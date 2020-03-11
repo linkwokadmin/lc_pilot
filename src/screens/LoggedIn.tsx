@@ -19,7 +19,7 @@ export default class LoggedIn extends Component {
     };
     axios({
       method: 'GET',
-      url: 'http://192.168.0.102:4000/api/v1/my_user',
+      url: 'https://life-coach-api.herokuapp.com/api/v1/my_user',
       headers: headers,
     }).then((response) => {
       // console.log(response.data.data)

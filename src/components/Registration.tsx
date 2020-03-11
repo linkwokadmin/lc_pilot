@@ -25,7 +25,7 @@ class Registration extends Component {
     this.setState({ error: '', loading: true });
 
     // NOTE Post to HTTPS only in production
-    axios.post("http://192.168.0.102:4000/api/v1/sign_up",{
+    axios.post("https://life-coach-api.herokuapp.com/api/v1/sign_up",{
       user: {
         email: email,
         password: password,

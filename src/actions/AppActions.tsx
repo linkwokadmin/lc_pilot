@@ -52,7 +52,7 @@ export const fetchContacts = (emailLoggedIn) => {
   da dispatch atualizando na store e deixar o email = ''... assim qunado tiver retorno atualizar os contatos
   */
   return (dispatch) => {
-    axios.get("http://192.168.0.102:4000/api/v1/users_of_contacts")
+    axios.get("https://life-coach-api.herokuapp.com/api/v1/users_of_contacts")
     .then(response => { 
       let snapshot = response.data;
       dispatch({
@@ -113,10 +113,10 @@ export const sendMessage = (message, contactName, contactEmail) => {
 
 export const fetchAllChats = currentUserEmail => {
   return dispatch => {
-    axios.get("http://192.168.0.102:4000/api/v1/user_conversations")
+    axios.get("https://life-coach-api.herokuapp.com/api/v1/user_conversations")
     .then(response => { 
       let user_conversations = response.data;
-      axios.get("http://192.168.0.102:4000/api/v1/users_of_contacts")
+      axios.get("https://life-coach-api.herokuapp.com/api/v1/users_of_contacts")
       .then(response => { 
         let users_of_contacts = response.data;
         const contacts = _.map(users_of_contacts, (value, uid) => {

@@ -44,7 +44,7 @@ export const SignIN = ({ email, password }) => {
   return dispatch => {
     dispatch({ type: SIGN_IN_LOADING })
     // firebase.auth().signInWithEmailAndPassword(email, password)
-    axios.post("http://192.168.0.102:4000/api/v1/sign_in",{
+    axios.post("https://life-coach-api.herokuapp.com/api/v1/sign_in",{
         email: email,
         password: password
     })

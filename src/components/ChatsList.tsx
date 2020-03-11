@@ -12,27 +12,22 @@ import {
 
 class ChatsList extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchAllChats(base64.encode(this.props.email_logged_in));
-    // this.createDataSource(this.props.chatsList);
   }
 
-  componentWillReceiveProps(nextProps) {
-    // this.createDataSource(nextProps.chatsList);
-  }
-
-  createDataSource(chatsList) {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
-    this.dataSource = ds.cloneWithRows(chatsList)
-    // (this.dataSource) CallScane.prototype.dataSource (example)
-  }
+  // createDataSource(chatsList) {
+  //   const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+  //   this.dataSource = ds.cloneWithRows(chatsList)
+  //   // (this.dataSource) CallScane.prototype.dataSource (example)
+  // }
 
   renderRow(chatContent) {
     // console.log(chatContent.item);
     // let newChatContent = _.values(chatContent.item)
     let newChatContent = _.values(chatContent.item)
-    console.log(chatContent)
-    console.log(newChatContent[0]);
+    // console.log(chatContent)
+    // console.log(newChatContent[0]);
     return (
       <TouchableHighlight
         onPress={ () => Actions.chat({
@@ -58,9 +53,9 @@ class ChatsList extends Component {
         enableEmptySections
         data={this.props.chatsList}
         renderItem={data => this.renderRow(data)}
-    />
-  );
-}
+      />
+    );
+  }
 }
 
 mapStateToProps = state => {
