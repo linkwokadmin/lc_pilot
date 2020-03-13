@@ -3,53 +3,146 @@ import firebase from 'firebase';
 import base64 from 'base-64';
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
-import { View, Text, FlatList, Image, TouchableHighlight } from 'react-native';
+import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet } from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchContacts } from  '../actions/AppActions';
+import { fatchQuestions } from '../actions/AppActions';
+import { QuestionText } from './QuestionTypeText'
+import { QuestionMcq } from './QuestionTypeMcq'
+import { CheckBox, Card } from 'react-native-elements'
+
+const qlist =
+{
+  "template": "Temp 1",
+  "Questions": [
+    {
+      "id": 1,
+      "statement": "is This status Q1",
+      "type": "text",
+      "w": "1",
+      "options": [],
+      "value": "value test"
+    },
+    {
+      "id": 2,
+      "statement": "is This status Q3",
+      "type": "mcq",
+      "w": "1",
+      "options": [
+        {
+          "lable": "this is statment 1",
+          "test": "1",
+          "value": "12"
+        },
+        {
+          "lable": "this is statment 2",
+          "test": "2",
+          "value": "122"
+        },
+        {
+          "lable": "this is statment 3",
+          "test": "3",
+          "value": "1245"
+        }
+      ],
+      "value": "value test"
+    },
+    {
+      "id": 3,
+      "statement": "is This status",
+      "type": "mcq",
+      "w": "1",
+      "options": [
+        {
+          "lable": "A",
+          "test": "1",
+          "value": "12"
+        },
+        {
+          "lable": "B",
+          "test": "2",
+          "value": "122"
+        },
+        {
+          "lable": "D",
+          "test": "3",
+          "value": "1245"
+        }
+      ],
+      "value": "value test"
+    },
+    {
+      "id": 1,
+      "statement": "is This status Q1",
+      "type": "text",
+      "w": "1",
+      "options": [],
+      "value": "value test"
+    },
+    {
+      "id": 1,
+      "statement": "is This status Q1",
+      "type": "text",
+      "w": "1",
+      "options": [],
+      "value": "value test"
+    },
+    {
+      "id": 1,
+      "statement": "is This status Q1",
+      "type": "text",
+      "w": "1",
+      "options": [],
+      "value": "value test"
+    },
+  ]
+}
+
 
 class CallScane extends Component {
-
-  componentDidMount() {
-    this.props.fetchContacts(base64.encode(this.props.email_logged_in));
-    // this.createDataSource(this.props.contacts);
+  constructor(props) {
+    super()
+    this.state = { questionsList: qlist }
+  }
+  renderQuestion(questionContent) {
+    let question = questionContent.item
+    let q_number = (questionContent.index) + 1;
+    if (question.type == "text") {
+      return (
+        <View style={styles.contener}>
+          <Text style={styles.Header}>{q_number}. {question.statement}</Text>
+          <QuestionText question={question} number={q_number}></QuestionText>
+        </View>
+      )
+    }
+    if (question.type == "mcq") {
+      return (
+        <View style={styles.contener}>
+          <Text style={styles.Header}>{q_number}. {question.statement}</Text>
+          <QuestionMcq options={question.options}></QuestionMcq>
+        </View>
+      )
+    }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.createDataSource(nextProps.contacts);
-  // }
 
-  createDataSource(contacts) {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
-    this.dataSource = ds.cloneWithRows(contacts)
-    // (this.dataSource) CallScane.prototype.dataSource (example)
-  }
-
-  renderRow(contact) {
-    return (
-      <TouchableHighlight
-        onPress={ () => Actions.chat({ title: contact.name, contactName: contact.name, contactEmail: contact.email }) }
-      >
-      <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
-        <Image source={{uri: contact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
-          <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontSize: 23, fontWeight: 'bold' }}>{ contact.name }</Text>
-            <Text style={{ fontSize: 13 }}>{ contact.email }</Text>
-          </View>
-      </View>
-      </TouchableHighlight>
-    )
-  }
 
   render() {
+    let renderQiestions = this.state.questionsList.Questions;
+    let question = renderQiestions[0]
     return (
       <FlatList
+        keyExtractor={(item) => item.id}
         enableEmptySections
-        data={this.dataSource}
-        renderItem={data => this.renderRow(data)}
-    />
-  );
-}
+        data={renderQiestions}
+        renderItem={data => this.renderQuestion(data)}
+      />
+    );
+  }
+
+
+
+
 }
 
 mapStateToProps = state => {
@@ -62,5 +155,24 @@ mapStateToProps = state => {
     contacts: contacts
   }
 }
+const styles = StyleSheet.create({
+  contener: {
+    flex: 1,
+    flexDirection: 'column',
+    marginLeft: 15,
+    marginTop: 10
+  },
+  Header: {
+    fontSize: 20,
+    fontWeight: 'bold',
 
-export default connect(mapStateToProps, { fetchContacts })(CallScane);
+  },
+  textInput: {
+    borderColor: '#777', borderWidth: 1,
+    padding: 10,
+    flex: 1,
+    width: '80%',
+    margin: 15,
+  }
+});
+export default CallScane;

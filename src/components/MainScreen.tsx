@@ -18,7 +18,7 @@ export default class MainScreen extends Component {
     routes: [
       { key: 'first', title: 'CHATS' },
       { key: 'second', title: 'STATUS' },
-      { key: 'third', title: 'CALLS' },
+      { key: 'third', title: 'Questions' },
     ],
   };
 
@@ -39,7 +39,7 @@ export default class MainScreen extends Component {
           renderScene={this._renderScene}
           renderTabBar={this._renderHeader}
           onIndexChange={this._handleIndexChange}
-          initialLayout={initialLayout}s
+          initialLayout={initialLayout}
         />
     );
   }

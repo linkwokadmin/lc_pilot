@@ -7,12 +7,9 @@ import TabBarMenu from './TabBarMenu'
 
 export default props => (
   <View style={styles.container}>
-  
-    {/* List of chasts */}
-    <ChatsList />
-
+    <ChatsList/>
     <View>
-      <TouchableOpacity activeOpacity={0.5} onPress={() => Actions.selectContact() } style={styles.touchableOpacityStyle} >
+      <TouchableOpacity activeOpacity={0.5} onPress={() => Actions.selectContact()} style={styles.touchableOpacityStyle} >
         <Image source={require('../images/ic_chats_contacts.png')} style={styles.floatingButtonStyle} />
       </TouchableOpacity>
     </View>
@@ -22,9 +19,9 @@ export default props => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor : '#F5F5F5'
+    backgroundColor: '#F5F5F5'
   },
-  touchableOpacityStyle:{
+  touchableOpacityStyle: {
     position: 'absolute',
     width: 55,
     height: 55,

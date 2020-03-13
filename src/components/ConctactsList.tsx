@@ -52,11 +52,12 @@ class ContactsList extends Component {
 
   render() {
     return (
-      <FlatList
+      <Text>MIt </Text>
+     /*  <FlatList
         enableEmptySections
         data={this.props.contacts}
         renderItem={data => this.renderRow(data)}
-    />
+    /> */
   );
 }
 }
