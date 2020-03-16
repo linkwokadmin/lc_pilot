@@ -9,8 +9,11 @@ import WelcomeScreen from './components/WelcomeScreen';
 import AddContactScreen from './components/AddContactScreen';
 import AddTemplateScreen from './components/AddTemplateScreen';
 import AddTextQuestion from './components/AddTextQuestion';
+import AddMcqQuestion from './components/AddMcqQuestion';
 import Chat from './components/Chat';
 import SelectContact from './components/SelectContact';
+import SurveyShowScreen from './components/SurveyShowScreen';
+import SurveyEditScreen from './components/SurveyEditScreen';
 
 export default class Routes extends Component {
   constructor(props) {
@@ -58,6 +61,10 @@ componentWillMount() {
           <Scene key='selectContact' component={SelectContact} title="Select contact" hideNavBar={false} />
           <Scene key='addTemplate' component={AddTemplateScreen} title="Add Template" />
           <Scene key='addTextQuestion' component={AddTextQuestion} title="Add Text Question" />
+          <Scene key='addMcqQuestion' component={AddMcqQuestion} title="Add Multiple-choice Question" />
+          <Scene key='showSurvey' component={SurveyShowScreen} title="Survey Show" />
+          <Scene key='editSurvey' component={SurveyEditScreen} title="Survey Edit" />
+
         </Scene>
       </Router>
     )

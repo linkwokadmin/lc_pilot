@@ -1,0 +1,64 @@
+{
+    "success": true,
+    "data": {
+        "template": "Temp 1",
+        "Questions": [
+            {
+                "id": 1,
+                "statement": "is This status Q1",
+                "type": "text",
+                "w": "1",
+                "options": [],
+                "value": "value test"
+            },
+            {
+                "id": 2,
+                "statement": "is This status Q3",
+                "type": "mcq",
+                "w": "1",
+                "options": [
+                    {
+                        "lable": "A",
+                        "test": "1",
+                        "value": "12"
+                    },
+                    {
+                        "lable": "B",
+                        "test": "2",
+                        "value": "122"
+                    },
+                    {
+                        "lable": "C",
+                        "test": "3",
+                        "value": "1245"
+                    }
+                ],
+                "value": "value test"
+            },
+            {
+                "id": 3,
+                "statement": "is This status",
+                "type": "mcq",
+                "w": "1",
+                "options": [
+                    {
+                        "lable": "A",
+                        "test": "1",
+                        "value": "12"
+                    },
+                    {
+                        "lable": "B",
+                        "test": "2",
+                        "value": "122"
+                    },
+                    {
+                        "lable": "D",
+                        "test": "3",
+                        "value": "1245"
+                    }
+                ],
+                "value": "value test"
+            }
+        ]
+    }
+}

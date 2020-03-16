@@ -6,37 +6,68 @@ import { Actions } from 'react-native-router-flux';
 import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchContacts } from  '../actions/AppActions';
+import { fetchQuestions } from '../actions/AppActions';
+import DialogInput from 'react-native-dialog-input';
+
+const templateList = [
+  {
+    "id": 1,
+    "name": "T1",
+    "created_on": "11 Mar. 2020"
+  },
+  {
+    "id": 2,
+    "name": "T2",
+    "created_on": "12 Mar. 2020"
+  }
+]
+
 
 class CallScane extends Component {
-
-  componentDidMount() {
-    this.props.fetchContacts(base64.encode(this.props.email_logged_in));
-    // this.createDataSource(this.props.contacts);
+  constructor(props) {
+    super()
+    this.state = { 
+      dialogVisible: false,
+      templateList: templateList,
+      newTemplate: null 
+    }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.createDataSource(nextProps.contacts);
-  // }
+   
+  showDialog = () => {
+    this.setState({ dialogVisible: true });
+  };
+ 
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
+  };
+ 
+  handleDelete = () => {
+    // The user has pressed the "Delete" button, so here you can do your own logic.
+    // ...Your logic
+    this.setState({ dialogVisible: false });
+  };
 
-  createDataSource(contacts) {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
-    this.dataSource = ds.cloneWithRows(contacts)
-    // (this.dataSource) CallScane.prototype.dataSource (example)
+  handleName = (name) => {
+    this.setState({newTemaplte: name});
+    console.log("Calling name create");
+    this.setState({dialogVisible:false})
+    Actions.editSurvey({ title: name })
   }
 
-  renderRow(contact) {
+  renderRow(item) {
+    const survey = item.item;
+    console.log(survey);
     return (
       <TouchableHighlight
-        onPress={ () => Actions.chat({ title: contact.name, contactName: contact.name, contactEmail: contact.email }) }
+        onPress={ () => Actions.showSurvey({ title: survey.name }) }
       >
-      <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
-        <Image source={{uri: contact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+        <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
           <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontSize: 23, fontWeight: 'bold' }}>{ contact.name }</Text>
-            <Text style={{ fontSize: 13 }}>{ contact.email }</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{ survey.name }</Text>
+            <Text style={{ fontSize: 13 }}>{ survey.created_on }</Text>
           </View>
-      </View>
+        </View>
       </TouchableHighlight>
     )
   }
@@ -46,13 +77,20 @@ class CallScane extends Component {
       <View style={styles.container}>
         <FlatList
           enableEmptySections
-          data={this.dataSource}
+          data={this.state.templateList}
           renderItem={data => this.renderRow(data)}
         />
         <View>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => Actions.addTemplate() } style={styles.touchableOpacityStyle} >
-            <Image source={require('../images/ic_chats_contacts.png')} style={styles.floatingButtonStyle} />
+          <TouchableOpacity activeOpacity={0.5} onPress={() => this.showDialog() } style={styles.touchableOpacityStyle} >
+            <Image source={require('../images/ic_add.png')} style={styles.floatingButtonStyle} />
           </TouchableOpacity>
+          <DialogInput isDialogVisible={this.state.dialogVisible}
+                     title={"Template"}
+                     message={"Enter name of the template"}
+                     hintInput ={"hint for the input"}
+                     submitInput={ (inputText) => {this.handleName(inputText)} }
+                     closeDialog={ () =>this.setState({dialogVisible:false})}>
+         </DialogInput>
         </View>
       </View>
     );
@@ -91,4 +129,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(mapStateToProps, { fetchContacts })(CallScane);
+export default connect(mapStateToProps, { fetchQuestions })(CallScane);

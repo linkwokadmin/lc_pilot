@@ -166,6 +166,22 @@ export const fetchAllChats = currentUserEmail => {
     })
   }
 }
+//fatch Questions
+
+export const fetchQuestions=()=>{
+  return dispatch=>{
+    axios.get("../service/Qdata.json").then((response)=>{
+      let questions=response.data
+      dispatch({
+        payload: questions
+      })
+    },(error)=>{
+      
+    })
+  }
+}
+
+
 
 /* Seatch conversation and return it to ListConversation reducer */
 export const fetchMessages = contactEmail => {

@@ -45,6 +45,7 @@ class AddContactScreen extends Component {
     return (
       <View style={styles.container}>
           { this.renderAddContact() }
+          
       </View>
     );
   }

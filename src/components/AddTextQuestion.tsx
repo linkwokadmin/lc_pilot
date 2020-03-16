@@ -14,12 +14,16 @@ class AddTextQuestion extends Component {
   constructor() {
     super();
     this.state = {
-      name: "",
+      "statement": "",
+      "type": "text",
+      "w": "1",
+      "options": [],
+      "value": ""
     };
   }
 
-  handleNameChange = name => () => {
-    this.setState({name: name})
+  handleNameChange = statement => () => {
+    this.setState({statement: statement})
   }
 
   handleSave = () => {
@@ -40,20 +44,19 @@ class AddTextQuestion extends Component {
               <TextInput
                 placeholder={`Enter question statement`}
                 label="text"
-                value={this.state.name}
-                onChangeText={(value) => this.handleNameChange(value)}
+                onChangeText={(value) => this.setState({statement: value})}
               />
               <View style = { styles.inputContainer }>
                 <Button 
                   title = "Add " 
                   style = { styles.placeButtonAdd }
-                  onPress = { this.handleSave() }
+                  onPress = { () => this.handleSave() }
                   color = "blue"
                 />
                 <Button 
                   title = "Delete" 
                   style = { styles.placeButtonDelete }
-                  onPress = { this.handleDelete() }
+                  onPress = { () => this.handleDelete() }
                   color = "red"
                 />
               </View>
