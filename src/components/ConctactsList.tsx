@@ -6,7 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import { View, Text, FlatList, Image, TouchableHighlight } from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchContacts } from  '../actions/AppActions';
+import { fetchContacts } from '../actions/AppActions';
 
 class ContactsList extends Component {
 
@@ -37,21 +37,27 @@ class ContactsList extends Component {
     console.log("------------------------------------------------------");
     return (
       <TouchableHighlight
-        onPress={ () => Actions.chat({ title: newContact.name, contactName: newContact.name, contactEmail: newContact.email }) }
+        onPress={() => Actions.chat({ title: newContact.name, contactName: newContact.name, contactEmail: newContact.email })}
       >
-      <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
-        <Image source={{uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+        <View style={{ flex: 1, flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
+          <Image source={{ uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
           <View style={{ marginLeft: 15 }}>
+<<<<<<< Updated upstream
             <Text style={{ fontSize: 23, fontWeight: 'bold' }}>{ newContact.name }</Text>
             <Text style={{ fontSize: 13 }}>{ newContact.email }</Text>
+=======
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{newContact.name}</Text>
+            <Text style={{ fontSize: 13 }}>{newContact.email}</Text>
+>>>>>>> Stashed changes
           </View>
-      </View>
+        </View>
       </TouchableHighlight>
     )
   }
 
   render() {
     return (
+<<<<<<< Updated upstream
       <Text>MIt </Text>
      /*  <FlatList
         enableEmptySections
@@ -60,6 +66,16 @@ class ContactsList extends Component {
     /> */
   );
 }
+=======
+      <FlatList
+        keyExtractor={(data) => { data.id }}
+        enableEmptySections
+        data={this.props.contacts}
+        renderItem={data => this.renderRow(data)}
+      />
+    );
+  }
+>>>>>>> Stashed changes
 }
 
 mapStateToProps = state => {

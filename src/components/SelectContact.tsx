@@ -6,7 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import { View, Text, FlatList, Image, TouchableHighlight } from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchContacts } from  '../actions/AppActions';
+import { fetchContacts } from '../actions/AppActions';
 
 class SelectContact extends Component {
 
@@ -30,25 +30,25 @@ class SelectContact extends Component {
     let contact = _.first(_.values(ncontact))
     if (contact.name === 'New Contact' || contact.name === 'New Group') {
       return (
-        <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
-          <Image source={{uri: contact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
-            <View style={{ marginLeft: 15, marginTop: 8 }}>
-              <Text style={{ fontSize: 23, fontWeight: 'bold' }}>{ contact.name }</Text>
-            </View>
+        <View style={{ flex: 1, flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
+          <Image source={{ uri: contact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+          <View style={{ marginLeft: 15, marginTop: 8 }}>
+            <Text style={{ fontSize: 23, fontWeight: 'bold' }}>{contact.name}</Text>
+          </View>
         </View>
       )
     }
     return (
       <TouchableHighlight
-        onPress={ () => Actions.chat({ title: contact.name, contactName: contact.name, contactEmail: contact.email }) }
+        onPress={() => Actions.chat({ title: contact.name, contactName: contact.name, contactEmail: contact.email })}
       >
-      <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
-        <Image source={{uri: contact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+        <View style={{ flex: 1, flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
+          <Image source={{ uri: contact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
           <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontSize: 23, fontWeight: 'bold' }}>{ contact.name }</Text>
-            <Text style={{ fontSize: 13 }}>{ contact.email }</Text>
+            <Text style={{ fontSize: 23, fontWeight: 'bold' }}>{contact.name}</Text>
+            <Text style={{ fontSize: 13 }}>{contact.email}</Text>
           </View>
-      </View>
+        </View>
       </TouchableHighlight>
     )
   }
@@ -58,11 +58,11 @@ class SelectContact extends Component {
       <FlatList
         enableEmptySections
         data={this.props.contacts}
-        renderItem={({item}) => this.renderRow(item)}
-        keyExtractor={(item, index) => index.toString() }
-    />
-  );
-}
+        renderItem={({ item }) => this.renderRow(item)}
+        keyExtractor={(item) => { item.id }}
+      />
+    );
+  }
 }
 
 mapStateToProps = state => {

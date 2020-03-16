@@ -1,1 +1,1 @@
-export const app_name = 'Whatsapp Clone';
+export const app_name = 'Lc Pilot';
