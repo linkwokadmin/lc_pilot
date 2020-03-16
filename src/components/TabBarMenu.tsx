@@ -18,7 +18,7 @@ class TabBarMenu extends Component {
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ height: 50, justifyContent: 'center', marginLeft: 20 }}>
-          <Text style={{ color: 'white', fontSize: 19 }}>Whatsapp</Text>
+          <Text style={{ color: 'white', fontSize: 19 }}>SuperCoach</Text>
           </View>
 
           <View style={{ flexDirection: 'row', marginRight: 10 }}>
@@ -34,12 +34,6 @@ class TabBarMenu extends Component {
           </View>
 
         <View style={{ flexDirection: 'row' }}>
-          <View style={{ width: CAMERA_WIDTH, justifyContent: 'center', alignItems: 'center' }}>
-            <TouchableOpacity onPress={() => alert('this is a camera!')}>
-            <Image source={require('../images/ic_photo_camera.png')} style={{ height: 20, width: 20 }} />
-            </TouchableOpacity>
-          </View>
-
           <View style={{ alignItems: 'flex-end' }}>
             <TabBar {...this.props} style={{ width: TAB_BAR_WIDTH, elevation: 0, backgroundColor: '#115E54' }} indicatorStyle={{ width: TAB_AND_INDICATOR_WIDTH }} tabStyle={{ width: TAB_AND_INDICATOR_WIDTH }} />
           </View>

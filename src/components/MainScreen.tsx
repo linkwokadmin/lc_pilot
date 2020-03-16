@@ -16,9 +16,8 @@ export default class MainScreen extends Component {
   state = {
     index: 0,
     routes: [
-      { key: 'first', title: 'CHATS' },
-      { key: 'second', title: 'STATUS' },
-      { key: 'third', title: 'CALLS' },
+      { key: 'second', title: 'CHATS' },
+      { key: 'third', title: 'TEMPLATE' },
     ],
   };
 
@@ -26,7 +25,6 @@ export default class MainScreen extends Component {
   _renderHeader = props => <TabBarMenu {...props} />;
 
   _renderScene = SceneMap({
-    first: ChatScene,
     second: StatusScane,
     third: CallScane,
   });

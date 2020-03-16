@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import base64 from 'base-64';
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
-import { View, Text, FlatList, Image, TouchableHighlight } from 'react-native';
+import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { connect } from 'react-redux';
 import { fetchContacts } from  '../actions/AppActions';
@@ -43,13 +43,20 @@ class CallScane extends Component {
 
   render() {
     return (
-      <FlatList
-        enableEmptySections
-        data={this.dataSource}
-        renderItem={data => this.renderRow(data)}
-    />
-  );
-}
+      <View style={styles.container}>
+        <FlatList
+          enableEmptySections
+          data={this.dataSource}
+          renderItem={data => this.renderRow(data)}
+        />
+        <View>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => Actions.addTemplate() } style={styles.touchableOpacityStyle} >
+            <Image source={require('../images/ic_chats_contacts.png')} style={styles.floatingButtonStyle} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 }
 
 mapStateToProps = state => {
@@ -62,5 +69,26 @@ mapStateToProps = state => {
     contacts: contacts
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor : '#F5F5F5'
+  },
+  touchableOpacityStyle:{
+    position: 'absolute',
+    width: 55,
+    height: 55,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+  },
+  floatingButtonStyle: {
+    resizeMode: 'contain',
+    width: 55,
+    height: 55,
+  }
+});
 
 export default connect(mapStateToProps, { fetchContacts })(CallScane);

@@ -8,6 +8,7 @@ const INITIAL_STATE = {
 
 import {
   ADD_CONTACT,
+  ADD_TEMPLATE,
   ADD_NEW_CONTACT_ERROR,
   ADD_NEW_CONTACT_SUCCESS,
   CHANGE_MESSAGE,
@@ -26,7 +27,9 @@ export default (state = INITIAL_STATE, action) => {
         return { ...state, message: action.payload }
       case SEND_MESSAGE_SUCCESS:
         return { ...state, message: '' }
-     default:
+      case ADD_TEMPLATE:
+        return { ...state, template: template}
+      default:
         return state;
    }
 }

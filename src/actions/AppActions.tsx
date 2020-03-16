@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import {
   ADD_CONTACT,
+  ADD_TEMPLATE,
   ADD_NEW_CONTACT_ERROR,
   ADD_NEW_CONTACT_SUCCESS,
   CONTACTS_LIST,
@@ -20,6 +21,14 @@ export const addContact = (email) => {
     type: ADD_CONTACT,
     payload: email
   }
+}
+
+/* added to redux */
+export const addTemplate = (dispatch, template) => {
+  dispatch({
+    type: ADD_TEMPLATE,
+    payload: template
+  })
 }
 
 export const registerNewContact = (email) => {
@@ -45,6 +54,13 @@ export const registerNewContact = (email) => {
     })
   }
 }
+
+export const createNewTemplate = (template) => {
+  return (dispatch) => {
+    addTemplate(dispatch, template);
+  }
+}
+
 
 export const fetchContacts = (emailLoggedIn) => {
   /* A solução sera ao carregar a aplicação, atualizar o emailLoggedIn  no AppReducer para que aplicação não quebre

@@ -42,7 +42,7 @@ class ContactsList extends Component {
       <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
         <Image source={{uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
           <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontSize: 23, fontWeight: 'bold' }}>{ newContact.name }</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{ newContact.name }</Text>
             <Text style={{ fontSize: 13 }}>{ newContact.email }</Text>
           </View>
       </View>

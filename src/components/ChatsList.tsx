@@ -51,8 +51,6 @@ class ChatsList extends Component {
     return (
       <FlatList
         enableEmptySections
-        data={this.props.chatsList}
-        renderItem={data => this.renderRow(data)}
       />
     );
   }

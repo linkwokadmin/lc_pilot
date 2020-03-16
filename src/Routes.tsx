@@ -7,6 +7,8 @@ import SignUpScreen from './components/SignUpScreen';
 import MainScreen from './components/MainScreen';
 import WelcomeScreen from './components/WelcomeScreen';
 import AddContactScreen from './components/AddContactScreen';
+import AddTemplateScreen from './components/AddTemplateScreen';
+import AddTextQuestion from './components/AddTextQuestion';
 import Chat from './components/Chat';
 import SelectContact from './components/SelectContact';
 
@@ -54,6 +56,8 @@ componentWillMount() {
           <Scene key='addContactScreen' component={AddContactScreen} title="Add Contact" />
           <Scene key='chat' component={Chat} title="Chat" hideNavBar={false} />
           <Scene key='selectContact' component={SelectContact} title="Select contact" hideNavBar={false} />
+          <Scene key='addTemplate' component={AddTemplateScreen} title="Add Template" />
+          <Scene key='addTextQuestion' component={AddTextQuestion} title="Add Text Question" />
         </Scene>
       </Router>
     )
