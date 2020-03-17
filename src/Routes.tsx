@@ -50,7 +50,7 @@ componentWillMount() {
       );
     }
     return (
-      <Router navigationBarStyle={{ backgroundColor: '#115E54' }} titleStyle={{ color: 'white' }}>
+      <Router navigationBarStyle={{ backgroundColor: '#75daad' }} titleStyle={{ color: 'white' }}>
         <Scene key='app'>
           <Scene key='loginScreen' component={LoginScreen} title="Login" hideNavBar={true} initial={!this.state.logged} />
           <Scene key='signUpScreen' component={SignUpScreen} title="SignUp" />

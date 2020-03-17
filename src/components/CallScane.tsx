@@ -117,7 +117,7 @@ class CallScane extends Component {
   }
 }
 
-mapStateToProps = state => {
+const mapStateToProps = state => {
   const templates = _.map(state.ListTemplatesReducer, (value, uid) => {
     return { ...value, uid }
   });
@@ -157,6 +157,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     right: 30,
     bottom: 30,
+  },
+  Header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    backgroundColor: '#F5F5F5'
   },
   floatingButtonStyle: {
     resizeMode: 'contain',

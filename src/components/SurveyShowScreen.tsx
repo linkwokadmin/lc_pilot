@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { fetchQuestions } from '../actions/AppActions';
 import { QuestionText } from './QuestionTypeText'
 import { QuestionMcq } from './QuestionTypeMcq'
+import { Card } from 'react-native-paper';
 
 const qlist =
 {
@@ -135,11 +136,6 @@ class SurveyShowScreen extends Component {
             />
         );
     }
-
-
-
-
-
 }
 
 mapStateToProps = state => {
@@ -157,7 +153,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     marginLeft: 15,
-    marginTop: 10
+    marginTop: 10,
+    padding: 10
   },
   Header: {
     fontSize: 20,
@@ -170,6 +167,10 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '80%',
     margin: 15,
+  },
+  card: {
+    margin: 10,
+    elevation: 10
   }
 });
 export default SurveyShowScreen;

@@ -6,54 +6,45 @@ import { Actions } from 'react-native-router-flux';
 import { View, Text, FlatList, Image, TouchableHighlight } from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchContacts } from  '../actions/AppActions';
+import { fetchContacts } from '../actions/AppActions';
 
 class ContactsList extends Component {
 
   componentDidMount() {
     this.props.fetchContacts(base64.encode(this.props.email_logged_in));
-    // this.createDataSource(this.props.contacts);
-  }
-
-  // componentWillReceiveProps(nextProps) {
-  //   this.createDataSource(nextProps.contacts);
-  // }
-
-  createDataSource(contacts) {
-    // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
-    // this.dataSource = ds.cloneWithRows(contacts)
-    // (this.dataSource) CallScane.prototype.dataSource (example)
   }
 
   renderRow(contact) {
     let newContact = _.first(_.values(contact.item));
     return (
       <TouchableHighlight
-        onPress={ () => Actions.chat({ title: newContact.name, contactName: newContact.name, contactEmail: newContact.email }) }
+        onPress={() => Actions.chat({ title: newContact.name, contactName: newContact.name, contactEmail: newContact.email })}
       >
-      <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
-        <Image source={{uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+        <View style={{ flex: 1, flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
+          <Image source={{ uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />
           <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{ newContact.name }</Text>
-            <Text style={{ fontSize: 13 }}>{ newContact.email }</Text>
+
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{newContact.name}</Text>
+            <Text style={{ fontSize: 13 }}>{newContact.email}</Text>
           </View>
-      </View>
+        </View>
       </TouchableHighlight>
     )
   }
 
   render() {
     return (
-     <FlatList
+      <FlatList
+        keyExtractor={(data) => { data.id }}
         enableEmptySections
         data={this.props.contacts}
         renderItem={data => this.renderRow(data)}
-    />
-  );
-}
+      />
+    );
+  }
 }
 
-mapStateToProps = state => {
+const mapStateToProps = state => {
   const contacts = _.map(state.ListContactsReducer, (value, uid) => {
     return { ...value, uid }
   });

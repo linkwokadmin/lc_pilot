@@ -56,9 +56,10 @@ class ChatsList extends Component {
     } else {
       return (
         <FlatList
+          keyExtractor={(data) => { data.id }}
           enableEmptySections
           data={loadData}
-          renderItem={data => this.renderRow(data)}
+          renderItem={(data) => this.renderRow(data)}
         />
       );
     }
