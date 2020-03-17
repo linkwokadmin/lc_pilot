@@ -1,14 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
 import { connect } from 'react-redux';
-import { Input  } from './common';
 import {
   addContact,
   registerNewContact
 } from '../actions/AppActions';
 import { TextInput } from 'react-native-gesture-handler';
-import RNPickerSelect from 'react-native-picker-select';
-import { FloatingAction } from "react-native-floating-action";
+import { api_url } from './../resources/constants';
+import axios from 'axios';
+import { AsyncStorage } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 class AddTextQuestion extends Component {
   constructor() {
@@ -16,9 +17,9 @@ class AddTextQuestion extends Component {
     this.state = {
       "statement": "",
       "type": "text",
-      "w": "1",
+      "weight": "1",
       "options": [],
-      "value": ""
+      "value": "val"
     };
   }
 
@@ -27,7 +28,28 @@ class AddTextQuestion extends Component {
   }
 
   handleSave = () => {
-    console.log(this.state);
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/questions";
+      let data = {question: {...this.state, template_id: this.props.id}};
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+      axios.post(url, data, {
+        headers: headers
+      }).then(response => {
+        let question = response.data.data;
+        Actions.editSurvey({ title: this.props.title, id: this.props.id })
+      }).catch((error) => {
+        console.log(error);
+        return null;
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+      return null;
+    })
   }
 
   handleDelete = () => {

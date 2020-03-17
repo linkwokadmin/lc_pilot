@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import base64 from 'base-64';
 import axios from 'axios';
+import { api_url } from './../resources/constants'
 
 import {
   ADD_NAME,
@@ -44,7 +45,7 @@ export const SignIN = ({ email, password }) => {
   return dispatch => {
     dispatch({ type: SIGN_IN_LOADING })
     // firebase.auth().signInWithEmailAndPassword(email, password)
-    axios.post("https://life-coach-api.herokuapp.com/api/v1/sign_in",{
+    axios.post(api_url + "/api/v1/sign_in",{
         email: email,
         password: password
     })

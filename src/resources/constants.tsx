@@ -19,3 +19,7 @@ export const user_disabled = 'The user corresponding to the given email has been
 export const user_not_found = 'There is no user corresponding to the given email.';
 
 export const wrong_password = 'The password is invalid for the given email, or the account corresponding to the email does not have a password set.';
+
+// export const api_url = 'https://life-coach-api.herokuapp.com';
+
+export const api_url = 'http://192.168.0.105:4000';

@@ -7,19 +7,23 @@ import {
   registerNewContact
 } from '../actions/AppActions';
 import { TextInput } from 'react-native-gesture-handler';
-import RNPickerSelect from 'react-native-picker-select';
-import { FloatingAction } from "react-native-floating-action";
+import axios from 'axios';
+import { AsyncStorage } from 'react-native';
+import { api_url } from './../resources/constants';
 
 class AddMcqQuestion extends Component {
   constructor() {
     super();
     this.state = {
         statement: "",
-        type: "text",
-        w: "1",
+        type: "mcq",
+        weight: "1",
+        value: "default",
         options: [
             {
-                "text": ""
+                "test": "",
+                "label": "",
+                "value": ""
             }
         ]
     };
@@ -33,11 +37,10 @@ class AddMcqQuestion extends Component {
   handleOptionsNameChange = (text, idx) => {
     const newOptions = this.state.options.map((option, sidx) => {
       if (idx !== sidx) return option;
-      return { ...option, text: text };
+      return { ...option, test: text, label: text, value: "" };
     });
 
     this.setState({ options: newOptions });
-    // this.handleAddOption();
   };
 
   handleRemoveOptions = idx => () => {
@@ -54,7 +57,29 @@ class AddMcqQuestion extends Component {
 
   handleSave = () => {
     console.log('Calling Save..', this.state);
-    Actions.editSurvey({ title: this.props.name })
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/questions";
+      let data = {question: {...this.state, template_id: this.props.id}};
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+      axios.post(url, data, {
+        headers: headers
+      }).then(response => {
+        let question = response.data.data;
+        console.log(question);
+        Actions.editSurvey({ title: this.props.title, id: this.props.id })
+      }).catch((error) => {
+        console.log(error);
+        return null;
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+      return null;
+    })
   }
 
   handleDelete = () => {
@@ -96,7 +121,7 @@ class AddMcqQuestion extends Component {
                             style = { styles.placeInput }
                             placeholder={`Statement`}
                             label="text"
-                            value={option.text}
+                            value={option.test}
                             onChangeText={(value) => this.handleOptionsNameChange(value, idx)}
                         />
                         <Button 

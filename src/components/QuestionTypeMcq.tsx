@@ -15,7 +15,7 @@ export const QuestionMcq = ({ options, number }) => {
                         <CheckBox
                             
                         />
-                        <Text style={{ marginTop: 5 }}>{item.lable} </Text>
+                        <Text style={{ marginTop: 5 }}>{item.label} </Text>
                     </View>
                 )} />
         </View>

@@ -27,14 +27,6 @@ class ContactsList extends Component {
 
   renderRow(contact) {
     let newContact = _.first(_.values(contact.item));
-    console.log("------------------------------------------------------");
-    console.log(contact);
-    console.log(newContact);
-    console.log(newContact.name);
-    console.log(newContact.email);
-    console.log(newContact.profileImage);
-
-    console.log("------------------------------------------------------");
     return (
       <TouchableHighlight
         onPress={ () => Actions.chat({ title: newContact.name, contactName: newContact.name, contactEmail: newContact.email }) }

@@ -6,34 +6,31 @@ import { Actions } from 'react-native-router-flux';
 import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchQuestions } from '../actions/AppActions';
+import {compose} from "redux";
+import { fetchTemplates, createTemplates } from '../actions/AppActions';
 import DialogInput from 'react-native-dialog-input';
-
-const templateList = [
-  {
-    "id": 1,
-    "name": "T1",
-    "created_on": "11 Mar. 2020"
-  },
-  {
-    "id": 2,
-    "name": "T2",
-    "created_on": "12 Mar. 2020"
-  }
-]
-
+import axios from 'axios';
+import { api_url } from './../resources/constants'
+import { AsyncStorage } from 'react-native';
 
 class CallScane extends Component {
   constructor(props) {
     super()
     this.state = { 
       dialogVisible: false,
-      templateList: templateList,
       newTemplate: null 
     }
   }
 
-   
+  componentDidMount(){
+    this.fetchTemplates();
+    // console.log(this.props);
+  } 
+
+  fetchTemplates = async () => {
+    this.props.actions.fetchTemplates();
+  }
+
   showDialog = () => {
     this.setState({ dialogVisible: true });
   };
@@ -49,23 +46,46 @@ class CallScane extends Component {
   };
 
   handleName = (name) => {
-    this.setState({newTemaplte: name});
-    console.log("Calling name create");
-    this.setState({dialogVisible:false})
-    Actions.editSurvey({ title: name })
+    this.setState({dialogVisible:false});
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/templates";
+      let data = {
+        "template": {
+          name: name
+        }
+      }
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+      axios.post(url, data, {
+        headers: headers
+      }).then(response => {
+        let template = response.data.data;
+        Actions.editSurvey({ title: template.name, id: template.id })
+        // return template;
+      }).catch((error) => {
+        console.log(error);
+        return null;
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+      return null;
+    })
   }
 
   renderRow(item) {
     const survey = item.item;
-    console.log(survey);
     return (
       <TouchableHighlight
-        onPress={ () => Actions.showSurvey({ title: survey.name }) }
+        onPress={ () => Actions.editSurvey({ title: survey.name, id: survey.id }) }
       >
         <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
           <View style={{ marginLeft: 15 }}>
             <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{ survey.name }</Text>
-            <Text style={{ fontSize: 13 }}>{ survey.created_on }</Text>
+            <Text style={{ fontSize: 13 }}>{ survey.inserted_at }</Text>
           </View>
         </View>
       </TouchableHighlight>
@@ -77,7 +97,7 @@ class CallScane extends Component {
       <View style={styles.container}>
         <FlatList
           enableEmptySections
-          data={this.state.templateList}
+          data={this.props.templates}
           renderItem={data => this.renderRow(data)}
         />
         <View>
@@ -98,15 +118,31 @@ class CallScane extends Component {
 }
 
 mapStateToProps = state => {
-  const contacts = _.map(state.ListContactsReducer, (value, uid) => {
+  const templates = _.map(state.ListTemplatesReducer, (value, uid) => {
     return { ...value, uid }
   });
 
   return {
-    email_logged_in: state.AppReducer.email_logged_in,
-    contacts: contacts
+    templates: templates
   }
 }
+
+const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch => {
+  return {
+    actions: {
+      fetchTemplates: () =>{
+        return dispatch(
+          fetchTemplates()
+        );
+      },
+      createTemplates: (template) => {
+        return dispatch(
+          createTemplates(template)
+        );
+      }
+    }
+  }
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -129,4 +165,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(mapStateToProps, { fetchQuestions })(CallScane);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(CallScane);

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { Button, Loading } from '../components/common';
 import axios from 'axios';
+import { api_url } from './../resources/constants'
 
 export default class LoggedIn extends Component {
   constructor(props){
@@ -19,7 +20,7 @@ export default class LoggedIn extends Component {
     };
     axios({
       method: 'GET',
-      url: 'https://life-coach-api.herokuapp.com/api/v1/my_user',
+      url: api_url + '/api/v1/my_user',
       headers: headers,
     }).then((response) => {
       // console.log(response.data.data)

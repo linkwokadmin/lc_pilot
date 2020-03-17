@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { Input, TextLink, Loading, Button } from './common';
 import axios from 'axios';
 import deviceStorage from '../services/deviceStorage';
+import { api_url } from './../resources/constants'
 
 class Registration extends Component {
   constructor(props){
@@ -25,7 +26,7 @@ class Registration extends Component {
     this.setState({ error: '', loading: true });
 
     // NOTE Post to HTTPS only in production
-    axios.post("https://life-coach-api.herokuapp.com/api/v1/sign_up",{
+    axios.post(api_url + "/api/v1/sign_up",{
       user: {
         email: email,
         password: password,

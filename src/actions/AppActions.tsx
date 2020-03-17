@@ -2,6 +2,8 @@ import firebase from 'firebase';
 import base64 from 'base-64';
 import _ from 'lodash';
 import axios from 'axios';
+import { api_url } from './../resources/constants'
+import { AsyncStorage } from 'react-native';
 
 import {
   ADD_CONTACT,
@@ -13,6 +15,9 @@ import {
   SEND_MESSAGE_SUCCESS,
   LIST_CONVERSATION_USER,
   FETCH_ALL_CHATS,
+  TEMPLATES_LIST,
+  QUESTION_LIST,
+  ERROR_ADDING_TEMPLATE
 } from '../resources/types';
 
 /* added to redux */
@@ -68,7 +73,7 @@ export const fetchContacts = (emailLoggedIn) => {
   da dispatch atualizando na store e deixar o email = ''... assim qunado tiver retorno atualizar os contatos
   */
   return (dispatch) => {
-    axios.get("https://life-coach-api.herokuapp.com/api/v1/users_of_contacts")
+    axios.get(api_url + "/api/v1/users_of_contacts")
     .then(response => { 
       let snapshot = response.data;
       dispatch({
@@ -129,10 +134,10 @@ export const sendMessage = (message, contactName, contactEmail) => {
 
 export const fetchAllChats = currentUserEmail => {
   return dispatch => {
-    axios.get("https://life-coach-api.herokuapp.com/api/v1/user_conversations")
+    axios.get(api_url + "/api/v1/user_conversations")
     .then(response => { 
       let user_conversations = response.data;
-      axios.get("https://life-coach-api.herokuapp.com/api/v1/users_of_contacts")
+      axios.get(api_url + "/api/v1/users_of_contacts")
       .then(response => { 
         let users_of_contacts = response.data;
         const contacts = _.map(users_of_contacts, (value, uid) => {
@@ -168,16 +173,96 @@ export const fetchAllChats = currentUserEmail => {
 }
 //fatch Questions
 
-export const fetchQuestions=()=>{
-  return dispatch=>{
-    axios.get("../service/Qdata.json").then((response)=>{
-      let questions=response.data
-      dispatch({
-        payload: questions
+export const fetchQuestions=(template_id)=>{
+  return dispatch => {
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1//questions/template_questions/" + template_id;
+      axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then((response) => {
+        let questions = response.data.data;
+        // console.log("Questions: ", questions);
+        dispatch({
+          type: QUESTION_LIST,
+          payload: questions
+        })
+      }).catch((api_err) => {
+        console.log("API ERR: ", api_err)
       })
-    },(error)=>{
-      
     })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+    })
+  }
+}
+
+// Fetch templates
+export const fetchTemplates = () => {
+  return dispatch => {
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/templates";
+      console.log("URL: ", url);
+      axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then((response) => {
+        let templates = response.data.data;
+        dispatch({
+          type: TEMPLATES_LIST,
+          payload: templates
+        })
+      }).catch((api_err) => {
+        console.log("API ERR: ", api_err)
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+    })
+  }
+}
+
+// Fetch templates
+export const createTemplates = (template) => {
+  return dispatch => {
+    let data = {
+      "template": template
+    }
+    // return Promise.resolve(
+      AsyncStorage.getItem("authorization")
+      .then((token) => {
+        let url = api_url + "/api/v1/templates";
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+        axios.post(url, data, {
+          headers: headers
+        }).then(response => {
+          let template = response.data.data;
+          // dispatch({
+          //   type: ADD_TEMPLATE,
+          //   payload: template
+          // })
+          console.log("Template: ", template);
+          return template;
+        }).catch((error) => {
+          // dispatch({
+          //   type: ERROR_ADDING_TEMPLATE
+          // })
+          console.log(err);
+          return null;
+        })
+      })
+      .catch((err) => {
+        console.log("Token Error: ", err);
+        return null;
+      })
+    // );
   }
 }
 

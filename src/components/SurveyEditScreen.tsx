@@ -4,97 +4,11 @@ import { Actions } from 'react-native-router-flux';
 import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { connect } from 'react-redux';
+import {compose} from "redux";
 import { fetchQuestions } from '../actions/AppActions';
 import { FloatingAction } from "react-native-floating-action";
 import { QuestionText } from './QuestionTypeText'
 import { QuestionMcq } from './QuestionTypeMcq'
-
-const qlist =
-{
-  "template": "Temp 1",
-  "Questions": [
-    {
-      "id": 1,
-      "statement": "is This status Q1",
-      "type": "text",
-      "w": "1",
-      "options": [],
-      "value": "value test"
-    },
-    {
-      "id": 2,
-      "statement": "is This status Q3",
-      "type": "mcq",
-      "w": "1",
-      "options": [
-        {
-          "lable": "this is statment 1",
-          "test": "1",
-          "value": "12"
-        },
-        {
-          "lable": "this is statment 2",
-          "test": "2",
-          "value": "122"
-        },
-        {
-          "lable": "this is statment 3",
-          "test": "3",
-          "value": "1245"
-        }
-      ],
-      "value": "value test"
-    },
-    {
-      "id": 3,
-      "statement": "is This status",
-      "type": "mcq",
-      "w": "1",
-      "options": [
-        {
-          "lable": "A",
-          "test": "1",
-          "value": "12"
-        },
-        {
-          "lable": "B",
-          "test": "2",
-          "value": "122"
-        },
-        {
-          "lable": "D",
-          "test": "3",
-          "value": "1245"
-        }
-      ],
-      "value": "value test"
-    },
-    {
-      "id": 1,
-      "statement": "is This status Q1",
-      "type": "text",
-      "w": "1",
-      "options": [],
-      "value": "value test"
-    },
-    {
-      "id": 1,
-      "statement": "is This status Q1",
-      "type": "text",
-      "w": "1",
-      "options": [],
-      "value": "value test"
-    },
-    {
-      "id": 1,
-      "statement": "is This status Q1",
-      "type": "text",
-      "w": "1",
-      "options": [],
-      "value": "value test"
-    },
-  ]
-}
 
 const actions = [
   {
@@ -115,7 +29,15 @@ const actions = [
 class SurveyEditScreen extends Component {
     constructor(props) {
         super()
-        this.state = { questionsList: qlist }
+        this.state = { }
+    }
+
+    componentDidMount(){
+      this.fetchQuestions(this.props.id);
+    } 
+
+    fetchQuestions = (template_id) => {
+      this.props.actions.fetchQuestions(template_id);
     }
 
     renderQuestion(questionContent) {
@@ -140,19 +62,17 @@ class SurveyEditScreen extends Component {
     }
 
     handleNavigation = (name) => {
-      name === 'bt_add_text_question' ? Actions.addTextQuestion() : Actions.addMcqQuestion();
+      name === 'bt_add_text_question' ? Actions.addTextQuestion({id: this.props.id}) : Actions.addMcqQuestion({id: this.props.id});
     }
    
 
     render() {
-        let renderQiestions = this.state.questionsList.Questions;
-        let question = renderQiestions[0]
         return (
-          <View>
+          <View style={styles.container}>
             <FlatList
             keyExtractor={(item) => item.id}
             enableEmptySections
-            data={renderQiestions}
+            data={this.props.questions}
             renderItem={data => this.renderQuestion(data)}
             />
             <FloatingAction
@@ -166,8 +86,8 @@ class SurveyEditScreen extends Component {
     }
 }
 
-mapStateToProps = state => {
-    const questions = _.map(state.ListContactsReducer, (value, uid) => {
+const mapStateToProps = state => {
+    const questions = _.map(state.ListQuestionsReducer, (value, uid) => {
       return { ...value, uid }
     });
   
@@ -175,6 +95,18 @@ mapStateToProps = state => {
       questions: questions
     }
 }
+
+const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch => {
+  return {
+    actions: {
+      fetchQuestions: (template_id) =>{
+        return dispatch(
+          fetchQuestions(template_id)
+        );
+      },
+    }
+  }
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -196,4 +128,8 @@ const styles = StyleSheet.create({
     margin: 15,
   }
 });
-export default SurveyEditScreen;
+
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(SurveyEditScreen);
