@@ -18,7 +18,7 @@ class ContactsList extends Component {
     let newContact = _.first(_.values(contact.item));
     return (
       <TouchableHighlight
-        onPress={() => Actions.chat({ title: newContact.name, contactName: newContact.name, contactEmail: newContact.email })}
+        onPress={() => Actions.b_chat({ title: newContact.name, contactName: newContact.name, contactEmail: newContact.email })}
       >
         <View style={{ flex: 1, flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
           <Image source={{ uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50 }} />

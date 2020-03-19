@@ -14,6 +14,7 @@ import Chat from './components/Chat';
 import SelectContact from './components/SelectContact';
 import SurveyShowScreen from './components/SurveyShowScreen';
 import SurveyEditScreen from './components/SurveyEditScreen';
+import Mess from './services/Mess';
 
 export default class Routes extends Component {
   constructor(props) {
@@ -64,6 +65,7 @@ componentWillMount() {
           <Scene key='addMcqQuestion' component={AddMcqQuestion} title="Add Multiple-choice Question" />
           <Scene key='showSurvey' component={SurveyShowScreen} title="Survey Show" />
           <Scene key='editSurvey' component={SurveyEditScreen} title="Survey Edit" />
+          <Scene key='b_chat' component={Mess} title="b_Chat" hideNavBar={false} />
 
         </Scene>
       </Router>
