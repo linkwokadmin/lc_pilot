@@ -1,7 +1,8 @@
 import { Socket } from 'phoenix-channels';
+import { api_url } from './../resources/constants'
 
 const TIMEOUT = 10000
-const URL = 'http://192.168.0.105:4000/socket'
+const URL = api_url + 'socket';
 const LOBBY = 'rooms:lobby'
 
 const CHATROOM='chat:13:Sunny:1:SS'
