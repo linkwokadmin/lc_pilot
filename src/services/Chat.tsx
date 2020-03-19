@@ -2,7 +2,7 @@ import { Socket } from 'phoenix-channels';
 import { api_url } from './../resources/constants'
 
 const TIMEOUT = 10000
-const URL = api_url + 'socket';
+const URL = api_url + '/socket';
 const LOBBY = 'rooms:lobby'
 
 const CHATROOM='chat:13:Sunny:1:SS'
