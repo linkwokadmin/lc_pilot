@@ -27,6 +27,10 @@ class CallScane extends Component {
     // console.log(this.props);
   } 
 
+  componentDidUpdate(){
+    this.fetchTemplates();
+  }
+
   fetchTemplates = async () => {
     this.props.actions.fetchTemplates();
   }
