@@ -2,8 +2,8 @@ import React from 'react'
 import { View, Text, StyleSheet, TextInput, CheckBox, FlatList } from 'react-native'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-export const QuestionMcq = ({ options, number }) => {
-    /* this.state={} */
+export const QuestionMcq = ({ question, options, number, onChange }) => {
+    // /* this.state={} 
     console.log('-------------------', options);
     return (
         <View style={styles.conterner}>
@@ -13,7 +13,7 @@ export const QuestionMcq = ({ options, number }) => {
                 renderItem={({ item }) => (
                     <View style={{ flexDirection: 'row' }}>
                         <CheckBox
-                            
+                            onValueChange={() => onChange(question, item)}
                         />
                         <Text style={{ marginTop: 5 }}>{item.label} </Text>
                     </View>

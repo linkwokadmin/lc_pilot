@@ -14,7 +14,7 @@ const CAMERA_WIDTH = (10 * SCREEN_WIDTH) / 100; //10% of screen
 class TabBarMenu extends Component {
   logout(){
     AsyncStorage.clear();
-    
+    Actions.loginScreen();
   }
 
 

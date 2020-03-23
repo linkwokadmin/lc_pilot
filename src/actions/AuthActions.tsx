@@ -70,12 +70,27 @@ export const registerUser = ({ name, email, password }) => {
       SIGN_UP_LOADING
     })
 
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    axios.post(api_url + "/api/v1/sign_up",{
+      user:{
+        email: email,
+        password: password,
+        name: name,
+        password_confirmation: password
+      }
+    })
     .then(response => {
-      let EmailEncode = base64.encode(email);
-      firebase.database().ref(`/users/${EmailEncode}`)
-      .push({ name })
-      .then(response => registerSuccess(dispatch))
+      const TOKEN_KEY = response.data.jwt;
+      console.log(TOKEN_KEY);
+      AsyncStorage.setItem('@mytoken:key', TOKEN_KEY);
+      AsyncStorage.setItem('authorization', TOKEN_KEY);
+      // AsyncStorage.setItem('currentUser', response.data.user);
+      console.log(response.data.user);
+      authSuccess(dispatch, response.data.user)
+      registerSuccess(dispatch)
+      // let EmailEncode = base64.encode(email);
+      // firebase.database().ref(`/users/${EmailEncode}`)
+      // .push({ name })
+      // .then(response => registerSuccess(dispatch))
     })
     .catch(error => registerUnsuccess(error, dispatch))
   }

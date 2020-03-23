@@ -29,6 +29,15 @@ class SurveyShowScreen extends Component {
       console.log(questionFeedback);
     }
 
+    onMcqChange = (question, item) => {
+      let val = val + "," + item.label;
+      // const update = {}
+      // this.setState({"mcq": update})
+      console.log(val);
+      let questionFeedback = {...question, value: val}
+      console.log(questionFeedback);
+    }
+
     renderQuestion(questionContent) {
         let question = questionContent.item
         let q_number = (questionContent.index) + 1;
@@ -44,7 +53,7 @@ class SurveyShowScreen extends Component {
             return (
             <View style={styles.contener}>
                 <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-                <QuestionMcq options={question.options}></QuestionMcq>
+                <QuestionMcq question={question} options={question.options} onChange={this.onMcqChange}></QuestionMcq>
             </View>
             )
         }

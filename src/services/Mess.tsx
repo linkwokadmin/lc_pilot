@@ -35,7 +35,11 @@ export default class Mess extends Component {
     // let's chat!
     console.log(this.props); 
     // chat:13:Sunny:1:SS
-    this.chatRoom = "chat:" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(" ")) + ":" + this.props.contactId + ":" + _.first(this.props.contactName.split(' '))
+    if(this.props.currentUser.id > this.props.contactId) {
+      this.chatRoom = "chat:" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(" ")) + ":" + this.props.contactId + ":" + _.first(this.props.contactName.split(' '))
+    } else {
+      this.chatRoom = "chat:" + this.props.contactId + ":" + _.first(this.props.contactName.split(' ')) + ":"  + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(" "));
+    }
     this.chat = Chat(user, this.chatRoom, this.receiveChatMessage);
     // console.log("-----------")
     this.state = {
