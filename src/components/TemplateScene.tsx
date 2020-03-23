@@ -10,10 +10,10 @@ import {compose} from "redux";
 import { fetchTemplates, createTemplates } from '../actions/AppActions';
 import DialogInput from 'react-native-dialog-input';
 import axios from 'axios';
-import { api_url } from './../resources/constants'
+import { api_url } from '../resources/constants'
 import { AsyncStorage } from 'react-native';
 
-class CallScane extends Component {
+class TemplateScene extends Component {
   constructor(props) {
     super()
     this.state = { 
@@ -28,7 +28,7 @@ class CallScane extends Component {
   } 
 
   componentDidUpdate(){
-    this.fetchTemplates();
+    // this.fetchTemplates();
   }
 
   fetchTemplates = async () => {
@@ -176,4 +176,4 @@ const styles = StyleSheet.create({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps)
-)(CallScane);
+)(TemplateScene);

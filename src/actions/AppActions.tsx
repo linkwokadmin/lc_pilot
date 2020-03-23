@@ -73,13 +73,17 @@ export const fetchContacts = (emailLoggedIn) => {
   da dispatch atualizando na store e deixar o email = ''... assim qunado tiver retorno atualizar os contatos
   */
   return (dispatch) => {
-    axios.get(api_url + "/api/v1/users_of_contacts")
-    .then(response => { 
-      let snapshot = response.data;
-      dispatch({
-        type: CONTACTS_LIST,
-        payload: snapshot
-      })
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      axios.get(api_url + "/api/v1/users")
+      .then(response => { 
+        let snapshot = response.data;
+        // console.log(snapshot)
+        dispatch({
+          type: CONTACTS_LIST,
+          payload: snapshot
+        })
+      });
     });
 
     // firebase.database().ref(`/users_of_contacts/${emailLoggedIn}`)
@@ -205,7 +209,6 @@ export const fetchTemplates = () => {
     AsyncStorage.getItem("authorization")
     .then((token) => {
       let url = api_url + "/api/v1/templates";
-      console.log("URL: ", url);
       axios.get(url, {
         headers: {
           'Authorization': `Bearer ${token}`

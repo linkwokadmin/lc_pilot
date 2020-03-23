@@ -22,7 +22,7 @@ class SelectContact extends Component {
   createDataSource(contacts) {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
     this.dataSource = ds.cloneWithRows(contacts)
-    // (this.dataSource) CallScane.prototype.dataSource (example)
+    // (this.dataSource) TemplateScene.prototype.dataSource (example)
   }
 
 

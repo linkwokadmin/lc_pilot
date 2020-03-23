@@ -1,106 +1,32 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Actions } from 'react-native-router-flux';
-import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView, Button } from 'react-native';
 
 import { connect } from 'react-redux';
+import {compose} from "redux";
 import { fetchQuestions } from '../actions/AppActions';
 import { QuestionText } from './QuestionTypeText'
 import { QuestionMcq } from './QuestionTypeMcq'
-import { Card } from 'react-native-paper';
-
-const qlist =
-{
-  "template": "Temp 1",
-  "Questions": [
-    {
-      "id": 1,
-      "statement": "is This status Q1",
-      "type": "text",
-      "w": "1",
-      "options": [],
-      "value": "value test"
-    },
-    {
-      "id": 2,
-      "statement": "is This status Q3",
-      "type": "mcq",
-      "w": "1",
-      "options": [
-        {
-          "lable": "this is statment 1",
-          "test": "1",
-          "value": "12"
-        },
-        {
-          "lable": "this is statment 2",
-          "test": "2",
-          "value": "122"
-        },
-        {
-          "lable": "this is statment 3",
-          "test": "3",
-          "value": "1245"
-        }
-      ],
-      "value": "value test"
-    },
-    {
-      "id": 3,
-      "statement": "is This status",
-      "type": "mcq",
-      "w": "1",
-      "options": [
-        {
-          "lable": "A",
-          "test": "1",
-          "value": "12"
-        },
-        {
-          "lable": "B",
-          "test": "2",
-          "value": "122"
-        },
-        {
-          "lable": "D",
-          "test": "3",
-          "value": "1245"
-        }
-      ],
-      "value": "value test"
-    },
-    {
-      "id": 1,
-      "statement": "is This status Q1",
-      "type": "text",
-      "w": "1",
-      "options": [],
-      "value": "value test"
-    },
-    {
-      "id": 1,
-      "statement": "is This status Q1",
-      "type": "text",
-      "w": "1",
-      "options": [],
-      "value": "value test"
-    },
-    {
-      "id": 1,
-      "statement": "is This status Q1",
-      "type": "text",
-      "w": "1",
-      "options": [],
-      "value": "value test"
-    },
-  ]
-}
-
 
 class SurveyShowScreen extends Component {
     constructor(props) {
         super()
-        this.state = { questionsList: qlist }
+        this.state = { }
+    }
+
+    componentDidMount(){
+      this.fetchQuestions(this.props.id);
+    } 
+
+    fetchQuestions = (template_id) => {
+      this.props.actions.fetchQuestions(template_id);
+    }
+
+    onTextChange = (question, text) => {
+      console.log(question);
+      console.log(text);
+      let questionFeedback = {...question, value: text}
+      console.log(questionFeedback);
     }
 
     renderQuestion(questionContent) {
@@ -110,7 +36,7 @@ class SurveyShowScreen extends Component {
             return (
             <View style={styles.container}>
                 <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-                <QuestionText question={question} number={q_number}></QuestionText>
+                <QuestionText question={question} number={q_number} onChange={this.onTextChange}></QuestionText>
             </View>
             )
         }
@@ -124,22 +50,37 @@ class SurveyShowScreen extends Component {
         }
     }
 
+    handleSave = () => {
+      console.log('Calling Save..', this.state);
+      console.log('Calling Save..', this.props.questions);
+    }
+
+
+
     render() {
-        let renderQiestions = this.state.questionsList.Questions;
-        let question = renderQiestions[0]
         return (
-            <FlatList
-            keyExtractor={(item) => item.id}
-            enableEmptySections
-            data={renderQiestions}
-            renderItem={data => this.renderQuestion(data)}
+          <View style={styles.container}>
+            <ScrollView style={styles.form}>
+              <FlatList
+              keyExtractor={(item) => item.id}
+              enableEmptySections
+              data={this.props.questions}
+              renderItem={data => this.renderQuestion(data)}
+              />
+            </ScrollView>
+            <Button 
+                style = {styles.saveBtn}
+                title="Save"
+                color="#115E54"
+                onPress={() => this.handleSave()} 
             />
+          </View>
         );
     }
 }
 
-mapStateToProps = state => {
-    const questions = _.map(state.ListContactsReducer, (value, uid) => {
+const mapStateToProps = state => {
+    const questions = _.map(state.ListQuestionsReducer, (value, uid) => {
       return { ...value, uid }
     });
   
@@ -148,18 +89,26 @@ mapStateToProps = state => {
     }
 }
 
+const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch => {
+  return {
+    actions: {
+      fetchQuestions: (template_id) =>{
+        return dispatch(
+          fetchQuestions(template_id)
+        );
+      },
+    }
+  }
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    marginLeft: 15,
-    marginTop: 10,
-    padding: 10
   },
   Header: {
     fontSize: 20,
     fontWeight: 'bold',
-
   },
   textInput: {
     borderColor: '#777', borderWidth: 1,
@@ -168,9 +117,18 @@ const styles = StyleSheet.create({
     width: '80%',
     margin: 15,
   },
-  card: {
-    margin: 10,
-    elevation: 10
+  form: {
+    width: '100%',
+    padding: 10,
+    marginBottom: 5
+  },
+  saveBtn: {
+    position: 'absolute',
+    bottom: 20
   }
 });
-export default SurveyShowScreen;
+
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(SurveyShowScreen);

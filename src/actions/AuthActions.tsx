@@ -54,7 +54,9 @@ export const SignIN = ({ email, password }) => {
       console.log(TOKEN_KEY);
       AsyncStorage.setItem('@mytoken:key', TOKEN_KEY);
       AsyncStorage.setItem('authorization', TOKEN_KEY);
-      authSuccess(dispatch)
+      // AsyncStorage.setItem('currentUser', response.data.user);
+      console.log(response.data.user);
+      authSuccess(dispatch, response.data.user)
     })
     .catch(error => authUnsuccess(error, dispatch))
   }
@@ -79,9 +81,24 @@ export const registerUser = ({ name, email, password }) => {
   }
 }
 
-const authSuccess = (dispatch) => {
+export const fetchCurrentUser = () => {
+  console.log("Fetching......");
+  return dispatch => {
+    AsyncStorage.getItem('currentUser')
+    .then(user => {
+      console.log(user);
+      authSuccess(dispatch, user);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+}
+
+const authSuccess = (dispatch, payload) => {
   dispatch({
-    type: AUTH_SUCCESS
+    type: AUTH_SUCCESS,
+    payload: payload
   });
   Actions.mainScreen();
 }

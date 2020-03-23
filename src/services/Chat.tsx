@@ -7,7 +7,7 @@ const LOBBY = 'rooms:lobby'
 
 const CHATROOM='chat:13:Sunny:1:SS'
 
-export default (user, onChat) => {
+export default (user, room, onChat) => {
   // construct a socket
   const socket = new Socket(URL, {params: {token: "lirtFGyHgjhwfj3k8b7zYP2mt5GHimThd453bcRQIhU=", user_id: "13", user_name: "Sunny"}})
 
@@ -21,7 +21,7 @@ export default (user, onChat) => {
 
   // configure a channel into a room - https://www.youtube.com/watch?v=vWFX4ylV_ko
   // const chan = socket.channel(LOBBY, { user })
-  const chan = socket.channel(CHATROOM, { user })
+  const chan = socket.channel(room, { user })
 
   // join the channel and listen for admittance
   chan.join()

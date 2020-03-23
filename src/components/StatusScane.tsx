@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-import ConctactsList from './ConctactsList'
+import ContactsList from './ContactsList'
 
 export default props => (
   <View style={styles.container}>
-  <ConctactsList />
+  <ContactsList />
     <View>
       <TouchableOpacity activeOpacity={0.5} onPress={() => alert('Clicked!!')} style={styles.touchableOpacityStyle} >
         <Image source={require('../images/ic_chats_contacts.png')} style={styles.floatingButtonStyle} />

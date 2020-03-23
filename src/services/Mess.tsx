@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, Dimensions } from 'react-native';
+import { View, Dimensions, StyleSheet } from 'react-native';
 
 import { GiftedChat } from 'react-native-gifted-chat'
 import moment from 'moment'
 import Chat from './Chat'
-
+import _ from 'lodash';
 // layout numbers
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const STATUS_BAR_HEIGHT = 40  // i know, but let's pretend its cool
@@ -18,7 +18,13 @@ const getRandomUser = () => `${ getRandomName() }${ getRandomName() }${ getRando
 const user = getRandomUser()
 const isMe = (someUser) => user === someUser
 const avatar = { uri: 'https://facebook.github.io/react/img/logo_og.png' }
+import { Actions } from 'react-native-router-flux';
 
+const styles = StyleSheet.create({
+  hashtag: {
+    top: 0
+  }
+});
 export default class Mess extends Component {
 
   constructor (props) {
@@ -27,7 +33,10 @@ export default class Mess extends Component {
     this.handleSend = this.handleSend.bind(this)
     this.receiveChatMessage = this.receiveChatMessage.bind(this)
     // let's chat!
-    this.chat = Chat(user, this.receiveChatMessage);
+    console.log(this.props); 
+    // chat:13:Sunny:1:SS
+    this.chatRoom = "chat:" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(" ")) + ":" + this.props.contactId + ":" + _.first(this.props.contactName.split(' '))
+    this.chat = Chat(user, this.chatRoom, this.receiveChatMessage);
     // console.log("-----------")
     this.state = {
       messages: [],
@@ -38,14 +47,6 @@ export default class Mess extends Component {
   receiveChatMessage (message) {
     const { user } = message
     if (isMe(user)) return // prevent echoing yourself (TODO: server could handle this i guess?)
-    // this.refs.giftedMessenger.appendMessage({
-    //   text: message.body,
-    //   name: message.user,
-    //   image: avatar,
-    //   position: 'left',
-    //   date: moment()
-    // })
-
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, message),
     }))
@@ -57,26 +58,22 @@ export default class Mess extends Component {
   }
 
   componentDidMount() {
-    // this.setState({
-    //   messages: [
-    //     {
-    //       _id: 1,
-    //       text: 'Hello developer',
-    //       createdAt: new Date(),
-    //       user: {
-    //         _id: 2,
-    //         name: 'React Native',
-    //         avatar: 'https://placeimg.com/140/140/any',
-    //       },
-    //     },
-    //   ],
-    // })
   }
  
   onSend(messages = []) {
     this.chat.send(messages)
     
   }
+
+  onPressPhoneNumber = () => {
+    console.log("phone number pressed")
+  }
+
+  onPressHashtag = () => {
+    console.log("aa gaya mai");
+    Actions.showSurvey({ title: "bbbb", id: 48, currentUser: this.props.currentUser })
+  }
+
 
   // draw our ui
   render () {
@@ -86,8 +83,12 @@ export default class Mess extends Component {
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
           user={{
-            _id: 1,
+            _id: this.props.contactId,
           }}
+          parsePatterns={(linkStyle) => [
+            { type: 'phone', style: linkStyle, onPress: this.onPressPhoneNumber },
+            { pattern: /#(\w+)/, style: { ...linkStyle }, onPress: this.onPressHashtag },
+          ]}
         />
       </View>
     )

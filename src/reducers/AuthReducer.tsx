@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   email: '',
   password: '',
   message: '',
+  currentUser: '',
   signInLoading: false,
   signUpLoading: false
 }
@@ -35,7 +36,7 @@ export default (state = INITIAL_STATE, action) => {
     case type.SUCCESS_REGISTER:
         return { ...state, name: '' }
     case type.AUTH_SUCCESS:
-        return { ...state, email: '', password: '' }
+        return { ...state, email: '', password: '', currentUser: action.payload }
     case type.AUTH_FAILURE:
     switch (action.payload)
     {
