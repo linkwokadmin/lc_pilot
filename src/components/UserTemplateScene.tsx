@@ -7,13 +7,13 @@ import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableO
 
 import { connect } from 'react-redux';
 import {compose} from "redux";
-import { fetchTemplates, createTemplates } from '../actions/AppActions';
+import { fetchUserTemplates } from '../actions/AppActions';
 import DialogInput from 'react-native-dialog-input';
 import axios from 'axios';
 import { api_url } from '../resources/constants'
 import { AsyncStorage } from 'react-native';
 
-class TemplateScene extends Component {
+class UserTemplateScene extends Component {
   constructor(props) {
     super()
     this.state = { 
@@ -23,16 +23,16 @@ class TemplateScene extends Component {
   }
 
   componentDidMount(){
-    this.fetchTemplates();
+    this.fetchUserTemplates();
     // console.log(this.props);
   } 
 
   componentDidUpdate(){
-    // this.fetchTemplates();
+    // this.fetchUserTemplates();
   }
 
-  fetchTemplates = async () => {
-    this.props.actions.fetchTemplates();
+  fetchUserTemplates = async () => {
+    this.props.actions.fetchUserTemplates();
   }
 
   showDialog = () => {
@@ -84,7 +84,7 @@ class TemplateScene extends Component {
     const survey = item.item;
     return (
       <TouchableHighlight
-        onPress={ () => Actions.editSurvey({ title: survey.name, id: survey.id }) }
+        onPress={ () => Actions.showSurvey({ title: survey.name, id: survey.id }) }
       >
         <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
           <View style={{ marginLeft: 15 }}>
@@ -104,18 +104,6 @@ class TemplateScene extends Component {
           data={this.props.templates}
           renderItem={data => this.renderRow(data)}
         />
-        <View>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => this.showDialog() } style={styles.touchableOpacityStyle} >
-            <Image source={require('../images/ic_add.png')} style={styles.floatingButtonStyle} />
-          </TouchableOpacity>
-          <DialogInput isDialogVisible={this.state.dialogVisible}
-                     title={"Template"}
-                     message={"Enter name of the template"}
-                     hintInput ={"hint for the input"}
-                     submitInput={ (inputText) => {this.handleName(inputText)} }
-                     closeDialog={ () =>this.setState({dialogVisible:false})}>
-         </DialogInput>
-        </View>
       </View>
     );
   }
@@ -135,14 +123,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch => {
   return {
     actions: {
-      fetchTemplates: () =>{
+      fetchUserTemplates: () =>{
         return dispatch(
-          fetchTemplates()
-        );
-      },
-      createTemplates: (template) => {
-        return dispatch(
-          createTemplates(template)
+          fetchUserTemplates()
         );
       }
     }
@@ -177,4 +160,4 @@ const styles = StyleSheet.create({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps)
-)(TemplateScene);
+)(UserTemplateScene);

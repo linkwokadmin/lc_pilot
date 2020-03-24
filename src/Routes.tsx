@@ -14,6 +14,7 @@ import Chat from './components/Chat';
 import SelectContact from './components/SelectContact';
 import SurveyShowScreen from './components/SurveyShowScreen';
 import SurveyEditScreen from './components/SurveyEditScreen';
+import UserTemplateScene from './components/UserTemplateScene'
 import Mess from './services/Mess';
 
 export default class Routes extends Component {
@@ -58,6 +59,7 @@ componentWillMount() {
           <Scene key='mainScreen' component={MainScreen} title="MainScreen" hideNavBar={true} initial={this.state.logged} />
           <Scene key='welcomeScreen' component={WelcomeScreen} title="WelcomeScreen" />
           <Scene key='addContactScreen' component={AddContactScreen} title="Add Contact" />
+          <Scene key='userTemplateScene' component={UserTemplateScene} title="User Templates" />
           <Scene key='chat' component={Chat} title="Chat" hideNavBar={false} />
           <Scene key='selectContact' component={SelectContact} title="Select contact" hideNavBar={false} />
           <Scene key='addTemplate' component={AddTemplateScreen} title="Add Template" />
@@ -65,7 +67,7 @@ componentWillMount() {
           <Scene key='addMcqQuestion' component={AddMcqQuestion} title="Add Multiple-choice Question" />
           <Scene key='showSurvey' component={SurveyShowScreen} title="Survey Show" />
           <Scene key='editSurvey' component={SurveyEditScreen} title="Survey Edit" />
-          <Scene key='b_chat' component={Mess} title="b_Chat" hideNavBar={false} />
+          <Scene key='b_chat' component={Mess} title="b_Chat" hideNavBar={false} onRight={ ()=> console.log(111) } rightButtonImage={null} />
 
         </Scene>
       </Router>

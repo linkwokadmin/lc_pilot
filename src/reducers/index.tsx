@@ -7,6 +7,7 @@ import ListConversation from './ListConversation';
 import ListChatsReducer from './ListChatsReducer';
 import ListTemplatesReducer from './ListTemplatesReducer';
 import ListQuestionsReducer from './ListQuestionsReducer';
+import ListFeedbacksReducer from './ListFeedbacksReducer';
 
 export default combineReducers({
    AuthReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
    ListConversation,
    ListChatsReducer,
    ListTemplatesReducer,
-   ListQuestionsReducer
+   ListQuestionsReducer,
+   ListFeedbacksReducer
 });

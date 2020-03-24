@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import { View, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { Icon } from 'react-native-elements'
 
 import { GiftedChat } from 'react-native-gifted-chat'
 import moment from 'moment'
 import Chat from './Chat'
 import _ from 'lodash';
+
 // layout numbers
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const STATUS_BAR_HEIGHT = 40  // i know, but let's pretend its cool
@@ -32,19 +34,16 @@ export default class Mess extends Component {
     // bind our functions to the right scope
     this.handleSend = this.handleSend.bind(this)
     this.receiveChatMessage = this.receiveChatMessage.bind(this)
-    // let's chat!
-    console.log(this.props); 
-    // chat:13:Sunny:1:SS
     if(this.props.currentUser.id > this.props.contactId) {
       this.chatRoom = "chat:" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(" ")) + ":" + this.props.contactId + ":" + _.first(this.props.contactName.split(' '))
     } else {
       this.chatRoom = "chat:" + this.props.contactId + ":" + _.first(this.props.contactName.split(' ')) + ":"  + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(" "));
     }
-    this.chat = Chat(user, this.chatRoom, this.receiveChatMessage);
-    // console.log("-----------")
+    this.chat = Chat(this.props.currentUser, this.chatRoom, this.receiveChatMessage);
     this.state = {
       messages: [],
     }
+    Actions.refresh({ onRight: this.handleRight(), rightButton: this.renderRightButton() });
   }
 
   // fires when we receive a message
@@ -61,7 +60,20 @@ export default class Mess extends Component {
     this.chat.send(message.text)
   }
 
+  renderRightButton = () => {
+    return(
+        <TouchableOpacity onPress={() => this.handleRight() } >
+            <Icon name="check" size={26} color='grey' />
+        </TouchableOpacity>
+    );
+  };
+
+  handleRight = () => {
+    Actions.userTemplateScene();
+  }
+
   componentDidMount() {
+    Actions.refresh({ rightButton: this.renderRightButton() });
   }
  
   onSend(messages = []) {

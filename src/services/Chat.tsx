@@ -9,7 +9,8 @@ const CHATROOM='chat:13:Sunny:1:SS'
 
 export default (user, room, onChat) => {
   // construct a socket
-  const socket = new Socket(URL, {params: {token: "lirtFGyHgjhwfj3k8b7zYP2mt5GHimThd453bcRQIhU=", user_id: "13", user_name: "Sunny"}})
+  
+  const socket = new Socket(URL, {params: {token: "lirtFGyHgjhwfj3k8b7zYP2mt5GHimThd453bcRQIhU=", user_id: user.id, user_name: user.name.split(' ')[0]}})
 
   // configure the event handlers
   socket.onOpen(event => console.log('Connected.'))
@@ -17,7 +18,7 @@ export default (user, room, onChat) => {
   socket.onClose(event => console.log('Goodbye.'))
 
   // open a connection to the server
-  socket.connect({token: "lirtFGyHgjhwfj3k8b7zYP2mt5GHimThd453bcRQIhU=", user_id: "13", user_name: "Sunny"})
+  socket.connect({token: "lirtFGyHgjhwfj3k8b7zYP2mt5GHimThd453bcRQIhU=", user_id: user.id, user_name: user.name.split(' ')[0]})
 
   // configure a channel into a room - https://www.youtube.com/watch?v=vWFX4ylV_ko
   // const chan = socket.channel(LOBBY, { user })
@@ -34,7 +35,7 @@ export default (user, room, onChat) => {
   chan.onClose(event => console.log('Channel closed.'))
 
   chan.on('init:msg', (msg) => {
-    console.log("kkkkkkk", msg);
+    // console.log("kkkkkkk", msg);
     onChat(msg.messages)
   })
   // when we receive a new chat message, just trigger the appropriate callback

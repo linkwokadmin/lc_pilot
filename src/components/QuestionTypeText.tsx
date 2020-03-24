@@ -1,12 +1,14 @@
 import React from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 
-export const QuestionText = ({ question, number, onChange }) => {
+export const QuestionText = ({ question, number, filled, onChange }) => {
+    console.log(question)
     return (
         <View >
             <TextInput
                 multiline
                 style={styles.textInput}
+                value={filled ? question.value : ''}
                 onChangeText={(text) => {onChange(question, text) }}
             />
         </View>

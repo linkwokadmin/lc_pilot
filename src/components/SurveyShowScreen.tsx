@@ -1,41 +1,59 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { View, Text, FlatList, StyleSheet, ScrollView, Button } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView, Button, AsyncStorage } from 'react-native';
 
 import { connect } from 'react-redux';
 import {compose} from "redux";
-import { fetchQuestions } from '../actions/AppActions';
+import { fetchQuestions, saveFeedbacks, fetchResponses } from '../actions/AppActions';
 import { QuestionText } from './QuestionTypeText'
 import { QuestionMcq } from './QuestionTypeMcq'
 
 class SurveyShowScreen extends Component {
     constructor(props) {
         super()
-        this.state = { }
+        this.state = { mcq: {}, feedbacks: []}
     }
 
     componentDidMount(){
+      this.fetchResponses(this.props.id);
       this.fetchQuestions(this.props.id);
+      console.log()
+      if(this.props.filled) {
+        this.setState({'feedbacks': this.props.feedbacks});
+      } else {
+        this.setState({'feedbacks': this.props.questions});
+      }
+      // console.log("======",this.props.feedbacks);
+      // AsyncStorage.getItem("authorization").then(token => {
+      //   console.log(token);
+      // })
     } 
 
     fetchQuestions = (template_id) => {
       this.props.actions.fetchQuestions(template_id);
     }
 
+    fetchResponses = (template_id) => {
+      this.props.actions.fetchResponses(template_id);
+    }
+
     onTextChange = (question, text) => {
-      console.log(question);
-      console.log(text);
       let questionFeedback = {...question, value: text}
-      console.log(questionFeedback);
+      let newFeedbacks = this.state.feedbacks.map((feedback, idx) => {
+        if(feedback.id !== question.id) return feedback;
+        return questionFeedback;
+      });
+      this.setState({'feedbacks': newFeedbacks})
     }
 
     onMcqChange = (question, item) => {
-      let val = val + "," + item.label;
-      // const update = {}
-      // this.setState({"mcq": update})
-      console.log(val);
+      let val = (val !== undefined ? val : "") + "" + item.label;
       let questionFeedback = {...question, value: val}
-      console.log(questionFeedback);
+      let newFeedbacks = this.state.feedbacks.map((feedback, idx) => {
+        if(feedback.id !== question.id) return feedback;
+        return questionFeedback;
+      });
+      this.setState({'feedbacks': newFeedbacks})
     }
 
     renderQuestion(questionContent) {
@@ -45,7 +63,7 @@ class SurveyShowScreen extends Component {
             return (
             <View style={styles.container}>
                 <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-                <QuestionText question={question} number={q_number} onChange={this.onTextChange}></QuestionText>
+                <QuestionText question={question} number={q_number} filled={this.props.filled} onChange={this.onTextChange}></QuestionText>
             </View>
             )
         }
@@ -61,7 +79,7 @@ class SurveyShowScreen extends Component {
 
     handleSave = () => {
       console.log('Calling Save..', this.state);
-      console.log('Calling Save..', this.props.questions);
+      this.props.actions.saveFeedbacks(this.props.id, this.state.feedbacks);
     }
 
 
@@ -73,16 +91,20 @@ class SurveyShowScreen extends Component {
               <FlatList
               keyExtractor={(item) => item.id}
               enableEmptySections
-              data={this.props.questions}
+              data={(this.props.filled ? this.props.feedbacks : this.props.questions)}
               renderItem={data => this.renderQuestion(data)}
               />
             </ScrollView>
-            <Button 
-                style = {styles.saveBtn}
-                title="Save"
-                color="#115E54"
-                onPress={() => this.handleSave()} 
-            />
+            {
+              this.props.filled ? 
+                null :
+              <Button 
+                  style = {styles.saveBtn}
+                  title="Save"
+                  color="#115E54"
+                  onPress={() => this.handleSave()} 
+              />
+            }
           </View>
         );
     }
@@ -92,9 +114,14 @@ const mapStateToProps = state => {
     const questions = _.map(state.ListQuestionsReducer, (value, uid) => {
       return { ...value, uid }
     });
+    const feedbacks = _.map(state.ListFeedbacksReducer, (value, uid) => {
+      return { ...value, uid }
+    });
   
     return {
-      questions: questions
+      questions: questions,
+      feedbacks: feedbacks,
+      filled: (feedbacks.length > 0 ? true : false)
     }
 }
 
@@ -106,6 +133,16 @@ const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch =
           fetchQuestions(template_id)
         );
       },
+      fetchResponses: (template_id) =>{
+        return dispatch(
+          fetchResponses(template_id)
+        );
+      },
+      saveFeedbacks: (template_id, feedbacks) => {
+        return dispatch(
+          saveFeedbacks(template_id, feedbacks)
+        )
+      }
     }
   }
 };

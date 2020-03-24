@@ -17,8 +17,11 @@ import {
   FETCH_ALL_CHATS,
   TEMPLATES_LIST,
   QUESTION_LIST,
-  ERROR_ADDING_TEMPLATE
+  ERROR_ADDING_TEMPLATE,
+  FEEDBACK_LIST,
+  USER_TEMPLATE_LIST
 } from '../resources/types';
+import { template } from '@babel/core';
 
 /* added to redux */
 export const addContact = (email) => {
@@ -203,6 +206,32 @@ export const fetchQuestions=(template_id)=>{
   }
 }
 
+export const fetchResponses = (template_id) => {
+  return dispatch => {
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/responses/feedbacks/" + template_id;
+      axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then((response) => {
+        let feedbacks = response.data.data;
+        console.log("feedbacks: ", feedbacks);
+        dispatch({
+          type: FEEDBACK_LIST,
+          payload: feedbacks
+        })
+      }).catch((api_err) => {
+        console.log("API ERR: ", api_err)
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+    })
+  }
+}
+
 // Fetch templates
 export const fetchTemplates = () => {
   return dispatch => {
@@ -217,6 +246,32 @@ export const fetchTemplates = () => {
         let templates = response.data.data;
         dispatch({
           type: TEMPLATES_LIST,
+          payload: templates
+        })
+      }).catch((api_err) => {
+        console.log("API ERR: ", api_err)
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+    })
+  }
+}
+
+// Fetch templates
+export const fetchUserTemplates = () => {
+  return dispatch => {
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/templates/my_templates/user";
+      axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then((response) => {
+        let templates = response.data.data;
+        dispatch({
+          type: USER_TEMPLATE_LIST,
           payload: templates
         })
       }).catch((api_err) => {
@@ -266,6 +321,35 @@ export const createTemplates = (template) => {
         return null;
       })
     // );
+  }
+}
+
+export const saveFeedbacks = (template_id, feedbacks) => {
+  return dispatch => {
+    let data = {
+      "feedbacks": feedbacks
+    }
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/responses/" + template_id + "/bulk_upsert";
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+      axios.post(url, data, {
+        headers: headers
+      }).then(response => {
+        let feedbacks = response.data.data;
+        return feedbacks;
+      }).catch((error) => {
+        console.log(err);
+        return null;
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+      return null;
+    })
   }
 }
 

@@ -14,6 +14,7 @@
     "base-64": "^0.1.0",
     "firebase": "^7.9.3",
     "formik": "^2.1.4",
+    "js-sha256": "^0.9.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "phoenix-channels": "^1.0.0",

@@ -22,7 +22,7 @@ class TabBarMenu extends Component {
     return (
       <View style={styles.statusBar}>
         <StatusBar backgroundColor="#75daad" />
-        <View style={styles.statusBarTital}>
+        <View style={styles.statusBarTitle}>
           <View style={{ height: 50, justifyContent: 'center', marginLeft: 20 }}>
           <Text style={{ color: 'white', fontSize: 19 }}>SuperCoach</Text>
           </View>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#75daad',
 
   },
-  statusBarTital: {
+  statusBarTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
