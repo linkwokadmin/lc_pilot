@@ -38,6 +38,7 @@ export default class MainScreen extends Component {
           renderTabBar={this._renderHeader}
           onIndexChange={this._handleIndexChange}
           initialLayout={initialLayout}
+          
         />
     );
   }
@@ -46,5 +47,5 @@ export default class MainScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
+    },
 });

@@ -10,6 +10,8 @@ import {
   fetchAllChats
 } from '../actions/AppActions';
 
+import { Card } from 'react-native-elements'
+
 class ChatsList extends Component {
   componentDidMount() {
     this.props.fetchAllChats(base64.encode(this.props.email_logged_in));
@@ -22,12 +24,9 @@ class ChatsList extends Component {
   // }
 
   renderRow(chatContent) {
-    // console.log(chatContent.item);
-    // let newChatContent = _.values(chatContent.item)
     let newChatContent = _.values(chatContent.item)
-    // console.log(chatContent)
-    // console.log(newChatContent[0]);
     return (
+
       <TouchableHighlight
         onPress={() => Actions.chat({
           title: newChatContent[0].name,
@@ -42,7 +41,9 @@ class ChatsList extends Component {
             <Text style={styles.chatSubtital}>{newChatContent[0].lastMessage}</Text>
           </View>
         </View>
+
       </TouchableHighlight>
+
     )
   }
   render() {
@@ -95,6 +96,9 @@ const styles = StyleSheet.create({
   DataMessage: {
     fontSize: 24,
     marginTop: 50
+  },
+  fatlistCard: {
+    width: '70%'
   }
 });
 

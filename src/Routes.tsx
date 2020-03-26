@@ -16,6 +16,7 @@ import SurveyShowScreen from './components/SurveyShowScreen';
 import SurveyEditScreen from './components/SurveyEditScreen';
 import UserTemplateScene from './components/UserTemplateScene'
 import Mess from './services/Mess';
+import splashScreen from './screens/splash';
 
 export default class Routes extends Component {
   constructor(props) {
@@ -26,15 +27,15 @@ export default class Routes extends Component {
     };
   }
 
-componentWillMount() {
-  AsyncStorage.getItem('@mytoken:key')
-    .then((token) => {
-      if (token != null) {
-        this.setState({ logged: true, loading: false, });
-      } else {
-        this.setState({ loading: false })
-      }
-    });
+  componentWillMount() {
+    AsyncStorage.getItem('@mytoken:key')
+      .then((token) => {
+        if (token != null) {
+          this.setState({ logged: true, loading: false, });
+        } else {
+          this.setState({ loading: false })
+        }
+      });
   }
 
   renderAcessRoutes() {
@@ -47,15 +48,16 @@ componentWillMount() {
     if (this.state.loading) {
       return (
         <View style={[styles.container, styles.horizontal]}>
-        { this.renderAcessRoutes() }
+          {this.renderAcessRoutes()}
         </View>
       );
     }
     return (
       <Router navigationBarStyle={{ backgroundColor: '#75daad' }} titleStyle={{ color: 'white' }}>
         <Scene key='app'>
-          <Scene key='loginScreen' component={LoginScreen} title="Login" hideNavBar={true} initial={!this.state.logged} />
-          <Scene key='signUpScreen' component={SignUpScreen} title="SignUp" />
+          <Scene key='splashScreen' component={splashScreen} hideNavBar={true} title="Splash" initial={!this.state.logged} />
+          <Scene key='loginScreen' component={LoginScreen} title="Login" hideNavBar={true}  />
+          <Scene key='signUpScreen' component={SignUpScreen} title="SignUp"  hideNavBar={true} />
           <Scene key='mainScreen' component={MainScreen} title="MainScreen" hideNavBar={true} initial={this.state.logged} />
           <Scene key='welcomeScreen' component={WelcomeScreen} title="WelcomeScreen" />
           <Scene key='addContactScreen' component={AddContactScreen} title="Add Contact" />
@@ -67,7 +69,7 @@ componentWillMount() {
           <Scene key='addMcqQuestion' component={AddMcqQuestion} title="Add Multiple-choice Question" />
           <Scene key='showSurvey' component={SurveyShowScreen} title="Survey Show" />
           <Scene key='editSurvey' component={SurveyEditScreen} title="Survey Edit" />
-          <Scene key='b_chat' component={Mess} title="b_Chat" hideNavBar={false} onRight={ ()=> console.log(111) } rightButtonImage={null} />
+          <Scene key='b_chat' component={Mess} title="b_Chat" hideNavBar={false} onRight={() => console.log(111)} rightButtonImage={null} />
 
         </Scene>
       </Router>

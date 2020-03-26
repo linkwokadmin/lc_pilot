@@ -12,19 +12,17 @@ const TAB_AND_INDICATOR_WIDTH = TAB_BAR_WIDTH / 2;
 const CAMERA_WIDTH = (10 * SCREEN_WIDTH) / 100; //10% of screen
 
 class TabBarMenu extends Component {
-  logout(){
+  logout() {
     AsyncStorage.clear();
     Actions.loginScreen();
   }
-
-
   render() {
     return (
       <View style={styles.statusBar}>
         <StatusBar backgroundColor="#75daad" />
         <View style={styles.statusBarTitle}>
-          <View style={{ height: 50, justifyContent: 'center', marginLeft: 20 }}>
-          <Text style={{ color: 'white', fontSize: 19 }}>SuperCoach</Text>
+          <View style={styles.header}>
+            <Text style={styles.headerName}>SuperCoach</Text>
           </View>
           <View style={{ flexDirection: 'row', marginRight: 10 }}>
             <View style={{ width: 35, justifyContent: 'center' }}>
@@ -54,9 +52,9 @@ class TabBarMenu extends Component {
 
 const styles = StyleSheet.create({
   statusBar: {
-    backgroundColor: '#75daad',
     elevation: 3,
-    marginBottom: 3
+    marginBottom: 2,
+    backgroundColor: '#75daad',
   },
   tabBar: {
     width: TAB_BAR_WIDTH,
@@ -65,9 +63,22 @@ const styles = StyleSheet.create({
 
   },
   statusBarTitle: {
+    marginTop: 50,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: '#75daad',
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 40
+  },
+  headerName: {
+    color: '#fff',
+    fontSize: 22,
+    marginLeft: 30,
+    
+  }
 }
 );
 

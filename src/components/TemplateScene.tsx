@@ -12,6 +12,7 @@ import DialogInput from 'react-native-dialog-input';
 import axios from 'axios';
 import { api_url } from '../resources/constants'
 import { AsyncStorage } from 'react-native';
+import { Card,Badge } from 'react-native-elements'
 
 class TemplateScene extends Component {
   constructor(props) {
@@ -79,20 +80,31 @@ class TemplateScene extends Component {
       return null;
     })
   }
+  getDtanemic(){
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 
   renderRow(item) {
     const survey = item.item;
     return (
+      <Card containerStyle={styles.cardChat}>
       <TouchableHighlight
         onPress={ () => Actions.editSurvey({ title: survey.name, id: survey.id }) }
       >
-        <View style={{ flex: 1,  flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderColor: "#b7b7b7" }}>
-          <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{ survey.name }</Text>
+        <View style={{ flex: 1,  flexDirection: 'row',justifyContent:'flex-start'}}>
+        <View style={{width: 50, height: 50, backgroundColor: this.getDtanemic() }} />
+ 
+          <View style={{marginLeft:40}}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold'}}>{ survey.name }</Text>
             <Text style={{ fontSize: 13 }}>{ survey.inserted_at }</Text>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableHighlight></Card>
     )
   }
 
@@ -172,7 +184,14 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: 55,
     height: 55,
+  },
+  cardChat: {
+    width: '95%',
+    justifyContent:'center',
+    alignSelf:'center'
+   
   }
+
 });
 
 export default compose(
