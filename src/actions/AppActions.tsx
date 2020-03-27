@@ -324,6 +324,39 @@ export const createTemplates = (template) => {
   }
 }
 
+// Share template to user
+export const shareTemplate = (userId, templateId) => {
+  return dispatch => {
+    let data = {
+      user: {
+        template_ids: [templateId]
+      }
+    }
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/users/" + userId + "/upsert_templates";
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+      axios.post(url, data, {
+        headers: headers
+      }).then(response => {
+        let template = response.data.data;
+        console.log("Template: ", template);
+        return template;
+      }).catch((error) => {
+        console.log(error);
+        return null;
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+      return null;
+    })
+  }
+}
+
 export const saveFeedbacks = (template_id, feedbacks) => {
   return dispatch => {
     let data = {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, StatusBar, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Dimensions, StatusBar, Image, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { TabBar } from 'react-native-tab-view';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 
   },
   statusBarTitle: {
-    marginTop: 50,
+    marginTop: Platform.OS === 'ios' ? 50 : 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#75daad',
