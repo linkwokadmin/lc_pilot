@@ -11,7 +11,7 @@ export const QuestionMcq = ({ question, options, number, onChange }) => {
                 renderItem={({ item }) => (
                     <View style={{ flexDirection: 'row' }}>
                         <CheckBox
-                            value={question.value === item.label}
+                            value={(question !== undefined && question.value) === item.label}
                             onValueChange={() => onChange(question, item)}
                         />
                         <Text style={{ marginTop: 5 }}>{item.label} </Text>

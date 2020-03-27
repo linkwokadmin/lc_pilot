@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableHighlight, ImageBackground, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableHighlight, ImageBackground, ActivityIndicator, Image, TouchableOpacity, Platform } from 'react-native';
 import * as Strings from '../resources/strings';
 
 import { Actions } from 'react-native-router-flux';
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height: 50,
     borderEndWidth: 0,
-    margin: 22,
+    margin: Platform.OS === 'ios' ? 22 : 15,
     borderBottomWidth: 1,
     borderBottomColor: '#000'
   },
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   heder: {
-    marginTop: 100,
+    marginTop: Platform.OS === 'ios' ? 100 : 80,
     alignItems: 'center'
   },
   loginCard: {
@@ -115,7 +115,8 @@ const styles = StyleSheet.create({
     margin: 30
   },
   btnLoginN: {
-    margin: 20
+    margin: 20,
+    width: 100
   }
 
 });

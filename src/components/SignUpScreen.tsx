@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Button, StyleSheet, ImageBackground, Text, ActivityIndicator, Image } from 'react-native';
+import { View, TextInput, Button, StyleSheet, ImageBackground, Text, ActivityIndicator, Image, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { addName, addEmail, addPassword, registerUser } from '../actions/AuthActions';
 import { Card, CheckBox } from 'react-native-elements';
@@ -16,14 +16,20 @@ class SignUpScreen extends Component {
   }
   _registerUser() {
     const { name, email, password } = this.props;
-    this.props.registerUser({ name, email, password });
+    const userType = this.state.Coach ? 'coach' : 'user';
+    console.log(userType);
+    this.props.registerUser({ name, email, password, userType });
   }
 
   renderRegisterButton() {
     if (this.props.signUpLoading) {
       return (<ActivityIndicator size="large" color="#00ff00" />)
     }
-    return (<Button title="SignUp" color='green' onPress={() => this._registerUser()} />)
+    return (
+      <View style={styles.btnSignUp}>
+        <Button title="SignUp" color='green' onPress={() => this._registerUser()} />
+      </View>
+    )
   }
 
   render() {
@@ -83,11 +89,12 @@ class SignUpScreen extends Component {
               value={this.props.password}
               onChangeText={password => this.props.addPassword(password)}
             />
-            <View style={styles.btnSignUp}>
+            <View style={styles.btnSignUpContainer}>
               {this.renderRegisterButton()}
-              <Button title="SignIn" color='green' onPress={() => Actions.loginScreen()} />
+              <View style={styles.btnSignUp}>
+                <Button title="SignIn" color='green' onPress={() => Actions.loginScreen()} />
+              </View>
             </View>
-            
           </Card>
         </View>
 
@@ -127,24 +134,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  btnSignUp: {
+  btnSignUpContainer: {
+    marginTop:  Platform.OS === 'ios' ? 0 : 15,
     height: 50,
     flexDirection:'row',
     justifyContent:'space-between'
   },
+  btnSignUp: {
+    width: 100
+  },
   heder: {
-    marginTop: 100,
+    marginTop: Platform.OS === 'ios' ? 100 : 70,
     alignItems: 'center'
   },
   loginCard: {
-    height: 500,
+    height: Platform.OS === 'ios' ? 500 : 400,
     margin: 30
   },
   textInput: {
     fontSize: 18,
     height: 50,
     borderEndWidth: 0,
-    margin: 22,
+    margin: Platform.OS === 'ios' ? 22 : 15,
     borderBottomWidth: 1,
     borderBottomColor: '#000'
   },
@@ -157,5 +168,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent:'center',
     justifyContent:'center'
-  }
+  },
 });

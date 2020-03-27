@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert, Image, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 
@@ -12,11 +12,11 @@ export default class splashScreen extends Component {
                     <Image source={require('../images/SuperCoach.png')} />
                 </View>
                 <View style={styles.notes} >
-                    <Text style={styles.notesName}> Mobile first Coaching Management App </Text>
-                    <Text style={styles.notesName}> Secure chat, voice and video call with Clients (with recording features) </Text>
-                    <Text style={styles.notesName}> Scheduling assistance, integrated with your favorite calendar apps. </Text>
-                    <Text style={styles.notesName}> Create interactive and fun progress plans with your Clients. </Text>
-                    <Text style={styles.notesName}>Create your own forms for discovery, session feedback, etc.  </Text>
+                    <Text style={styles.notesName}>Mobile first Coaching Management App </Text>
+                    <Text style={styles.notesName}>Secure chat, voice and video call with Clients (with recording features) </Text>
+                    <Text style={styles.notesName}>Scheduling assistance, integrated with your favorite calendar apps. </Text>
+                    <Text style={styles.notesName}>Create interactive and fun progress plans with your Clients. </Text>
+                    <Text style={styles.notesName}>Create your own forms for discovery, session feedback, etc. </Text>
                     <Text style={styles.notesName}>Digital Contracts. </Text>
                     <Text style={styles.notesName}>Send Invoices and receive Payments. </Text>
 
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     heder: {
-        marginTop: 100,
+        marginTop: Platform.OS === 'ios' ? 100 : 30,
         alignItems: 'center'
     },
     hederName: {
@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     notes: {
-        marginTop: 50,
-        alignItems: 'center'
+        marginTop: Platform.OS === 'ios' ? 50 : 30,
+        alignItems:  Platform.OS === 'ios' ? 'center' : 'flex-start'
     },
     notesName: {
-        fontSize: 18,
+        fontSize:  Platform.OS === 'ios' ? 18 : 15,
         fontStyle: 'normal',
         fontWeight: '300',
-        margin: 10
+        margin: Platform.OS === 'ios' ? 10 : 11
     },
     btnStart: {
         alignItems: 'center',

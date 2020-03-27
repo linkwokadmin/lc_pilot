@@ -64,26 +64,29 @@ export const SignIN = ({ email, password }) => {
 /*
 ActionCreator to create new user registration
 */
-export const registerUser = ({ name, email, password }) => {
+export const registerUser = ({ name, email, password, userType }) => {
+  const newUserObj = {
+    user:{
+      email: email,
+      password: password,
+      name: name,
+      password_confirmation: password,
+      user_type: userType
+    }
+  };
+  console.log(newUserObj);
   return dispatch => {
     dispatch({ type:
       SIGN_UP_LOADING
     })
 
-    axios.post(api_url + "/api/v1/sign_up",{
-      user:{
-        email: email,
-        password: password,
-        name: name,
-        password_confirmation: password
-      }
-    })
+    axios.post(api_url + "/api/v1/sign_up", newUserObj)
     .then(response => {
       const TOKEN_KEY = response.data.jwt;
       console.log(TOKEN_KEY);
       AsyncStorage.setItem('@mytoken:key', TOKEN_KEY);
       AsyncStorage.setItem('authorization', TOKEN_KEY);
-      // AsyncStorage.setItem('currentUser', response.data.user);
+      AsyncStorage.setItem('currentUser', response.data.user);
       console.log(response.data.user);
       authSuccess(dispatch, response.data.user)
       registerSuccess(dispatch)
@@ -127,7 +130,7 @@ const authUnsuccess = (error, dispatch) => {
 
 const registerSuccess = (dispatch) => {
   dispatch({ type: SUCCESS_REGISTER });
-  Actions.welcomeScreen();
+  Actions.mainScreen();
 }
 
 const registerUnsuccess = (error, dispatch) => {
