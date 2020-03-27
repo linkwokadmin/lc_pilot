@@ -8,11 +8,14 @@ const INITIAL_STATE = {
   message: '',
   currentUser: '',
   signInLoading: false,
-  signUpLoading: false
+  signUpLoading: false,
+  splashRead: false
 }
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case type.SPLASH_READ:
+        return {...state, splashRead: true}
     case type.ADD_EMAIL:
         return { ...state, email: action.payload }
     case type.ADD_PASSWORD:
