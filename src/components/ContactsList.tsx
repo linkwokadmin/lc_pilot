@@ -24,9 +24,28 @@ class ContactsList extends Component {
     }
     return color;
   }
+
+  renderBadgeData = (newContact) => {
+    return(
+      <View style={{alignContent:'flex-end'}}>
+        <Text>{newContact.sent_at}</Text>
+        <Badge value={newContact.count} status="error" containerStyle={{marginTop:10}} />
+      </View>
+    )
+  }
+
+  renderBadgeBlankData = (newContact) => {
+    return(
+      <View style={{alignContent:'flex-end'}}>
+        <Text>{newContact.sent_at}</Text>
+        <Badge value={newContact.count} status="error" containerStyle={{marginTop:10}} />
+      </View>
+    )
+  }
+
   renderRow(contact) {
     let newContact = _.first(_.values(contact));
-    console.log('----------',newContact.email);
+    // console.log(newContact)
     if(newContact.email!=null){
       return (
         <Card containerStyle={styles.cardChat}>
@@ -36,15 +55,13 @@ class ContactsList extends Component {
           >
             <View style={{ flexDirection: 'row',flex:1,justifyContent:'space-between'}}>
               <Image source={{ uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50,alignContent:'flex-start',backgroundColor: this.getColor() }} />
-              <View style={{ marginLeft: 15 , alignContent:'center'}}>
+              <View style={{ marginLeft: 15 , alignContent:'center', position: 'absolute', left: 50}}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{newContact.name}</Text>
                 <Text style={{ fontSize: 13 ,marginTop:10}}>{newContact.email}</Text>
               </View>
-              <View style={{alignContent:'flex-end'}}>
-                  <Text>09:00 Am</Text>
-                  <Badge value="99+" status="error" containerStyle={{marginTop:10}} />
-
-              </View>
+              {
+                (newContact.sent_at !== null) ? this.renderBadgeData(newContact) : this.renderBadgeBlankData(newContact)
+              }
             </View>
           </TouchableHighlight >
           
@@ -52,9 +69,6 @@ class ContactsList extends Component {
   
       )
     }
-    
-   
-   
   }
 
   render() {

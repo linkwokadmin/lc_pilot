@@ -15,6 +15,7 @@ import SelectContact from './components/SelectContact';
 import SurveyShowScreen from './components/SurveyShowScreen';
 import SurveyEditScreen from './components/SurveyEditScreen';
 import UserTemplateScene from './components/UserTemplateScene'
+import CoachTemplateScene from './components/CoachTemplateScene'
 import Mess from './services/Mess';
 import splashScreen from './screens/splash';
 
@@ -62,6 +63,7 @@ export default class Routes extends Component {
           <Scene key='welcomeScreen' component={WelcomeScreen} title="WelcomeScreen" />
           <Scene key='addContactScreen' component={AddContactScreen} title="Add Contact" />
           <Scene key='userTemplateScene' component={UserTemplateScene} title="User Templates" />
+          <Scene key='coachTemplateScene' component={CoachTemplateScene} title="Template List" />
           <Scene key='chat' component={Chat} title="Chat" hideNavBar={false} />
           <Scene key='selectContact' component={SelectContact} title="Select contact" hideNavBar={false} />
           <Scene key='addTemplate' component={AddTemplateScreen} title="Add Template" />
