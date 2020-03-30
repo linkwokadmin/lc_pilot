@@ -5,10 +5,18 @@ export const QuestionText = ({ question, number, filled, onChange }) => {
     console.log(question)
     return (
         <View >
+            filled ?
             <TextInput
                 multiline
                 style={styles.textInput}
                 value={filled ? question.value : ''}
+                onChangeText={(text) => {onChange(question, text) }}
+            /> 
+            : 
+            <TextInput
+                multiline
+                style={styles.textInput}
+                value={}
                 onChangeText={(text) => {onChange(question, text) }}
             />
         </View>
