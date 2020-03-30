@@ -10,28 +10,35 @@ import { TextInput } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { api_url } from './../resources/constants';
+import { CheckBox } from 'react-native-elements'
+
 
 class AddMcqQuestion extends Component {
   constructor() {
     super();
     this.state = {
-        statement: "",
-        type: "mcq",
-        weight: "1",
-        value: "default",
-        options: [
-            {
-                "test": "",
-                "label": "",
-                "value": ""
-            }
-        ]
+      statement: "",
+      type: "mcq",
+      weight: "1",
+      value: "default",
+      options: [
+        {
+          "test": "",
+          "label": "",
+          "value": ""
+        },
+        {
+          "test": "",
+          "label": "",
+          "value": ""
+        }
+      ]
     };
   }
 
   handleNameChange = (statement) => () => {
     console.log("statement : ", statement);
-    this.setState({statement: statement})
+    this.setState({ statement: statement })
   }
 
   handleOptionsNameChange = (text, idx) => {
@@ -58,87 +65,83 @@ class AddMcqQuestion extends Component {
   handleSave = () => {
     console.log('Calling Save..', this.state);
     AsyncStorage.getItem("authorization")
-    .then((token) => {
-      let url = api_url + "/api/v1/questions";
-      let data = {question: {...this.state, template_id: this.props.id}};
-      const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-      axios.post(url, data, {
-        headers: headers
-      }).then(response => {
-        let question = response.data.data;
-        console.log(question);
-        Actions.editSurvey({ title: this.props.title, id: this.props.id })
-      }).catch((error) => {
-        console.log(error);
+      .then((token) => {
+        let url = api_url + "/api/v1/questions";
+        let data = { question: { ...this.state, template_id: this.props.id } };
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+        axios.post(url, data, {
+          headers: headers
+        }).then(response => {
+          let question = response.data.data;
+          console.log(question);
+          Actions.editSurvey({ title: this.props.title, id: this.props.id })
+        }).catch((error) => {
+          console.log(error);
+          return null;
+        })
+      })
+      .catch((err) => {
+        console.log("Token Error: ", err);
         return null;
       })
-    })
-    .catch((err) => {
-      console.log("Token Error: ", err);
-      return null;
-    })
   }
 
   handleDelete = () => {
-      console.log("Deleted the question..");
+    console.log("Deleted the question..");
   }
 
- 
+
 
   render() {
     return (
       <Fragment>
-            <View style={styles.container}>
-                <View style = { styles.titleContainer }>
-                <Text style={styles.textLbl}>Question Text</Text>
-                <Button 
-                    title = "Delete" 
-                    style = { styles.placeButtonDelete }
-                    onPress = { () => this.handleDelete() }
-                    color = "red"
-                    />
-                </View>
-                <TextInput
-                    placeholder={`Enter question statement`}
-                    label="text"
-                    onChangeText={(value) => this.setState({statement: value})}
-                />
-                <View style = { styles.titleContainer }>
-                    <Text style={styles.textLbl}>Options</Text>
-                    <Button 
-                        title = " + " 
-                        style = { styles.placeButtonAdd }
-                        onPress = { () => this.handleAddOption() }
-                        color = "blue"
-                    />
-                </View>
-                {this.state.options.map((option, idx) => (
-                    <View style = { styles.inputContainer }>
-                        <TextInput
-                            style = { styles.placeInput }
-                            placeholder={`Statement`}
-                            label="text"
-                            value={option.test}
-                            onChangeText={(value) => this.handleOptionsNameChange(value, idx)}
-                        />
-                        <Button 
-                            title = " X " 
-                            style = { styles.placeButton }
-                            onPress = { this.handleRemoveOptions(idx) }
-                            color = "red"
-                        />
-                    </View>
-                ))}
+        <View>
+          <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:20}}>
+            <Text style={styles.textLbl}>Question Text</Text>
+           </View>
+          <TextInput
+            style={{marginTop:20,width:'100%',height:50, borderBottomWidth: 1,
+            borderColor: '#ddd'}}
+            placeholder={`Enter question statement`}
+            label="text"
+            onChangeText={(value) => this.setState({ statement: value })}
+          />
+          {this.state.options.map((option, idx) => (
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.placeInput}
+                placeholder={`Enter Opction Text `}
+                label="text"
+                value={option.test}
+                onChangeText={(value) => this.handleOptionsNameChange(value, idx)}
+              />
+              <Button
+                title=" X "
+                style={styles.placeButton}
+                onPress={this.handleRemoveOptions(idx)}
+                color="red"
+              />
             </View>
-            <Button 
-                style = {styles.saveBtn}
-                title="Save"
-                color="#115E54"
-                onPress={() => this.handleSave()} 
-            />
+          ))}
+        </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.textLbl}>Add Options</Text>
+          <Button
+            title=" + "
+            style={styles.placeButtonAdd}
+            onPress={() => this.handleAddOption()}
+            color="blue"
+          />
+        </View>
+        <Button
+          style={styles.saveBtn}
+          title="Save"
+          color="#115E54"
+          onPress={() => this.handleSave()}
+        />
       </Fragment>
     );
   }
@@ -152,9 +155,9 @@ const mapStateToProps = state => (
 
 export default connect(
   mapStateToProps, {
-    addContact,
-    registerNewContact
-  })(AddMcqQuestion);
+  addContact,
+  registerNewContact
+})(AddMcqQuestion);
 
 const styles = StyleSheet.create({
   container: {
@@ -163,17 +166,15 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    top: 70
+    justifyContent: 'space-between'
   },
+
   titleContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    width: '100%',
-    top: 1
+    top: 1,
+    marginTop:20
   },
   placeButtonAdd: {
     width: '50%',
@@ -184,7 +185,10 @@ const styles = StyleSheet.create({
     right: 10
   },
   placeInput: {
-    width: '70%'
+    width: '70%',
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+    height: 50
   },
   placeInputLbl: {
     width: '70%',
@@ -196,7 +200,7 @@ const styles = StyleSheet.create({
     color: "white"
   },
   textLbl: {
-      color: 'green'
+    color: 'green'
   },
   saveBtn: {
     position: 'absolute',

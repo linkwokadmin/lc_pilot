@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
-import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity, Button, TextInput } from 'react-native';
 
 import { connect } from 'react-redux';
-import {compose} from "redux";
+import { compose } from "redux";
 import { fetchQuestions } from '../actions/AppActions';
 import { FloatingAction } from "react-native-floating-action";
 import { QuestionText } from './QuestionTypeText'
 import { QuestionMcq } from './QuestionTypeMcq'
+import { Card } from 'react-native-elements'
+import AddTextQuestion from './AddTextQuestion';
+import AddMcqQuestion from './AddMcqQuestion'
 
 const actions = [
   {
@@ -27,79 +30,150 @@ const actions = [
 
 
 class SurveyEditScreen extends Component {
-    constructor(props) {
-        super()
-        this.state = { }
+  constructor(props) {
+    super();
+    this.state = {
+      textType: true,
+      mcqType: false,
+      rateType: false
     }
+  }
+  viweQuestion: any;
+  componentDidMount() {
+    this.fetchQuestions(this.props.id ? this.props.id : 0);
+  }
 
-    componentDidMount(){
-      this.fetchQuestions(this.props.id);
-    } 
+  fetchQuestions = (template_id) => {
+    this.props.actions.fetchQuestions(template_id ? template_id : 0);
+  }
+  handleChange(event) {
 
-    fetchQuestions = (template_id) => {
-      this.props.actions.fetchQuestions(template_id);
-    }
+  }
 
-    renderQuestion(questionContent) {
-        let question = questionContent.item
-        let q_number = (questionContent.index) + 1;
-        if (question.type == "text") {
-            return (
-            <View style={styles.container}>
-                <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-                <QuestionText question={question} number={q_number}></QuestionText>
-            </View>
-            )
-        }
-        if (question.type == "mcq") {
-            return (
-            <View style={styles.contener}>
-                <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-                <QuestionMcq options={question.options}></QuestionMcq>
-            </View>
-            )
-        }
-    }
 
-    handleNavigation = (name) => {
-      name === 'bt_add_text_question' ? Actions.addTextQuestion({id: this.props.id}) : Actions.addMcqQuestion({id: this.props.id});
-    }
-   
 
-    render() {
-        return (
+  renderQuestion(questionContent) {
+    let question = questionContent.item
+    let q_number = (questionContent.index) + 1;
+    if (question.type == "text") {
+      return (
+        <Card>
           <View style={styles.container}>
-            <FlatList
-            keyExtractor={(item) => item.id}
-            enableEmptySections
-            data={this.props.questions}
-            renderItem={data => this.renderQuestion(data)}
-            />
-            <FloatingAction
-              actions={actions}
-              onPressItem={name => {
-                this.handleNavigation(name);
-              }}
-            />
+            <Text style={styles.Header}>{q_number}. {question.statement}</Text>
+            <QuestionText question={question} number={q_number} onChange={this.handleChange} ></QuestionText>
           </View>
-        );
-    }
-}
+        </Card>
+      )
 
-const mapStateToProps = state => {
-    const questions = _.map(state.ListQuestionsReducer, (value, uid) => {
-      return { ...value, uid }
-    });
-  
-    return {
-      questions: questions
     }
+    if (question.type == "mcq") {
+      return (
+        <Card>
+          <View style={styles.container}>
+            <Text style={styles.Header}>{q_number}. {question.statement}</Text>
+            <QuestionMcq options={question.options} onChange={this.handleChange}></QuestionMcq>
+          </View>
+        </Card>
+      )
+    }
+  }
+
+  handleNavigation = (name) => {
+    name === 'bt_add_text_question' ? Actions.addTextQuestion({ id: this.props.id }) : Actions.addMcqQuestion({ id: this.props.id });
+  }
+
+  loadQuestions() {
+    console.log('---render ----------')
+    return (
+      <FlatList
+        keyExtractor={(item) => item.id}
+        enableEmptySections
+        data={this.props.questions}
+        renderItem={data => this.renderQuestion(data)}
+      />
+    )
+  }
+  renderQuestionType(Name: String) {
+    if (Name == 'MCQ') {
+
+      this.setState({
+        textType: false,
+        mcqType: true,
+        rateType: false
+      })
+      console.log(this.state);
+    }
+
+    if (Name == 'Text') {
+      this.setState({
+        textType: true,
+        mcqType: false,
+        rateType: false
+      });
+    }
+    if (Name == 'Rate') {
+      this.setState({
+        textType: false,
+        mcqType: false,
+        rateType: true
+      });
+    }
+
+  }
+
+  rendrUI(l) {
+    if (l.textType) {
+      return (<AddTextQuestion />);
+    }
+    if (l.mcqType) {
+      return (<AddMcqQuestion/>);
+    }
+    if (l.rateType) {
+      return (<View>
+        <Text>Rate</Text>
+      </View>);
+    }
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Card>
+          <View style={styles.questionType}>
+            <Button title="MCQ" color='green' onPress={() => this.renderQuestionType('MCQ')} />
+            <Button title="Text" color='green' onPress={() => this.renderQuestionType('Text')} />
+            <Button title="Rate" color='green' onPress={() => this.renderQuestionType('Rate')} />
+          </View>
+          <View>
+            {this.rendrUI(this.state)}
+          </View>
+        </Card>
+
+        {this.loadQuestions()}
+        <FloatingAction
+          actions={actions}
+          onPressItem={name => {
+            this.handleNavigation(name);
+          }}
+        />
+      </View>
+    );
+  }
+
+}
+const mapStateToProps = state => {
+  const questions = _.map(state.ListQuestionsReducer, (value, uid) => {
+    return { ...value, uid }
+  });
+  return {
+    questions: questions
+  }
 }
 
 const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch => {
   return {
     actions: {
-      fetchQuestions: (template_id) =>{
+      fetchQuestions: (template_id) => {
         return dispatch(
           fetchQuestions(template_id)
         );
@@ -111,25 +185,49 @@ const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch =
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    marginLeft: 15,
-    marginTop: 10
+    marginTop: 5
   },
   Header: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginBottom: 5
 
   },
   textInput: {
-    borderColor: '#777', borderWidth: 1,
+    borderColor: '#777',
+    borderWidth: 1,
     padding: 10,
     flex: 1,
     width: '80%',
     margin: 15,
+  },
+  questionType: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  
+
+
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    top: 70
+  },
+  placeButtonAdd: {
+    width: '50%',
+    left: 10
+  },
+  placeButtonDelete: {
+    width: '50%',
+    right: 10
+  },
+  textLbl: {
+    color: 'green'
   }
 });
 
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps)
+export default compose(connect(mapStateToProps, mapDispatchToProps)
 )(SurveyEditScreen);

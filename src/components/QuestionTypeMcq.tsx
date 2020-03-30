@@ -1,29 +1,46 @@
 import React from 'react'
-import { View, Text, StyleSheet, TextInput, CheckBox, FlatList } from 'react-native'
+import { View, Text, StyleSheet, TextInput, FlatList } from 'react-native'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
+import {CheckBox}from 'react-native-elements' ;
+
+
+
+
 export const QuestionMcq = ({ question, options, number, onChange }) => {
+
+
+
     return (
         <View style={styles.conterner}>
             <FlatList
-                keyExtractor={(item)=>item.value}
+                keyExtractor={(item) => item.value}
                 data={options}
                 renderItem={({ item }) => (
                     <View style={{ flexDirection: 'row' }}>
+
+
                         <CheckBox
-                            value={(question !== undefined && question.value) === item.label}
-                            onValueChange={() => onChange(question, item)}
+                            containerStyle={{width:'100%'}}
+                            title={item.label}
+                            checkedIcon='dot-circle-o'
+                            uncheckedIcon='circle-o'
+                            checked={(question !== undefined && question.value) === item.label}
+                            onPress={() => onChange(question, item) }
                         />
-                        <Text style={{ marginTop: 5 }}>{item.label} </Text>
+
                     </View>
                 )} />
         </View>
     );
 
 
-};
+}
+
+
 const styles = StyleSheet.create({
     conterner: {
         flex: 1,
+       
     }
 });

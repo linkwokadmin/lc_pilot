@@ -26,7 +26,6 @@ export default class Routes extends Component {
       loading: true,
     };
   }
-
   componentWillMount() {
     AsyncStorage.getItem('@mytoken:key')
       .then((token) => {
@@ -70,8 +69,7 @@ export default class Routes extends Component {
           <Scene key='showSurvey' component={SurveyShowScreen} title="Survey Show" />
           <Scene key='editSurvey' component={SurveyEditScreen} title="Survey Edit" />
           <Scene key='b_chat' component={Mess} title="b_Chat" hideNavBar={false} onRight={() => console.log(111)} rightButtonImage={null} />
-
-        </Scene>
+       </Scene>
       </Router>
     )
   }
