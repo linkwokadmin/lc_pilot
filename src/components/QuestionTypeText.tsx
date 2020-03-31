@@ -16,7 +16,6 @@ export const QuestionText = ({ question, number, filled, onChange }) => {
             <TextInput
                 multiline
                 style={styles.textInput}
-                value={}
                 onChangeText={(text) => {onChange(question, text) }}
             />
         </View>
