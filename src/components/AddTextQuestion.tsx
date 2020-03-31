@@ -24,65 +24,71 @@ class AddTextQuestion extends Component {
   }
 
   handleNameChange = statement => () => {
-    this.setState({statement: statement})
+    this.setState({ statement: statement })
   }
 
   handleSave = () => {
     AsyncStorage.getItem("authorization")
-    .then((token) => {
-      let url = api_url + "/api/v1/questions";
-      let data = {question: {...this.state, template_id: this.props.id}};
-      const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-      axios.post(url, data, {
-        headers: headers
-      }).then(response => {
-        let question = response.data.data;
-        Actions.editSurvey({ title: this.props.title, id: this.props.id })
-      }).catch((error) => {
-        console.log(error);
+      .then((token) => {
+        let url = api_url + "/api/v1/questions";
+        let data = { question: { ...this.state, template_id: this.props.id } };
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+        axios.post(url, data, {
+          headers: headers
+        }).then(response => {
+          let question = response.data.data;
+           Actions.editSurvey({ title: this.props.title, id: this.props.id })
+        }).catch((error) => {
+          console.log(error);
+          return null;
+        })
+      })
+      .catch((err) => {
+        console.log("Token Error: ", err);
         return null;
       })
-    })
-    .catch((err) => {
-      console.log("Token Error: ", err);
-      return null;
-    })
   }
 
   handleDelete = () => {
-      console.log("Deleted the question..");
+    console.log("Deleted the question..");
   }
 
- 
+
 
   render() {
     return (
       <Fragment>
-            <View style={styles.container}>
-              <Text style={styles.textLbl}>Question Text</Text>
-              <TextInput
-                placeholder={`Enter question statement`}
-                label="text"
-                onChangeText={(value) => this.setState({statement: value})}
-              />
-              <View style = { styles.inputContainer }>
-                <Button 
-                  title = "Add " 
-                  style = { styles.placeButtonAdd }
-                  onPress = { () => this.handleSave() }
-                  color = "blue"
-                />
-                <Button 
-                  title = "Delete" 
-                  style = { styles.placeButtonDelete }
-                  onPress = { () => this.handleDelete() }
-                  color = "red"
-                />
-              </View>
-            </View>
+        <View style={styles.container}>
+          <Text style={styles.textLbl}>Question Text</Text>
+          <TextInput
+            multiline
+            style={{
+               borderColor: '#CBCAC9',
+              borderWidth: 1,
+              height:50 }}
+            placeholder="Question Text"
+            onChangeText={(value) => this.setState({ statement: value })}
+          />
+           <View style={styles.inputContainer}>
+           <Button
+              title="Add "
+              style={styles.placeButtonAdd}
+              onPress={() => this.handleSave()}
+              color="blue"
+            />
+            <Button
+              title="Delete"
+              style={styles.placeButtonDelete}
+              onPress={() => this.handleDelete()}
+              color="red"
+            />
+         
+           
+          </View>
+        </View>
       </Fragment>
     );
   }
@@ -96,21 +102,19 @@ const mapStateToProps = state => (
 
 export default connect(
   mapStateToProps, {
-    addContact,
-    registerNewContact
-  })(AddTextQuestion);
+  addContact,
+  registerNewContact
+})(AddTextQuestion);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 30,
   },
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    top: 70
+   
   },
   placeButtonAdd: {
     width: '50%',
@@ -121,6 +125,7 @@ const styles = StyleSheet.create({
     right: 10
   },
   textLbl: {
-      color: 'green'
+    color: 'green',
+    marginTop:20
   }
 });

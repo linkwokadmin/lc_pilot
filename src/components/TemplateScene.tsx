@@ -16,7 +16,7 @@ import { Card,Badge } from 'react-native-elements'
 
 class TemplateScene extends Component {
   constructor(props) {
-    super()
+    super();
     this.state = { 
       dialogVisible: false,
       newTemplate: null 
@@ -80,7 +80,7 @@ class TemplateScene extends Component {
       return null;
     })
   }
-  getDtanemic(){
+  getColor(){
     var letters = '0123456789ABCDEF';
     var color = '#';
     for (var i = 0; i < 6; i++) {
@@ -97,7 +97,7 @@ class TemplateScene extends Component {
         onPress={ () => Actions.editSurvey({ title: survey.name, id: survey.id }) }
       >
         <View style={{ flex: 1,  flexDirection: 'row',justifyContent:'flex-start'}}>
-        <View style={{width: 50, height: 50, backgroundColor: this.getDtanemic() }} />
+        <View style={{width: 50, height: 50, backgroundColor: this.getColor() }} />
  
           <View style={{marginLeft:40}}>
             <Text style={{ fontSize: 18, fontWeight: 'bold'}}>{ survey.name }</Text>
@@ -189,7 +189,6 @@ const styles = StyleSheet.create({
     width: '95%',
     justifyContent:'center',
     alignSelf:'center'
-   
   }
 
 });

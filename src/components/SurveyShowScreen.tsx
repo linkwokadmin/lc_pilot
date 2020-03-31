@@ -3,137 +3,137 @@ import _ from 'lodash';
 import { View, Text, FlatList, StyleSheet, ScrollView, Button, AsyncStorage } from 'react-native';
 
 import { connect } from 'react-redux';
-import {compose} from "redux";
+import { compose } from "redux";
 import { fetchQuestions, saveFeedbacks, fetchResponses } from '../actions/AppActions';
 import { QuestionText } from './QuestionTypeText'
 import { QuestionMcq } from './QuestionTypeMcq'
+import { Card } from 'react-native-elements'
 
 class SurveyShowScreen extends Component {
-    constructor(props) {
-        super()
-        this.state = { mcq: {}, feedbacks: []}
+  constructor(props) {
+    super()
+    this.state = { mcq: {}, feedbacks: [] }
+  }
+
+  componentDidMount() {
+    this.fetchResponses(this.props.id);
+    this.fetchQuestions(this.props.id);
+    console.log()
+    if (this.props.filled) {
+      this.setState({ 'feedbacks': this.props.feedbacks });
+    } else {
+      this.setState({ 'feedbacks': this.props.questions });
     }
+  }
 
-    componentDidMount(){
-      this.fetchResponses(this.props.id);
-      this.fetchQuestions(this.props.id);
-      console.log()
-      if(this.props.filled) {
-        this.setState({'feedbacks': this.props.feedbacks});
-      } else {
-        this.setState({'feedbacks': this.props.questions});
-      }
-      // console.log("======",this.props.feedbacks);
-      // AsyncStorage.getItem("authorization").then(token => {
-      //   console.log(token);
-      // })
-    } 
+  fetchQuestions = (template_id) => {
+    this.props.actions.fetchQuestions(template_id);
+  }
 
-    fetchQuestions = (template_id) => {
-      this.props.actions.fetchQuestions(template_id);
-    }
+  fetchResponses = (template_id) => {
+    this.props.actions.fetchResponses(template_id);
+  }
 
-    fetchResponses = (template_id) => {
-      this.props.actions.fetchResponses(template_id);
-    }
+  onTextChange = (question, text) => {
+    let questionFeedback = { ...question, value: text }
+    let newFeedbacks = this.state.feedbacks.map((feedback, idx) => {
+      if (feedback.id !== question.id) return feedback;
+      return questionFeedback;
+    });
+    this.setState({ 'feedbacks': newFeedbacks })
+  }
 
-    onTextChange = (question, text) => {
-      let questionFeedback = {...question, value: text}
-      let newFeedbacks = this.state.feedbacks.map((feedback, idx) => {
-        if(feedback.id !== question.id) return feedback;
-        return questionFeedback;
-      });
-      this.setState({'feedbacks': newFeedbacks})
-    }
+  onMcqChange = (question, item) => {
+    let val = (val !== undefined ? val : "") + "" + item.label;
+    let questionFeedback = { ...question, value: val }
+    let newFeedbacks = this.state.feedbacks.map((feedback, idx) => {
+      if (feedback.id !== question.id) return feedback;
+      return questionFeedback;
+    });
+    this.setState({ 'feedbacks': newFeedbacks })
+  }
 
-    onMcqChange = (question, item) => {
-      let val = (val !== undefined ? val : "") + "" + item.label;
-      let questionFeedback = {...question, value: val}
-      let newFeedbacks = this.state.feedbacks.map((feedback, idx) => {
-        if(feedback.id !== question.id) return feedback;
-        return questionFeedback;
-      });
-      this.setState({'feedbacks': newFeedbacks})
-    }
-
-    renderQuestion(questionContent) {
-        let question = questionContent.item
-        let q_number = (questionContent.index) + 1;
-        if (question.type == "text") {
-            return (
-            <View style={styles.container}>
-                <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-                <QuestionText question={question} number={q_number} filled={this.props.filled} onChange={this.onTextChange}></QuestionText>
-            </View>
-            )
-        }
-        if (question.type == "mcq") {
-            return (
-            <View style={styles.contener}>
-                <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-                <QuestionMcq question={question} options={question.options} onChange={this.onMcqChange}></QuestionMcq>
-            </View>
-            )
-        }
-    }
-
-    handleSave = () => {
-      console.log('Calling Save..', this.state);
-      this.props.actions.saveFeedbacks(this.props.id, this.state.feedbacks);
-    }
-
-
-
-    render() {
-        return (
+  renderQuestion(questionContent) {
+    let question = questionContent.item
+    let q_number = (questionContent.index) + 1;
+    if (question.type == "text") {
+      return (
+        <Card>
           <View style={styles.container}>
-            <ScrollView style={styles.form}>
-              <FlatList
-              keyExtractor={(item) => item.id}
-              enableEmptySections
-              data={(this.props.filled ? this.props.feedbacks : this.props.questions)}
-              renderItem={data => this.renderQuestion(data)}
-              />
-            </ScrollView>
-            {
-              this.props.filled ? 
-                null :
-              <Button 
-                  style = {styles.saveBtn}
-                  title="Save"
-                  color="#115E54"
-                  onPress={() => this.handleSave()} 
-              />
-            }
+            <Text style={styles.Header}>{q_number}. {question.statement}</Text>
+            <QuestionText question={question} number={q_number} filled={this.props.filled} onChange={this.onTextChange}></QuestionText>
           </View>
-        );
+        </Card>
+      )
     }
+    if (question.type == "mcq") {
+      return (
+        <Card>
+          <View style={styles.container}>
+            <Text style={styles.Header}>{q_number}. {question.statement}</Text>
+            <QuestionMcq question={question} options={question.options} onChange={this.onMcqChange}></QuestionMcq>
+          </View>
+        </Card>
+      )
+    }
+  }
+
+  handleSave = () => {
+    this.props.actions.saveFeedbacks(this.props.id, this.state.feedbacks);
+  }
+
+
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <ScrollView style={styles.form}>
+          <FlatList
+            keyExtractor={(item) => item.id}
+            enableEmptySections
+            data={(this.props.filled ? this.props.feedbacks : this.props.questions)}
+            renderItem={data => this.renderQuestion(data)}
+          />
+        </ScrollView>
+        {
+          this.props.filled ?
+            null :
+            <Button
+              style={styles.saveBtn}
+              title="Save"
+              color="#115E54"
+              onPress={() => this.handleSave()}
+            />
+        }
+      </View>
+    );
+  }
 }
 
 const mapStateToProps = state => {
-    const questions = _.map(state.ListQuestionsReducer, (value, uid) => {
-      return { ...value, uid }
-    });
-    const feedbacks = _.map(state.ListFeedbacksReducer, (value, uid) => {
-      return { ...value, uid }
-    });
-  
-    return {
-      questions: questions,
-      feedbacks: feedbacks,
-      filled: (feedbacks.length > 0 ? true : false)
-    }
+  const questions = _.map(state.ListQuestionsReducer, (value, uid) => {
+    return { ...value, uid }
+  });
+  const feedbacks = _.map(state.ListFeedbacksReducer, (value, uid) => {
+    return { ...value, uid }
+  });
+
+  return {
+    questions: questions,
+    feedbacks: feedbacks,
+    filled: (feedbacks.length > 0 ? true : false)
+  }
 }
 
 const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch => {
   return {
     actions: {
-      fetchQuestions: (template_id) =>{
+      fetchQuestions: (template_id) => {
         return dispatch(
           fetchQuestions(template_id)
         );
       },
-      fetchResponses: (template_id) =>{
+      fetchResponses: (template_id) => {
         return dispatch(
           fetchResponses(template_id)
         );
