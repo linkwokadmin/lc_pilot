@@ -55,7 +55,7 @@ class AddMcqQuestion extends Component {
       options: this.state.options.filter((s, sidx) => idx !== sidx)
     });
   };
-
+  
   handleAddOption = () => {
     this.setState({
       options: this.state.options.concat([{ text: "" }])

@@ -9,9 +9,10 @@ import { fetchQuestions } from '../actions/AppActions';
 import { FloatingAction } from "react-native-floating-action";
 import { QuestionText } from './QuestionTypeText'
 import { QuestionMcq } from './QuestionTypeMcq'
-import { Card } from 'react-native-elements'
+import { Card,AirbnbRating } from 'react-native-elements'
 import AddTextQuestion from './AddTextQuestion';
 import AddMcqQuestion from './AddMcqQuestion'
+import AddReatQuestion from './AddReatQuestion'
 
 const actions = [
   {
@@ -129,9 +130,7 @@ class SurveyEditScreen extends Component {
       return (<AddMcqQuestion/>);
     }
     if (l.rateType) {
-      return (<View>
-        <Text>Rate</Text>
-      </View>);
+      return (<AddReatQuestion/>);
     }
   }
 
