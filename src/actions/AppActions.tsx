@@ -71,7 +71,7 @@ export const createNewTemplate = (template) => {
 }
 
 
-export const fetchContacts = (emailLoggedIn) => {
+export const fetchContacts = () => {
   /* A solução sera ao carregar a aplicação, atualizar o emailLoggedIn  no AppReducer para que aplicação não quebre
   devido ao componentWillMount tentar passar um valor inexistente, fazer um função que que buscar o currentUser e
   da dispatch atualizando na store e deixar o email = ''... assim qunado tiver retorno atualizar os contatos

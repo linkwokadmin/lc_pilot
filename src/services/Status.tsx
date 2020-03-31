@@ -1,5 +1,5 @@
 import { Socket } from 'phoenix-channels';
-import { api_url } from './../resources/constants'
+import { api_url } from '../resources/constants'
 
 const TIMEOUT = 10000
 const URL = api_url + '/socket';
@@ -19,6 +19,7 @@ export default (user, room, onChat) => {
 
   // configure a channel into a room - https://www.youtube.com/watch?v=vWFX4ylV_ko
   // const chan = socket.channel(LOBBY, { user })
+  console.log("Room: ",room);
   const chan = socket.channel(room, { user })
 
   // join the channel and listen for admittance
@@ -31,8 +32,9 @@ export default (user, room, onChat) => {
   chan.onError(event => console.log('Channel blew up.'))
   chan.onClose(event => console.log('Channel closed.'))
 
-  chan.on('init:msg', (msg) => {
-    onChat(msg.messages)
+  chan.on('init:status_msg', (msg) => {
+    onChat(msg.users)
+    // console.log(msg);
   })
   // when we receive a new chat message, just trigger the appropriate callback
   chan.on('new:msg', msg => onChat && onChat(msg))

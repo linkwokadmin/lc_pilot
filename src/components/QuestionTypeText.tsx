@@ -5,11 +5,12 @@ export const QuestionText = ({ question, number, filled, onChange }) => {
     console.log(question)
     return (
         <View >
+            {
             filled ?
             <TextInput
                 multiline
                 style={styles.textInput}
-                value={filled ? question.value : ''}
+                value={question.value}
                 onChangeText={(text) => {onChange(question, text) }}
             /> 
             : 
@@ -18,6 +19,7 @@ export const QuestionText = ({ question, number, filled, onChange }) => {
                 style={styles.textInput}
                 onChangeText={(text) => {onChange(question, text) }}
             />
+            }
         </View>
     );
 };
