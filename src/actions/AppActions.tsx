@@ -19,7 +19,8 @@ import {
   QUESTION_LIST,
   ERROR_ADDING_TEMPLATE,
   FEEDBACK_LIST,
-  USER_TEMPLATE_LIST
+  USER_TEMPLATE_LIST,
+  COACH_TEMPLATE_LIST
 } from '../resources/types';
 import { template } from '@babel/core';
 
@@ -78,7 +79,11 @@ export const fetchContacts = (emailLoggedIn) => {
   return (dispatch) => {
     AsyncStorage.getItem("authorization")
     .then((token) => {
-      axios.get(api_url + "/api/v1/users")
+      axios.get(api_url + "/api/v1/users", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then(response => { 
         let snapshot = response.data;
         // console.log(snapshot)
@@ -272,6 +277,32 @@ export const fetchUserTemplates = () => {
         let templates = response.data.data;
         dispatch({
           type: USER_TEMPLATE_LIST,
+          payload: templates
+        })
+      }).catch((api_err) => {
+        console.log("API ERR: ", api_err)
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+    })
+  }
+}
+
+// Fetch  Coach templates
+export const fetchCoachTemplates = () => {
+  return dispatch => {
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/templates/my_templates/user";
+      axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then((response) => {
+        let templates = response.data.data;
+        dispatch({
+          type: COACH_TEMPLATE_LIST,
           payload: templates
         })
       }).catch((api_err) => {

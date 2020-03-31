@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "base-64": "^0.1.0",
+    "emoji-utils": "^1.0.1",
     "eslint-plugin-react": "^7.19.0",
     "firebase": "^7.9.3",
     "formik": "^2.1.4",

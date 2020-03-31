@@ -1,12 +1,41 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, Alert, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert, Image, Platform, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { splashRead } from '../actions/AuthActions';
+import { Loading } from './../components/common/Loading'
 
 
 export default class splashScreen extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            loading: true,
+            read: false
+        }
+    }
 
-    render() {
-        return (
+    async componentDidMount(){
+        let sp = await AsyncStorage.getItem('sread')
+        if(sp === 'true') {
+            this.setState({
+                loading: false,
+                read: true
+            })
+            Actions.loginScreen()
+        } else {
+            this.setState({
+                loading: false,
+                read: false
+            })
+        }
+    }
+
+    getStarted = () => {
+        splashRead();
+    }
+
+    renderSplash = () => {
+        return(
             <View style={styles.container}>
                 <View style={styles.heder}>
                     <Image source={require('../images/SuperCoach.png')} />
@@ -24,10 +53,16 @@ export default class splashScreen extends Component {
                 <View style={styles.btnStart}>
                     <Button
                         title="Get Start"
-                        onPress={() =>  Actions.loginScreen()}
+                        onPress={() =>  this.getStarted()}
                     />
                 </View>
             </View>
+        )
+    }
+
+    render() {
+        return (
+            this.state.loading ? <Loading /> :this.renderSplash()            
         )
     };
 

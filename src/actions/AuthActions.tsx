@@ -15,6 +15,7 @@ import {
   SIGN_UP_LOADING,
   SUCCESS_REGISTER,
   FAILURE_REGISTER,
+  SPLASH_READ
 } from '../resources/types';
 
 /*
@@ -37,6 +38,18 @@ export const addPassword = (password) => {
     type: ADD_PASSWORD,
     payload: password
   }
+}
+
+export const readSplash = () => {
+  return {
+    type: SPLASH_READ
+  }
+}
+
+export const splashRead = () => {
+  readSplash();
+  AsyncStorage.setItem('sread', 'true');
+  Actions.loginScreen();
 }
 /*
 ActionCreator to signIn on application
