@@ -117,7 +117,7 @@ export const fetchCurrentUser = () => {
   return dispatch => {
     AsyncStorage.getItem('currentUser')
     .then(user => {
-      console.log(user);
+      console.log("User:", user);
       authSuccess(dispatch, user);
     })
     .catch(err => {

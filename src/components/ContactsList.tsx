@@ -9,13 +9,34 @@ import { connect } from 'react-redux';
 import { fetchContacts } from '../actions/AppActions';
 import { fetchCurrentUser } from '../actions/AuthActions';
 import { Card,Badge } from 'react-native-elements'
+import  Status from './../services/Status';
 
 class ContactsList extends Component {
 
-  componentDidMount() {
-    this.props.fetchContacts(base64.encode(this.props.email_logged_in));
+  constructor(props){
+    super(props);
+    this.state = {
+      contacts: [],
+      currentUser: null
+    }
     // this.props.fetchCurrentUser();
+    console.log(this.props.currentUser);
+    if(this.props.currentUser !== null && this.props.currentUser !== undefined && this.props.currentUser !== '') {
+      this.statusRoom = "status:" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(' '))
+      this.status = Status(this.props.currentUser, this.statusRoom, this.updateContacts);
+    }
   }
+
+  componentDidMount() {
+    this.props.fetchContacts();
+    this.setState({contacts: this.props.contacts});
+    // this.setState({currentUser: this.props.currentUser})
+  }
+
+  updateContacts = (contacts) => {
+    this.setState({contacts: contacts})
+  }
+
   getColor(){
     var letters = '0123456789ABCDEF';
     var color = '#';
@@ -45,11 +66,9 @@ class ContactsList extends Component {
 
   renderRow(contact) {
     let newContact = _.first(_.values(contact));
-    // console.log(newContact)
-    if(newContact.email!=null){
+    if(newContact.email!=null && this.props.currentUser !== null && newContact.email !== this.props.currentUser.email){
       return (
         <Card containerStyle={styles.cardChat}>
-         
           <TouchableHighlight
             onPress={() => Actions.b_chat({ title: newContact.name, contactId: newContact.id, contactName: newContact.name, contactEmail: newContact.email, currentUser: this.props.currentUser })}
           >
@@ -64,9 +83,7 @@ class ContactsList extends Component {
               }
             </View>
           </TouchableHighlight >
-          
         </Card>
-  
       )
     }
   }
@@ -76,7 +93,7 @@ class ContactsList extends Component {
       <FlatList
         keyExtractor={(data) => { data.id }}
         enableEmptySections
-        data={this.props.contacts[0]}
+        data={this.state.contacts}
         renderItem={data => this.renderRow(data)}
       />
     );
@@ -84,9 +101,9 @@ class ContactsList extends Component {
 }
 
 const mapStateToProps = state => {
-  const contacts = _.map(state.ListContactsReducer, (value, uid) => {
+  const contacts = _.first(_.map(state.ListContactsReducer, (value, uid) => {
     return value;
-  });
+  }));
 
   return {
     email_logged_in: state.AppReducer.email_logged_in,

@@ -56,8 +56,13 @@ export default class Mess extends Component {
     this.state = {
       messages: [],
     }
+<<<<<<< HEAD
     console.log(this.props)
     if (this.props.selectedTemplate !== undefined) {
+=======
+    // console.log(this.props)
+    if(this.props.selectedTemplate !== undefined){
+>>>>>>> e1b76b0a770d3f5f227852fbaf6483d8df18ff7d
       let template = this.props.selectedTemplate;
       let msgs = [{
         _id: "kkk",
@@ -110,7 +115,7 @@ export default class Mess extends Component {
   }
 
   onSend(messages = []) {
-    console.log("Msg: ", messages);
+    // console.log("Msg: ", messages);
     this.chat.send(messages)
 
   }
@@ -120,7 +125,7 @@ export default class Mess extends Component {
   }
 
   onPressHashtag = () => {
-    console.log("aa gaya mai");
+    // console.log("aa gaya mai");
     Actions.showSurvey({ title: "bbbb", id: 48, currentUser: this.props.currentUser })
   }
 
@@ -140,7 +145,7 @@ export default class Mess extends Component {
   }
 
   renderBubble(props) {
-    console.log("Props: ", props);
+    // console.log("Props: ", props);
     let isTemplate = props.currentMessage.text.includes('#')
     let templateId = props.currentMessage.text.split(':')[0].replace('#', '');
     let templateName = props.currentMessage.text.split(':')[1]
@@ -209,11 +214,23 @@ export default class Mess extends Component {
 
   renderSend(props) {
     return (
+
+      // <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+      //   <Button
+      //     title="Seed"
+      //     onPress={() => Actions.coachTemplateScene({ currentUser: props.user.currentUser, contactId: props.user.opponent.id, contactEmail: props.user.opponent.email, contactName: props.user.opponent.name })}
+      //   />
+
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-        <Button
-          title="Seed"
-          onPress={() => Actions.coachTemplateScene({ currentUser: props.user.currentUser, contactId: props.user.opponent.id, contactEmail: props.user.opponent.email, contactName: props.user.opponent.name })}
-        />
+        {
+          props.user.currentUser.user_type === 'Coach' ?
+            <Button
+              title="Seed"
+              onPress={() => Actions.coachTemplateScene({ currentUser: props.user.currentUser, contactId: props.user.opponent.id, contactEmail: props.user.opponent.email, contactName: props.user.opponent.name })}
+            />
+            :
+            null
+        }
         <Send
           {...props}
         >
@@ -236,9 +253,9 @@ export default class Mess extends Component {
             _id: this.props.contactId,
             currentUser: this.props.currentUser,
             opponent: {
-              id: this.props.contactId ? this.props.contactId:null,
-              name: this.props.contactName ? this.props.contactName:null,
-              email: this.props.contactEmail? this.props.contactEmail:null
+              id: this.props.contactId ? this.props.contactId : null,
+              name: this.props.contactName ? this.props.contactName : null,
+              email: this.props.contactEmail ? this.props.contactEmail : null
             }
           }}
           alwaysShowSend={true}
