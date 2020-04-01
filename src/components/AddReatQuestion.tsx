@@ -13,20 +13,26 @@ import { api_url } from './../resources/constants';
 import { Rating, AirbnbRating } from 'react-native-elements';
 
 class AddReatQuestion extends Component {
-    constructor() {
+    constructor(props) {
         super();
+
+
+        console.log('----------', props.templateId.id);
         this.state = {
             statement: "",
             type: "rate",
             weight: "1",
-            value: "default",
+            value: "default"
         }
     }
     handleSave = () => {
+        console.log('----    ', this.props.templateId.id);
+
+
         AsyncStorage.getItem("authorization")
             .then((token) => {
                 let url = api_url + "/api/v1/questions";
-                let data = { question: { ...this.state, template_id: this.props.id } };
+                let data = { question: { ...this.state, template_id: this.props.templateId.id } };
                 const headers = {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -36,7 +42,7 @@ class AddReatQuestion extends Component {
                 }).then(response => {
                     let question = response.data.data;
                     console.log(question);
-                    Actions.editSurvey({ title: this.props.title, id: this.props.id })
+                  //  Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
                 }).catch((error) => {
                     console.log(error);
                     return null;

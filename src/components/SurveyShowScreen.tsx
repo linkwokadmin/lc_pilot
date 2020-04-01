@@ -54,6 +54,8 @@ class SurveyShowScreen extends Component {
   }
 
   renderQuestion(questionContent) {
+    console.log('render  ----- show --- ',questionContent);
+    
     let question = questionContent.item
     let q_number = (questionContent.index) + 1;
     if (question.type == "text") {
@@ -76,25 +78,36 @@ class SurveyShowScreen extends Component {
         </Card>
       )
     }
+    if (question.type == "rate") {
+      return (
+        <Card>
+          <View style={styles.container}>
+            <Text style={styles.Header}>{q_number}. {question.statement}</Text>
+           
+          </View>
+        </Card>
+      )
+    }
   }
 
   handleSave = () => {
     this.props.actions.saveFeedbacks(this.props.id, this.state.feedbacks);
   }
-
-
-
+  
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.form}>
+       <Card>
+          <Text>MIt</Text>
+
+        </Card>
           <FlatList
             keyExtractor={(item) => item.id}
             enableEmptySections
             data={(this.props.filled ? this.props.feedbacks : this.props.questions)}
             renderItem={data => this.renderQuestion(data)}
           />
-        </ScrollView>
+       
         {
           this.props.filled ?
             null :

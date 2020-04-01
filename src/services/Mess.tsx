@@ -56,13 +56,9 @@ export default class Mess extends Component {
     this.state = {
       messages: [],
     }
-<<<<<<< HEAD
-    console.log(this.props)
-    if (this.props.selectedTemplate !== undefined) {
-=======
+
     // console.log(this.props)
     if(this.props.selectedTemplate !== undefined){
->>>>>>> e1b76b0a770d3f5f227852fbaf6483d8df18ff7d
       let template = this.props.selectedTemplate;
       let msgs = [{
         _id: "kkk",

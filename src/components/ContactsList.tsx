@@ -8,12 +8,12 @@ import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet } from 'rea
 import { connect } from 'react-redux';
 import { fetchContacts } from '../actions/AppActions';
 import { fetchCurrentUser } from '../actions/AuthActions';
-import { Card,Badge } from 'react-native-elements'
-import  Status from './../services/Status';
+import { Card, Badge } from 'react-native-elements'
+import Status from './../services/Status';
 
 class ContactsList extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       contacts: [],
@@ -21,7 +21,7 @@ class ContactsList extends Component {
     }
     // this.props.fetchCurrentUser();
     console.log(this.props.currentUser);
-    if(this.props.currentUser !== null && this.props.currentUser !== undefined && this.props.currentUser !== '') {
+    if (this.props.currentUser !== null && this.props.currentUser !== undefined && this.props.currentUser !== '') {
       this.statusRoom = "status:" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(' '))
       this.status = Status(this.props.currentUser, this.statusRoom, this.updateContacts);
     }
@@ -29,15 +29,14 @@ class ContactsList extends Component {
 
   componentDidMount() {
     this.props.fetchContacts();
-    this.setState({contacts: this.props.contacts});
+    this.setState({ contacts: this.props.contacts });
     // this.setState({currentUser: this.props.currentUser})
   }
-
   updateContacts = (contacts) => {
-    this.setState({contacts: contacts})
+    this.setState({ contacts: contacts })
   }
 
-  getColor(){
+  getColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';
     for (var i = 0; i < 6; i++) {
@@ -47,36 +46,36 @@ class ContactsList extends Component {
   }
 
   renderBadgeData = (newContact) => {
-    return(
-      <View style={{alignContent:'flex-end'}}>
+    return (
+      <View style={{ alignContent: 'flex-end' }}>
         <Text>{newContact.sent_at}</Text>
-        <Badge value={newContact.count} status="error" containerStyle={{marginTop:10}} />
+        <Badge value={newContact.count} status="error" containerStyle={{ marginTop: 10 }} />
       </View>
     )
   }
 
   renderBadgeBlankData = (newContact) => {
-    return(
-      <View style={{alignContent:'flex-end'}}>
+    return (
+      <View style={{ alignContent: 'flex-end' }}>
         <Text>{newContact.sent_at}</Text>
-        <Badge value={newContact.count} status="error" containerStyle={{marginTop:10}} />
+        <Badge value={newContact.count} status="error" containerStyle={{ marginTop: 10 }} />
       </View>
     )
   }
 
   renderRow(contact) {
     let newContact = _.first(_.values(contact));
-    if(newContact.email!=null && this.props.currentUser !== null && newContact.email !== this.props.currentUser.email){
+    if (newContact.email != null && this.props.currentUser !== null && newContact.email !== this.props.currentUser.email) {
       return (
         <Card containerStyle={styles.cardChat}>
           <TouchableHighlight
             onPress={() => Actions.b_chat({ title: newContact.name, contactId: newContact.id, contactName: newContact.name, contactEmail: newContact.email, currentUser: this.props.currentUser })}
           >
-            <View style={{ flexDirection: 'row',flex:1,justifyContent:'space-between'}}>
-              <Image source={{ uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50,alignContent:'flex-start',backgroundColor: this.getColor() }} />
-              <View style={{ marginLeft: 15 , alignContent:'center', position: 'absolute', left: 50}}>
+            <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+              <Image source={{ uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50, alignContent: 'flex-start', backgroundColor: this.getColor() }} />
+              <View style={{ marginLeft: 15, alignContent: 'center', position: 'absolute', left: 50 }}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{newContact.name}</Text>
-                <Text style={{ fontSize: 13 ,marginTop:10}}>{newContact.email}</Text>
+                <Text style={{ fontSize: 13, marginTop: 10 }}>{newContact.email}</Text>
               </View>
               {
                 (newContact.sent_at !== null) ? this.renderBadgeData(newContact) : this.renderBadgeBlankData(newContact)
@@ -114,9 +113,9 @@ const mapStateToProps = state => {
 const styles = StyleSheet.create({
   cardChat: {
     width: '95%',
-    justifyContent:'center',
-    alignSelf:'center'
-   
+    justifyContent: 'center',
+    alignSelf: 'center'
+
   }
 })
 

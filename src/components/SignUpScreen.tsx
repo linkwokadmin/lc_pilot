@@ -66,9 +66,7 @@ class SignUpScreen extends Component {
                 })}
               />
             </View>
-
-
-            <TextInput
+             <TextInput
               placeholder='Name:'
               placeholderTextColor='#000'
               style={styles.textInput}

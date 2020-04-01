@@ -33,6 +33,9 @@ const actions = [
 class SurveyEditScreen extends Component {
   constructor(props) {
     super();
+    console.log(props.id);
+    
+
     this.state = {
       textType: true,
       mcqType: false,
@@ -41,6 +44,7 @@ class SurveyEditScreen extends Component {
   }
   viweQuestion: any;
   componentDidMount() {
+    
     this.fetchQuestions(this.props.id ? this.props.id : 0);
   }
 
@@ -50,9 +54,6 @@ class SurveyEditScreen extends Component {
   handleChange(event) {
 
   }
-
-
-
   renderQuestion(questionContent) {
     let question = questionContent.item
     let q_number = (questionContent.index) + 1;
@@ -123,14 +124,17 @@ class SurveyEditScreen extends Component {
   }
 
   rendrUI(l) {
+    console.log('render -------',l);
+    
+
     if (l.textType) {
-      return (<AddTextQuestion />);
+      return (<AddTextQuestion templateId={{ id: this.props.id }}/>);
     }
     if (l.mcqType) {
-      return (<AddMcqQuestion/>);
+      return (<AddMcqQuestion  templateId={{ id: this.props.id }}/>);
     }
     if (l.rateType) {
-      return (<AddReatQuestion/>);
+      return (<AddReatQuestion  templateId={{ id: this.props.id }} />);
     }
   }
 

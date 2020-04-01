@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Button,Alert } from 'react-native';
 import { connect } from 'react-redux';
 import {
   addContact,
@@ -11,8 +11,8 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-class AddTextQuestion extends Component {
-  constructor() {
+class AddTextQuestion extends Component{
+  constructor(props) {
     super();
     this.state = {
       "statement": "",
@@ -22,6 +22,8 @@ class AddTextQuestion extends Component {
       "value": "val"
     };
   }
+ 
+  
 
   handleNameChange = statement => () => {
     this.setState({ statement: statement })
@@ -31,7 +33,7 @@ class AddTextQuestion extends Component {
     AsyncStorage.getItem("authorization")
       .then((token) => {
         let url = api_url + "/api/v1/questions";
-        let data = { question: { ...this.state, template_id: this.props.id } };
+        let data = { question: { ...this.state, template_id: this.props.templateId.id } };
         const headers = {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -40,7 +42,9 @@ class AddTextQuestion extends Component {
           headers: headers
         }).then(response => {
           let question = response.data.data;
-           Actions.editSurvey({ title: this.props.title, id: this.props.id })
+          console.log(response.data.data);
+          
+           //Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
         }).catch((error) => {
           console.log(error);
           return null;
@@ -55,8 +59,6 @@ class AddTextQuestion extends Component {
   handleDelete = () => {
     console.log("Deleted the question..");
   }
-
-
 
   render() {
     return (

@@ -14,8 +14,11 @@ import { CheckBox } from 'react-native-elements'
 
 
 class AddMcqQuestion extends Component {
-  constructor() {
+  constructor(props) {
     super();
+   
+    
+
     this.state = {
       statement: "",
       type: "mcq",
@@ -63,11 +66,12 @@ class AddMcqQuestion extends Component {
   };
 
   handleSave = () => {
-    console.log('Calling Save..', this.state);
+    console.log(this.props.id,'----------', this.props.templateId.id);
+     console.log('Calling Save..', this.state);
     AsyncStorage.getItem("authorization")
       .then((token) => {
         let url = api_url + "/api/v1/questions";
-        let data = { question: { ...this.state, template_id: this.props.id } };
+        let data = { question: { ...this.state, template_id: this.props.templateId.id } };
         const headers = {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -77,7 +81,7 @@ class AddMcqQuestion extends Component {
         }).then(response => {
           let question = response.data.data;
           console.log(question);
-          Actions.editSurvey({ title: this.props.title, id: this.props.id })
+         // Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
         }).catch((error) => {
           console.log(error);
           return null;
@@ -92,10 +96,7 @@ class AddMcqQuestion extends Component {
   handleDelete = () => {
     console.log("Deleted the question..");
   }
-
-
-
-  render() {
+ render() {
     return (
       <Fragment>
         <View>

@@ -23,6 +23,7 @@ import {
   COACH_TEMPLATE_LIST
 } from '../resources/types';
 import { template } from '@babel/core';
+import { log } from 'react-native-reanimated';
 
 /* added to redux */
 export const addContact = (email) => {
@@ -72,11 +73,7 @@ export const createNewTemplate = (template) => {
 
 
 export const fetchContacts = () => {
-  /* A solução sera ao carregar a aplicação, atualizar o emailLoggedIn  no AppReducer para que aplicação não quebre
-  devido ao componentWillMount tentar passar um valor inexistente, fazer um função que que buscar o currentUser e
-  da dispatch atualizando na store e deixar o email = ''... assim qunado tiver retorno atualizar os contatos
-  */
-  return (dispatch) => {
+ return (dispatch) => {
     AsyncStorage.getItem("authorization")
     .then((token) => {
       axios.get(api_url + "/api/v1/users", {
@@ -86,21 +83,17 @@ export const fetchContacts = () => {
       })
       .then(response => { 
         let snapshot = response.data;
+        console.log('------ contect -----',snapshot);
         // console.log(snapshot)
         dispatch({
           type: CONTACTS_LIST,
           payload: snapshot
         })
+      }).catch(error =>{
+        console.log('------error in fetch ---------',JSON.stringify(error))
       });
     });
 
-    // firebase.database().ref(`/users_of_contacts/${emailLoggedIn}`)
-    // .on("value", snapshot => {
-    //   dispatch({
-    //     type: CONTACTS_LIST,
-    //     payload: snapshot.val()
-    //   })
-    // })
   }
 }
 

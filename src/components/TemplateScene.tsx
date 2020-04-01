@@ -6,29 +6,29 @@ import { Actions } from 'react-native-router-flux';
 import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { connect } from 'react-redux';
-import {compose} from "redux";
+import { compose } from "redux";
 import { fetchTemplates, createTemplates } from '../actions/AppActions';
 import DialogInput from 'react-native-dialog-input';
 import axios from 'axios';
 import { api_url } from '../resources/constants'
 import { AsyncStorage } from 'react-native';
-import { Card,Badge } from 'react-native-elements'
+import { Card, Badge } from 'react-native-elements'
 
 class TemplateScene extends Component {
   constructor(props) {
     super();
-    this.state = { 
+    this.state = {
       dialogVisible: false,
-      newTemplate: null 
+      newTemplate: null
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.fetchTemplates();
     // console.log(this.props);
-  } 
+  }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     // this.fetchTemplates();
   }
 
@@ -39,11 +39,11 @@ class TemplateScene extends Component {
   showDialog = () => {
     this.setState({ dialogVisible: true });
   };
- 
+
   handleCancel = () => {
     this.setState({ dialogVisible: false });
   };
- 
+
   handleDelete = () => {
     // The user has pressed the "Delete" button, so here you can do your own logic.
     // ...Your logic
@@ -51,36 +51,36 @@ class TemplateScene extends Component {
   };
 
   handleName = (name) => {
-    this.setState({dialogVisible:false});
+    this.setState({ dialogVisible: false });
     AsyncStorage.getItem("authorization")
-    .then((token) => {
-      let url = api_url + "/api/v1/templates";
-      let data = {
-        "template": {
-          name: name
+      .then((token) => {
+        let url = api_url + "/api/v1/templates";
+        let data = {
+          "template": {
+            name: name
+          }
         }
-      }
-      const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-      axios.post(url, data, {
-        headers: headers
-      }).then(response => {
-        let template = response.data.data;
-        Actions.editSurvey({ title: template.name, id: template.id })
-        // return template;
-      }).catch((error) => {
-        console.log(error);
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+        axios.post(url, data, {
+          headers: headers
+        }).then(response => {
+          let template = response.data.data;
+          Actions.editSurvey({ title: template.name, id: template.id })
+          // return template;
+        }).catch((error) => {
+          console.log(error);
+          return null;
+        })
+      })
+      .catch((err) => {
+        console.log("Token Error: ", err);
         return null;
       })
-    })
-    .catch((err) => {
-      console.log("Token Error: ", err);
-      return null;
-    })
   }
-  getColor(){
+  getColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';
     for (var i = 0; i < 6; i++) {
@@ -93,18 +93,18 @@ class TemplateScene extends Component {
     const survey = item.item;
     return (
       <Card containerStyle={styles.cardChat}>
-      <TouchableHighlight
-        onPress={ () => Actions.editSurvey({ title: survey.name, id: survey.id }) }
-      >
-        <View style={{ flex: 1,  flexDirection: 'row',justifyContent:'flex-start'}}>
-        <View style={{width: 50, height: 50, backgroundColor: this.getColor() }} />
- 
-          <View style={{marginLeft:40}}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold'}}>{ survey.name }</Text>
-            <Text style={{ fontSize: 13 }}>{ survey.inserted_at }</Text>
+        <TouchableHighlight
+          onPress={() => Actions.showSurvey({ title: survey.name, id: survey.id })}
+        >
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <View style={{ width: 50, height: 50, backgroundColor: this.getColor() }} />
+
+            <View style={{ marginLeft: 40 }}>
+              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{survey.name}</Text>
+              <Text style={{ fontSize: 13 }}>{survey.inserted_at}</Text>
+            </View>
           </View>
-        </View>
-      </TouchableHighlight></Card>
+        </TouchableHighlight></Card>
     )
   }
 
@@ -117,16 +117,16 @@ class TemplateScene extends Component {
           renderItem={data => this.renderRow(data)}
         />
         <View>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => this.showDialog() } style={styles.touchableOpacityStyle} >
+          <TouchableOpacity activeOpacity={0.5} onPress={() => this.showDialog()} style={styles.touchableOpacityStyle} >
             <Image source={require('../images/ic_add.png')} style={styles.floatingButtonStyle} />
           </TouchableOpacity>
           <DialogInput isDialogVisible={this.state.dialogVisible}
-                     title={"Template"}
-                     message={"Enter name of the template"}
-                     hintInput ={"hint for the input"}
-                     submitInput={ (inputText) => {this.handleName(inputText)} }
-                     closeDialog={ () =>this.setState({dialogVisible:false})}>
-         </DialogInput>
+            title={"Template"}
+            message={"Enter name of the template"}
+            hintInput={"hint for the input"}
+            submitInput={(inputText) => { this.handleName(inputText) }}
+            closeDialog={() => this.setState({ dialogVisible: false })}>
+          </DialogInput>
         </View>
       </View>
     );
@@ -147,7 +147,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch => {
   return {
     actions: {
-      fetchTemplates: () =>{
+      fetchTemplates: () => {
         return dispatch(
           fetchTemplates()
         );
@@ -164,9 +164,9 @@ const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch =
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor : '#F5F5F5'
+    backgroundColor: '#F5F5F5'
   },
-  touchableOpacityStyle:{
+  touchableOpacityStyle: {
     position: 'absolute',
     width: 55,
     height: 55,
@@ -187,8 +187,8 @@ const styles = StyleSheet.create({
   },
   cardChat: {
     width: '95%',
-    justifyContent:'center',
-    alignSelf:'center'
+    justifyContent: 'center',
+    alignSelf: 'center'
   }
 
 });
