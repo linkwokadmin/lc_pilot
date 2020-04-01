@@ -19,25 +19,44 @@ class ContactsList extends Component {
       contacts: [],
       currentUser: null
     }
-    // this.props.fetchCurrentUser();
-    console.log(this.props.currentUser);
-    if(this.props.currentUser !== null && this.props.currentUser !== undefined && this.props.currentUser !== '') {
-      this.statusRoom = "status:" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(' '))
-      this.status = Status(this.props.currentUser, this.statusRoom, this.updateContacts);
-    }
   }
 
   componentDidMount() {
     this.props.fetchContacts();
+    
     this.setState({contacts: this.props.contacts});
     // this.setState({currentUser: this.props.currentUser})
+    if(this.props.currentUser !== null && this.props.currentUser !== undefined && this.props.currentUser !== '') {
+      this.statusRoom = "status:" + this.props.currentUser.id;
+      this.status = Status(this.props.currentUser, this.statusRoom, this.updateContacts, this.increaseUnreadMessages);
+    }
   }
 
   updateContacts = (contacts) => {
     this.setState({contacts: contacts})
   }
 
-  getColor(){
+  readMessagesRedirect = (newContact) => {
+    let userLists = _.map(this.state.contacts, (u) => {
+      if (u.id !== newContact.id) return u;
+      return { ...u, count: 0 };
+    });
+    this.setState({contacts: userLists})
+    Actions.b_chat({ title: newContact.name, contactId: newContact.id, contactName: newContact.name, contactEmail: newContact.email, currentUser: this.props.currentUser })
+  }
+
+  increaseUnreadMessages = (id) => {
+    let userLists = _.map(this.state.contacts, (u) => {
+      console.log("Cond:", (u.id.toString() !== id));
+      console.log("UserId:", id);
+      console.log("Id:", (u.id.toString()));
+      if (u.id.toString() !== id.toString()) return u;
+      return { ...u, count: (u.count + 1) };
+    });
+    this.setState({contacts: userLists})
+  }
+
+  getColor(){   
     var letters = '0123456789ABCDEF';
     var color = '#';
     for (var i = 0; i < 6; i++) {
@@ -70,7 +89,7 @@ class ContactsList extends Component {
       return (
         <Card containerStyle={styles.cardChat}>
           <TouchableHighlight
-            onPress={() => Actions.b_chat({ title: newContact.name, contactId: newContact.id, contactName: newContact.name, contactEmail: newContact.email, currentUser: this.props.currentUser })}
+            onPress={() => this.readMessagesRedirect(newContact)}
           >
             <View style={{ flexDirection: 'row',flex:1,justifyContent:'space-between'}}>
               <Image source={{ uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50,alignContent:'flex-start',backgroundColor: this.getColor() }} />
