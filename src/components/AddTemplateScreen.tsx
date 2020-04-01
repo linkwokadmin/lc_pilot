@@ -11,6 +11,11 @@ import { TextInput } from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
 import { FloatingAction } from "react-native-floating-action";
 import { Actions } from 'react-native-router-flux';
+import { Card,AirbnbRating } from 'react-native-elements'
+
+import AddTextQuestion from './AddTextQuestion';
+import AddMcqQuestion from './AddMcqQuestion'
+import AddReatQuestion from './AddReatQuestion'
 
 class AddTemplateScreen extends Component {
   constructor() {
@@ -20,7 +25,7 @@ class AddTemplateScreen extends Component {
       shareholders: [
         { 
           name: "",
-          type: "",
+          type: "Text",
           options: [
             {
               label: "A",
@@ -31,7 +36,7 @@ class AddTemplateScreen extends Component {
         }
       ]
     };
-  }
+  } 
 
   handleShareholderNameChange = (text, idx) => {
     console.log(text);
@@ -81,69 +86,91 @@ class AddTemplateScreen extends Component {
   handleNavigation = (name) => {
     name === 'bt_add_text_question' ? Actions.addTextQuestion() : console.log("MCQ template is not ready yet");
   }
+
+  renderQuestionType = (question_type) => {
+    
+  }
+
+  rendrUI(l) {
+    if (l.textType) {
+      return (<AddTextQuestion />);
+    }
+    if (l.mcqType) {
+      return (<AddMcqQuestion/>);
+    }
+    if (l.rateType) {
+      return (<AddReatQuestion/>);
+    }
+  }
  
+  renderCard(shareholder, idx) {
+    return(
+      <Card>
+        <View style={styles.questionType}>
+          <Button title="MCQ" color='green' onPress={() => this.handleShareholderTypeChange('MCQ', idx)} />
+          <Button title="Text" color='green' onPress={() => this.handleShareholderTypeChange('Text', idx)} />
+          <Button title="Rate" color='green' onPress={() => this.handleShareholderTypeChange('Rate', idx)} />
+        </View>
+        <View>
+          {
+            shareholder.type === "MCQ"
+            ? <AddMcqQuestion/> : (shareholder.type === 'Text' ? <AddTextQuestion /> : <AddReatQuestion/>)
+          }
+        </View>
+      </Card>
+    );
+  }
+
+  renderQ = (shareholder, idx) => {
+    return(
+      <View style={styles.questionSection}>
+        <View style = { styles.inputContainer }>
+          <Text style = { styles.placeInput }>{`Questions #${idx + 1}`}</Text>
+          <Button 
+            title = " X " 
+            style = { styles.placeButton }
+            onPress = { this.handleRemoveShareholder(idx) }
+            color = "red"
+          />
+        </View>
+        <TextInput
+          placeholder={`Statement`}
+          label="text"
+          value={shareholder.name}
+          onChangeText={(value) => this.handleShareholderNameChange(value, idx)}
+        />
+        <RNPickerSelect
+            value={shareholder.type}
+            onValueChange={(value) => this.handleShareholderTypeChange(value, idx)}
+            items={[
+                { label: 'Text', value: 'Text' },
+                { label: 'Multiple Choice', value: 'mcq' },
+            ]}
+        />
+        {
+          shareholder.type === "mcq" ?
+          <Text>One more level</Text>
+          :
+          null
+        }
+      </View>
+    )
+  }
 
   render() {
-    const actions = [
-      {
-        text: "Text",
-        icon: require("./../images/ic_accessibility_white.png"),
-        name: "bt_add_text_question",
-        position: 2
-      },
-      {
-        text: "MCQ",
-        icon: require("./../images/ic_language_white.png"),
-        name: "bt_add_mcq_question",
-        position: 1
-      }
-    ];
     return (
       <Fragment>
         <ScrollView style={styles.form}>
-          <View style={styles.section}>
+          <Card>
             <Input
               placeholder="Form 1"
               label="Name"
               value={this.state.name}
               onChangeText={name => this.setState({ name })}
             />
-          </View>
-          <Text>Questions: </Text>
+          </Card>
           {this.state.shareholders.map((shareholder, idx) => (
-            <View style={styles.questionSection}>
-              
-
-              <View style = { styles.inputContainer }>
-                <Text style = { styles.placeInput }>{`Questions #${idx + 1}`}</Text>
-                <Button 
-                  title = " X " 
-                  style = { styles.placeButton }
-                  onPress = { this.handleRemoveShareholder(idx) }
-                  color = "red"
-                />
-              </View>
-              <TextInput
-                placeholder={`Statement`}
-                label="text"
-                value={shareholder.name}
-                onChangeText={(value) => this.handleShareholderNameChange(value, idx)}
-              />
-              <RNPickerSelect
-                  value={shareholder.type}
-                  onValueChange={(value) => this.handleShareholderTypeChange(value, idx)}
-                  items={[
-                      { label: 'Text', value: 'Text' },
-                      { label: 'Multiple Choice', value: 'mcq' },
-                  ]}
-              />
-              {
-                shareholder.type === "mcq" ?
-                <Text>One more level</Text>
-                :
-                null
-              }
-            </View>
+            this.renderCard(shareholder, idx)
           ))}
           <Button
             title="Add Question"
@@ -151,13 +178,6 @@ class AddTemplateScreen extends Component {
           />
            
         </ScrollView>
-        <FloatingAction
-          actions={actions}
-          onPressItem={name => {
-            this.handleNavigation(name);
-            // console.log(`selected button: ${name}`);
-          }}
-        />
         <Button 
           style = {styles.saveBtn}
           title="Save"
@@ -229,5 +249,9 @@ const styles = StyleSheet.create({
   saveBtn: {
     position: 'absolute',
     bottom: 0
-  }
+  },
+  questionType: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });

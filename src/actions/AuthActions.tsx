@@ -67,8 +67,8 @@ export const SignIN = ({ email, password }) => {
       console.log(TOKEN_KEY);
       AsyncStorage.setItem('@mytoken:key', TOKEN_KEY);
       AsyncStorage.setItem('authorization', TOKEN_KEY);
-      // AsyncStorage.setItem('currentUser', response.data.user);
-      console.log(response.data.user);
+      AsyncStorage.setItem('currentUser', response.data.user);
+      console.log("Done")
       authSuccess(dispatch, response.data.user)
     })
     .catch(error => authUnsuccess(error, dispatch))
@@ -131,7 +131,7 @@ const authSuccess = (dispatch, payload) => {
     type: AUTH_SUCCESS,
     payload: payload
   });
-  Actions.mainScreen();
+  Actions.mainScreen({currentUser: payload});
 }
 
 const authUnsuccess = (error, dispatch) => {

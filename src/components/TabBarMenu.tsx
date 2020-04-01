@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { enableInclusionContact } from '../actions/AppActions';
 import { AsyncStorage } from 'react-native';
+import { fetchCurrentUser } from '../actions/AuthActions';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const TAB_BAR_WIDTH = (100 * SCREEN_WIDTH) / 100; //90% of screen
@@ -12,10 +13,23 @@ const TAB_AND_INDICATOR_WIDTH = TAB_BAR_WIDTH / 2;
 const CAMERA_WIDTH = (10 * SCREEN_WIDTH) / 100; //10% of screen
 
 class TabBarMenu extends Component {
+  constructor(props){
+    super(props);
+    if(this.props.currentUser === '') {
+      this.props.fetchCurrentUser();
+    }
+    if(this.props.currentUser === null) {
+      AsyncStorage.clear();
+      Actions.loginScreen();
+    }
+    console.log(this.props)
+  }
+
   logout() {
     AsyncStorage.clear();
     Actions.loginScreen();
   }
+
   render() {
     return (
       <View style={styles.statusBar}>
@@ -82,4 +96,11 @@ const styles = StyleSheet.create({
 }
 );
 
-export default connect(null, { enableInclusionContact })(TabBarMenu);
+const mapStateToProps = state => {
+  return {
+    email_logged_in: state.AppReducer.email_logged_in,
+    currentUser: state.AuthReducer.currentUser,
+  }
+}
+
+export default connect(mapStateToProps, { enableInclusionContact, fetchCurrentUser })(TabBarMenu);

@@ -21,7 +21,13 @@ export default class MainScreen extends Component {
     ],
   };
 
-  _handleIndexChange = index => this.setState({ index });
+  _handleIndexChange = index => {
+    this.setState({ index });
+    if(index == 0){
+      console.log(index);
+    }
+  };
+
   _renderHeader = props => <TabBarMenu {...props} />;
 
   _renderScene = SceneMap({

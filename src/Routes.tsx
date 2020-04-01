@@ -59,9 +59,11 @@ export default class Routes extends Component {
       <Router navigationBarStyle={{ backgroundColor: '#75daad' }} titleStyle={{ color: 'white' }}>
         <Scene key='app'>
           <Scene key='splashScreen' component={splashScreen} hideNavBar={true} title="Splash" initial={!this.state.logged} />
+
           <Scene key='loginScreen' component={LoginScreen} title="Login" hideNavBar={true} />
           <Scene key='signUpScreen' component={SignUpScreen} title="SignUp" hideNavBar={true} />
           <Scene key='mainScreen' component={MainScreen} title="MainScreen" hideNavBar={true} initial={this.state.logged} />
+
           <Scene key='welcomeScreen' component={WelcomeScreen} title="WelcomeScreen" />
           <Scene key='addContactScreen' component={AddContactScreen} title="Add Contact" />
           <Scene key='userTemplateScene' component={UserTemplateScene} title="User Templates" />
@@ -90,9 +92,7 @@ export default class Routes extends Component {
   }
 }
 
-const EditIcon = () => {
- 
-};
+
 
 const styles = StyleSheet.create({
   container: {
