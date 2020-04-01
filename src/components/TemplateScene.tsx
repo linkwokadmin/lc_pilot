@@ -37,7 +37,8 @@ class TemplateScene extends Component {
   }
 
   showDialog = () => {
-    this.setState({ dialogVisible: true });
+    // this.setState({ dialogVisible: true });
+    Actions.addTemplate();
   };
  
   handleCancel = () => {

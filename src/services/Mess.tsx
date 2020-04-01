@@ -48,7 +48,7 @@ export default class Mess extends Component {
     this.handleSend = this.handleSend.bind(this);
     this.receiveChatMessage = this.receiveChatMessage.bind(this);
     if (this.props.currentUser.id > this.props.contactId) {
-      this.chatRoom = "chat:" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(" ")) + ":" + this.props.contactId + ":" + _.first(this.props.contactName.split(""))
+      this.chatRoom = "chat:" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(" ")) + ":" + this.props.contactId + ":" + _.first(this.props.contactName.split(" "))
     } else {
       this.chatRoom = "chat:" + this.props.contactId + ":" + _.first(this.props.contactName.split(' ')) + ":" + this.props.currentUser.id + ":" + _.first(this.props.currentUser.name.split(" "));
     }

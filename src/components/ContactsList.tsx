@@ -42,6 +42,7 @@ class ContactsList extends Component {
       return { ...u, count: 0 };
     });
     this.setState({contacts: userLists})
+    console.log(newContact)
     Actions.b_chat({ title: newContact.name, contactId: newContact.id, contactName: newContact.name, contactEmail: newContact.email, currentUser: this.props.currentUser })
   }
 
