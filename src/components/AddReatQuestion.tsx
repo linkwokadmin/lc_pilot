@@ -14,49 +14,29 @@ import { Rating, AirbnbRating } from 'react-native-elements';
 
 class AddReatQuestion extends Component {
     constructor(props) {
-        super();
-
-
-        console.log('----------', props.templateId.id);
+        super(props);
         this.state = {
-            statement: "",
-            type: "rate",
-            weight: "1",
-            value: "default"
+            "statement": "",
+            "type": "rate",
+            "weight": "1",
+            "options": [],
+            "value": "val"
         }
     }
+
+    componentDidMount(){
+        this.setState(this.props.savedState)
+    }
+
     handleSave = () => {
-        console.log('----    ', this.props.templateId.id);
-
-
-        AsyncStorage.getItem("authorization")
-            .then((token) => {
-                let url = api_url + "/api/v1/questions";
-                let data = { question: { ...this.state, template_id: this.props.templateId.id } };
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-                axios.post(url, data, {
-                    headers: headers
-                }).then(response => {
-                    let question = response.data.data;
-                    console.log(question);
-                  //  Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
-                }).catch((error) => {
-                    console.log(error);
-                    return null;
-                })
-            })
-            .catch((err) => {
-                console.log("Token Error: ", err);
-                return null;
-            })
+        console.log(this.state);
+        this.props.handleUpdate(this.props.idx, this.state);
     }
 
     render() {
         return (
             <View>
+                <Text style={styles.textLbl}>Question Text</Text>
                 <TextInput
                     multiline
                     style={{
@@ -64,6 +44,7 @@ class AddReatQuestion extends Component {
                         borderWidth: 1,
                         height: 50
                     }}
+                    value={this.state.statement}
                     placeholder="Question Text"
                     onChangeText={(value) => this.setState({ statement: value })}
                 />
@@ -87,7 +68,11 @@ const styles = StyleSheet.create({
     saveBtn: {
         position: 'absolute',
         bottom: 20
-    }
+    },
+    textLbl: {
+        color: 'green',
+        marginTop:20
+    },
 })
 
 const mapStateToProps = state => (

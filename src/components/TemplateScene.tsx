@@ -13,6 +13,7 @@ import axios from 'axios';
 import { api_url } from '../resources/constants'
 import { AsyncStorage } from 'react-native';
 import { Card, Badge } from 'react-native-elements'
+import { template } from '@babel/core';
 
 class TemplateScene extends Component {
   constructor(props) {
@@ -36,9 +37,13 @@ class TemplateScene extends Component {
     this.props.actions.fetchTemplates();
   }
 
+  createTemplate = (template) => {
+    this.props.actions.createTemplates(template)
+  }
+
   showDialog = () => {
     // this.setState({ dialogVisible: true });
-    Actions.addTemplate();
+    Actions.addTemplate({currentUser: this.props.currentUser, createTemplates: this.createTemplate});
   };
 
   handleCancel = () => {
@@ -95,7 +100,7 @@ class TemplateScene extends Component {
     return (
       <Card containerStyle={styles.cardChat}>
         <TouchableHighlight
-          onPress={() => Actions.showSurvey({ title: survey.name, id: survey.id })}
+          onPress={() => Actions.showSurvey({ title: survey.name, id: survey.id, currentUser: this.props.currentUser })}
         >
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
             <View style={{ width: 50, height: 50, backgroundColor: this.getColor() }} />

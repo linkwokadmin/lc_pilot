@@ -127,7 +127,7 @@ const mapStateToProps = state => {
   });
 
   return {
-    templates: templates,
+    templates: state.ListTemplatesReducer,
     currentUser: state.AuthReducer.currentUser
   }
 }

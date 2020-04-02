@@ -20,7 +20,8 @@ import {
   ERROR_ADDING_TEMPLATE,
   FEEDBACK_LIST,
   USER_TEMPLATE_LIST,
-  COACH_TEMPLATE_LIST
+  COACH_TEMPLATE_LIST,
+  SINGLE_TEMPLATE
 } from '../resources/types';
 import { template } from '@babel/core';
 import { log } from 'react-native-reanimated';
@@ -179,6 +180,7 @@ export const fetchAllChats = currentUserEmail => {
 //fatch Questions
 
 export const fetchQuestions=(template_id)=>{
+  console.log(111)
   return dispatch => {
     AsyncStorage.getItem("authorization")
     .then((token) => {
@@ -257,6 +259,32 @@ export const fetchTemplates = () => {
 }
 
 // Fetch templates
+export const fetchSingleTemplate = (id) => {
+  return dispatch => {
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/templates/" + id;
+      axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then((response) => {
+        let templates = response.data;
+        dispatch({
+          type: SINGLE_TEMPLATE,
+          payload: templates
+        })
+      }).catch((api_err) => {
+        console.log("API ERR: ", api_err)
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+    })
+  }
+}
+
+// Fetch templates
 export const fetchUserTemplates = () => {
   return dispatch => {
     AsyncStorage.getItem("authorization")
@@ -287,7 +315,7 @@ export const fetchCoachTemplates = () => {
   return dispatch => {
     AsyncStorage.getItem("authorization")
     .then((token) => {
-      let url = api_url + "/api/v1/templates/my_templates/user";
+      let url = api_url + "/api/v1/templates/my_templates/coach";
       axios.get(url, {
         headers: {
           'Authorization': `Bearer ${token}`

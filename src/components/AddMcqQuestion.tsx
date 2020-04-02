@@ -39,6 +39,10 @@ class AddMcqQuestion extends Component {
     };
   }
 
+  componentDidMount(){
+    this.setState(this.props.savedState)
+  }
+
   handleNameChange = (statement) => () => {
     console.log("statement : ", statement);
     this.setState({ statement: statement })
@@ -66,31 +70,8 @@ class AddMcqQuestion extends Component {
   };
 
   handleSave = () => {
-    console.log(this.props.id,'----------', this.props.templateId.id);
-     console.log('Calling Save..', this.state);
-    AsyncStorage.getItem("authorization")
-      .then((token) => {
-        let url = api_url + "/api/v1/questions";
-        let data = { question: { ...this.state, template_id: this.props.templateId.id } };
-        const headers = {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-        axios.post(url, data, {
-          headers: headers
-        }).then(response => {
-          let question = response.data.data;
-          console.log(question);
-         // Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
-        }).catch((error) => {
-          console.log(error);
-          return null;
-        })
-      })
-      .catch((err) => {
-        console.log("Token Error: ", err);
-        return null;
-      })
+    console.log(this.state);
+    this.props.handleUpdate(this.props.idx, this.state);
   }
 
   handleDelete = () => {
@@ -108,6 +89,7 @@ class AddMcqQuestion extends Component {
             borderColor: '#ddd'}}
             placeholder={`Enter question statement`}
             label="text"
+            value={this.state.statement}
             onChangeText={(value) => this.setState({ statement: value })}
           />
           {this.state.options.map((option, idx) => (

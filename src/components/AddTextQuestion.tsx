@@ -13,7 +13,7 @@ import { Actions } from 'react-native-router-flux';
 
 class AddTextQuestion extends Component{
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       "statement": "",
       "type": "text",
@@ -23,37 +23,17 @@ class AddTextQuestion extends Component{
     };
   }
  
-  
+  componentDidMount(){
+    this.setState(this.props.savedState)
+  }
 
   handleNameChange = statement => () => {
     this.setState({ statement: statement })
   }
 
   handleSave = () => {
-    AsyncStorage.getItem("authorization")
-      .then((token) => {
-        let url = api_url + "/api/v1/questions";
-        let data = { question: { ...this.state, template_id: this.props.templateId.id } };
-        const headers = {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-        axios.post(url, data, {
-          headers: headers
-        }).then(response => {
-          let question = response.data.data;
-          console.log(response.data.data);
-          
-           //Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
-        }).catch((error) => {
-          console.log(error);
-          return null;
-        })
-      })
-      .catch((err) => {
-        console.log("Token Error: ", err);
-        return null;
-      })
+    console.log(this.state);
+    this.props.handleUpdate(this.props.idx, this.state);
   }
 
   handleDelete = () => {
@@ -72,24 +52,15 @@ class AddTextQuestion extends Component{
               borderWidth: 1,
               height:50 }}
             placeholder="Question Text"
+            value={this.state.statement}
             onChangeText={(value) => this.setState({ statement: value })}
           />
-           <View style={styles.inputContainer}>
-           <Button
-              title="Add "
-              style={styles.placeButtonAdd}
-              onPress={() => this.handleSave()}
-              color="blue"
-            />
-            <Button
-              title="Delete"
-              style={styles.placeButtonDelete}
-              onPress={() => this.handleDelete()}
-              color="red"
-            />
-         
-           
-          </View>
+             <Button
+                  style={styles.saveBtn}
+                  title="Save"
+                  color="#115E54"
+                  onPress={() => this.handleSave()}
+              />
         </View>
       </Fragment>
     );
@@ -129,5 +100,9 @@ const styles = StyleSheet.create({
   textLbl: {
     color: 'green',
     marginTop:20
+  },
+  saveBtn: {
+    position: 'absolute',
+    bottom: 20,
   }
 });

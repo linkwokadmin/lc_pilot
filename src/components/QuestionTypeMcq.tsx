@@ -8,13 +8,11 @@ import {CheckBox}from 'react-native-elements' ;
 
 
 export const QuestionMcq = ({ question, options, number, onChange }) => {
-
-
-
+    console.log("val :",question.value)
     return (
         <View style={styles.conterner}>
             <FlatList
-                keyExtractor={(item) => item.value}
+                keyExtractor={(item) => item.test}
                 data={options}
                 renderItem={({ item }) => (
                     <View style={{ flexDirection: 'row' }}>

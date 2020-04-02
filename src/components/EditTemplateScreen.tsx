@@ -2,10 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Input, TextLink, Loading,  } from './common';
+import { compose } from "redux";
+import _ from 'lodash';
 // import { Formik } from 'formik';
 import {
-  addContact,
-  registerNewContact
+  fetchSingleTemplate
 } from '../actions/AppActions';
 import { TextInput } from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
@@ -16,11 +17,11 @@ import { Card,AirbnbRating } from 'react-native-elements'
 import AddTextQuestion from './AddTextQuestion';
 import AddMcqQuestion from './AddMcqQuestion'
 import AddReatQuestion from './AddReatQuestion'
+import { template } from '@babel/core';
 
-class AddTemplateScreen extends Component {
+class EditTemplateScreen extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props)
     this.state = {
       name: "",
       user_id: this.props.currentUser.id,
@@ -47,6 +48,15 @@ class AddTemplateScreen extends Component {
       ]
     };
   } 
+
+  componentDidMount() {
+    this.fetchSingleTemplate(this.props.id);
+    this.setState(this.props.template)
+  }
+
+  fetchSingleTemplate = (id) => {
+    this.props.actions.fetchSingleTemplate(id);
+  }
 
   handleQuestionStatementChange = (text, idx) => {
     const newQuestion = this.state.questions.map((question, sidx) => {
@@ -150,10 +160,10 @@ class AddTemplateScreen extends Component {
           {
             shareholder.type === "mcq"
             ? 
-              <AddMcqQuestion handleUpdate={this.handleUpdate} idx={idx}/> : 
+              <AddMcqQuestion handleUpdate={this.handleUpdate} idx={idx} savedState={shareholder}/> : 
             (shareholder.type === 'rate' ? 
-              <AddReatQuestion handleUpdate={this.handleUpdate} idx={idx}/> : 
-              <AddTextQuestion handleUpdate={this.handleUpdate} idx={idx}/>
+              <AddReatQuestion handleUpdate={this.handleUpdate} idx={idx} savedState={shareholder}/> : 
+              <AddTextQuestion handleUpdate={this.handleUpdate} idx={idx} savedState={shareholder}/>
             )
           }
         </View>
@@ -228,19 +238,31 @@ class AddTemplateScreen extends Component {
   }
 }
 
-const mapStateToProps = state => (
-  {
+const mapStateToProps = state => {
+  return {
     email_contact: state.AppReducer.email_contact,
     add_contact_error: state.AppReducer.add_contact_error,
-    add_contact_status: state.AppReducer.add_contact_status
+    add_contact_status: state.AppReducer.add_contact_status,
+    template: state.ListTemplatesReducer
   }
-);
+}
 
-export default connect(
-  mapStateToProps, {
-    addContact,
-    registerNewContact
-  })(AddTemplateScreen);
+const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch => {
+  return {
+    actions: {
+      fetchSingleTemplate: (id) => {
+        return dispatch(
+          fetchSingleTemplate(id)
+        );
+      }
+    }
+  }
+};
+
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(EditTemplateScreen);
 
 const styles = StyleSheet.create({
   container: {

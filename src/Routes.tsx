@@ -14,6 +14,7 @@ import Chat from './components/Chat';
 import SelectContact from './components/SelectContact';
 import SurveyShowScreen from './components/SurveyShowScreen';
 import SurveyEditScreen from './components/SurveyEditScreen';
+import EditTemplateScreen from './components/EditTemplateScreen';
 import UserTemplateScene from './components/UserTemplateScene'
 import CoachTemplateScene from './components/CoachTemplateScene'
 import Mess from './services/Mess';
@@ -74,7 +75,7 @@ export default class Routes extends Component {
           <Scene key='addTextQuestion' component={AddTextQuestion} title="Add Text Question" />
           <Scene key='addMcqQuestion' component={AddMcqQuestion} title="Add Multiple-choice Question" />
           <Scene key='showSurvey' component={SurveyShowScreen} title="Survey Show" renderRightButton={ this.EditIcon()} />
-          <Scene key='editSurvey' component={SurveyEditScreen} title="Survey Edit" />
+          <Scene key='editSurvey' component={EditTemplateScreen} title="Survey Edit" />
           <Scene key='b_chat' component={Mess} title="b_Chat" hideNavBar={false} onRight={() => console.log(111)} rightButtonImage={null} />
         </Scene>
       </Router>
