@@ -110,12 +110,8 @@ class UserTemplateScene extends Component {
 }
 
 const mapStateToProps = state => {
-  const templates = _.map(state.ListTemplatesReducer, (value, uid) => {
-    return { ...value, uid }
-  });
-
   return {
-    templates: templates,
+    templates: state.ListTemplatesReducer.userTemplates,
     currentUser: state.AuthReducer.currentUser
   }
 }

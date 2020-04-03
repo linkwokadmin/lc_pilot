@@ -7,7 +7,7 @@ import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableO
 
 import { connect } from 'react-redux';
 import { compose } from "redux";
-import { fetchTemplates, createTemplates } from '../actions/AppActions';
+import { fetchTemplates, createTemplates, fetchCoachTemplates, fetchUserTemplates } from '../actions/AppActions';
 import DialogInput from 'react-native-dialog-input';
 import axios from 'axios';
 import { api_url } from '../resources/constants'
@@ -20,17 +20,27 @@ class TemplateScene extends Component {
     super(props);
     this.state = {
       dialogVisible: false,
-      newTemplate: null
+      newTemplate: null,
+      templates: []
     }
   }
 
   componentDidMount() {
-    this.fetchTemplates();
-    // console.log(this.props);
+    if(this.props.currentUser.user_type.toLowerCase() == 'coach'){
+      this.fetchCoachTemplates();
+      this.setState({templates: this.props.coachTemplates});
+    } else {
+      this.fetchUserTemplates();
+      this.setState({templates: this.props.userTemplates})
+    }
   }
 
-  fetchTemplates = async () => {
-    this.props.actions.fetchTemplates();
+  fetchCoachTemplates = async () => {
+    this.props.actions.fetchCoachTemplates();
+  }
+
+  fetchUserTemplates = async () => {
+    this.props.actions.fetchUserTemplates();
   }
 
   createTemplate = (template) => {
@@ -114,7 +124,7 @@ class TemplateScene extends Component {
       <View style={styles.container}>
         <FlatList
           enableEmptySections
-          data={this.props.templates}
+          data={this.state.templates}
           renderItem={data => this.renderRow(data)}
         />
         <View>
@@ -135,12 +145,9 @@ class TemplateScene extends Component {
 }
 
 const mapStateToProps = state => {
-  // const templates = _.map(state.ListTemplatesReducer, (value, uid) => {
-  //   return { ...value, uid }
-  // });
-
   return {
-    templates: state.ListTemplatesReducer.coachTemplates,
+    coachTemplates: state.ListTemplatesReducer.coachTemplates,
+    userTemplates: state.ListTemplatesReducer.userTemplates,
     currentUser: state.AuthReducer.currentUser
   }
 }
@@ -151,6 +158,16 @@ const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch =
       fetchTemplates: () => {
         return dispatch(
           fetchTemplates()
+        );
+      },
+      fetchCoachTemplates: () => {
+        return dispatch(
+          fetchCoachTemplates()
+        );
+      },
+      fetchUserTemplates: () => {
+        return dispatch(
+          fetchUserTemplates()
         );
       },
       createTemplates: (template) => {

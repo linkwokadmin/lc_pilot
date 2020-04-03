@@ -14,19 +14,11 @@ export default (state = INITIAL_STATE, action) => {
     case SINGLE_TEMPLATE:
       return action.payload
     case USER_TEMPLATE_LIST:
-      return action.payload
+      return {...state, userTemplates: action.payload}
     case COACH_TEMPLATE_LIST:
-      // return action.payload
       return {...state, coachTemplates: action.payload}
     case ADD_TEMPLATE:
-      // console.log("-----",state.coachTemplates);
-      // console.log("+++",action.payload);
-      // let updatedCoachTemplates = state.coachTemplates.concat([action.payload]);
-      // console.log("Updated Template :  ", updatedCoachTemplates);
-      // return {
-      //   ...state, coachTemplates: updatedCoachTemplates
-      // }
-      return state
+      return action.payload
     case ERROR_ADDING_TEMPLATE:
       return state
     case CREATE_TEMPLATE:

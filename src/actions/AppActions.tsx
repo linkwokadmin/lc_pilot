@@ -388,7 +388,7 @@ export const shareTemplate = (userId, templateId) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
-      axios.post(url, data, {
+      axios.put(url, data, {
         headers: headers
       }).then(response => {
         let template = response.data.data;

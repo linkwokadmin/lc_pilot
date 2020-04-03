@@ -7,7 +7,7 @@ import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableO
 
 import { connect } from 'react-redux';
 import {compose} from "redux";
-import { fetchCoachTemplates } from '../actions/AppActions';
+import { fetchCoachTemplates, shareTemplate } from '../actions/AppActions';
 import DialogInput from 'react-native-dialog-input';
 import axios from 'axios';
 import { api_url } from '../resources/constants'
@@ -82,6 +82,8 @@ class CoachTemplateScene extends Component {
   }
 
   sendTemplate = (item) => {
+    console.log(this.props.contactId);
+    this.props.actions.shareTemplate(this.props.contactId, item.id);
     Actions.b_chat({ 
       title: this.props.contactName, 
       contactId: this.props.contactId, 
@@ -122,10 +124,6 @@ class CoachTemplateScene extends Component {
 }
 
 const mapStateToProps = state => {
-  const templates = _.map(state.ListTemplatesReducer, (value, uid) => {
-    return { ...value, uid }
-  });
-
   return {
     templates: state.ListTemplatesReducer.coachTemplates,
     currentUser: state.AuthReducer.currentUser
@@ -138,6 +136,11 @@ const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch =
       fetchCoachTemplates: () =>{
         return dispatch(
           fetchCoachTemplates()
+        );
+      },
+      shareTemplate: (userId, templateId) =>{
+        return dispatch(
+          shareTemplate(userId, parseInt(templateId))
         );
       }
     }
