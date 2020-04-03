@@ -22,36 +22,32 @@ import { template } from '@babel/core';
 class EditTemplateScreen extends Component {
   constructor(props) {
     super(props);
+    console.log("Temp: ", this.props.template);
     this.state = {
-      name: "",
-      user_id: this.props.currentUser.id,
-      questions: [
-        { 
-          statement: "",
-          type: "text",
-          weight: "1",
-          options: [
-            {
-              "test": "",
-              "label": "",
-              "value": ""
-            },
-            {
-              "test": "",
-              "label": "",
-              "value": ""
-            }
-          ],
-          value: "val",
-          sequence: 0
-        }
-      ]
     };
   } 
 
   componentDidMount() {
     this.fetchSingleTemplate(this.props.id);
-    this.setState(this.props.template)
+    // this.setState(this.props.template)
+  }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log("PP:",prevProps.template);
+  //   console.log("PS:",prevState);
+  //   console.log("TS",this.state);
+  //   if (prevProps.template.id !== this.state.id) {
+  //     this.setState(this.props.template);
+  //   }
+  // }
+
+  static getDerivedStateFromProps(nextProps, prevState){
+    console.log("NP:",nextProps.template);
+    console.log("PPS:",prevState);
+    if(nextProps.template.id !== prevState.id){
+      return nextProps.template;
+    }
+    else return null;
   }
 
   fetchSingleTemplate = (id) => {
@@ -125,7 +121,7 @@ class EditTemplateScreen extends Component {
 
   handleSave = () => {
     console.log(this.state);
-    this.props.createTemplates(this.state);
+    // this.props.createTemplates(this.state);
   }
 
   handleNavigation = (name) => {
@@ -219,14 +215,16 @@ class EditTemplateScreen extends Component {
               onChangeText={name => this.setState({ name })}
             />
           </Card>
-          {this.state.questions.map((shareholder, idx) => (
-            this.renderCard(shareholder, idx)
-          ))}
+          {
+            this.state.questions !== undefined ?
+            this.state.questions.map((shareholder, idx) => (
+              this.renderCard(shareholder, idx)
+            )) : null
+          }
           <Button
             title="Add Question"
             onPress={this.handleAddQuestion}
           />
-           
         </ScrollView>
         <Button 
           style = {styles.saveBtn}
@@ -243,7 +241,7 @@ const mapStateToProps = state => {
     email_contact: state.AppReducer.email_contact,
     add_contact_error: state.AppReducer.add_contact_error,
     add_contact_status: state.AppReducer.add_contact_status,
-    template: state.ListTemplatesReducer
+    template: state.ListTemplatesReducer.editedTemplate
   }
 }
 

@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
   coachTemplates: [],
-  userTemplates: []
+  userTemplates: [],
+  editedTemplate: {}
 }
 
 import {
@@ -12,7 +13,7 @@ export default (state = INITIAL_STATE, action) => {
     case TEMPLATES_LIST:
       return {...state, coachTemplates: action.payload}
     case SINGLE_TEMPLATE:
-      return action.payload
+      return {...state, editedTemplate: action.payload}
     case USER_TEMPLATE_LIST:
       return {...state, userTemplates: action.payload}
     case COACH_TEMPLATE_LIST:

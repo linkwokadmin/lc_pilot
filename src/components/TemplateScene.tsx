@@ -124,7 +124,7 @@ class TemplateScene extends Component {
       <View style={styles.container}>
         <FlatList
           enableEmptySections
-          data={this.state.templates}
+          data={(this.props.currentUser.user_type.toLowerCase() === 'coach' ? this.props.coachTemplates : this.props.userTemplates)}
           renderItem={data => this.renderRow(data)}
         />
         <View>

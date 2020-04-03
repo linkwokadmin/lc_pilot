@@ -25,9 +25,9 @@ class SurveyShowScreen extends Component {
     } else {
       this.setState({ 'feedbacks': this.props.questions });
     }
-    // setTimeout(()=> 
-    //   Actions.refresh({ rightButton: this.renderRightButton() }),
-    // 0.5);
+    setTimeout(()=> 
+      Actions.refresh({ rightButton: this.renderRightButton() }),
+    0.5);
   }
 
   renderRightButton = () => {
@@ -133,7 +133,7 @@ class SurveyShowScreen extends Component {
         </Card>
           <FlatList
             enableEmptySections
-            data={this.state.feedbacks}
+            data={(this.props.filled ? this.props.feedbacks : this.props.questions )}
             renderItem={data => this.renderQuestion(data)}
           />
        
