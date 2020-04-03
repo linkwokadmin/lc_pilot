@@ -39,7 +39,7 @@ export default (state = INITIAL_STATE, action) => {
     case type.SUCCESS_REGISTER:
         return { ...state, name: '' }
     case type.AUTH_SUCCESS:
-        return { ...state, email: '', password: '', currentUser: action.payload }
+        return { ...state, email: '', password: '', currentUser: action.payload, signInLoading: false }
     case type.AUTH_FAILURE:
     switch (action.payload)
     {

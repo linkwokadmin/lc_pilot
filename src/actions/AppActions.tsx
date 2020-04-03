@@ -21,7 +21,8 @@ import {
   FEEDBACK_LIST,
   USER_TEMPLATE_LIST,
   COACH_TEMPLATE_LIST,
-  SINGLE_TEMPLATE
+  SINGLE_TEMPLATE,
+  CREATE_TEMPLATE
 } from '../resources/types';
 import { template } from '@babel/core';
 import { log } from 'react-native-reanimated';
@@ -342,37 +343,33 @@ export const createTemplates = (template) => {
     let data = {
       "template": template
     }
-    // return Promise.resolve(
-      AsyncStorage.getItem("authorization")
-      .then((token) => {
-        let url = api_url + "/api/v1/templates";
-        const headers = {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-        axios.post(url, data, {
-          headers: headers
-        }).then(response => {
-          let template = response.data.data;
-          // dispatch({
-          //   type: ADD_TEMPLATE,
-          //   payload: template
-          // })
-          console.log("Template: ", template);
-          return template;
-        }).catch((error) => {
-          // dispatch({
-          //   type: ERROR_ADDING_TEMPLATE
-          // })
-          console.log(err);
-          return null;
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/templates";
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+      axios.post(url, data, {
+        headers: headers
+      }).then(response => {
+        let newTemplate = response.data.data;
+        dispatch({
+          type: CREATE_TEMPLATE,
+          payload: newTemplate
         })
-      })
-      .catch((err) => {
-        console.log("Token Error: ", err);
+      }).catch((error) => {
+        // dispatch({
+        //   type: ERROR_ADDING_TEMPLATE
+        // })
+        console.log("dispatchError: ",error);
         return null;
       })
-    // );
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+      return null;
+    })
   }
 }
 

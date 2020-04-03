@@ -114,8 +114,8 @@ class AddTemplateScreen extends Component {
   }
 
   handleSave = () => {
-    console.log(this.state);
     this.props.createTemplates(this.state);
+    Actions.pop();
   }
 
   handleNavigation = (name) => {

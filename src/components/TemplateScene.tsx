@@ -17,7 +17,7 @@ import { template } from '@babel/core';
 
 class TemplateScene extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       dialogVisible: false,
       newTemplate: null
@@ -29,10 +29,6 @@ class TemplateScene extends Component {
     // console.log(this.props);
   }
 
-  componentDidUpdate() {
-    // this.fetchTemplates();
-  }
-
   fetchTemplates = async () => {
     this.props.actions.fetchTemplates();
   }
@@ -42,7 +38,6 @@ class TemplateScene extends Component {
   }
 
   showDialog = () => {
-    // this.setState({ dialogVisible: true });
     Actions.addTemplate({currentUser: this.props.currentUser, createTemplates: this.createTemplate});
   };
 
@@ -140,12 +135,12 @@ class TemplateScene extends Component {
 }
 
 const mapStateToProps = state => {
-  const templates = _.map(state.ListTemplatesReducer, (value, uid) => {
-    return { ...value, uid }
-  });
+  // const templates = _.map(state.ListTemplatesReducer, (value, uid) => {
+  //   return { ...value, uid }
+  // });
 
   return {
-    templates: templates,
+    templates: state.ListTemplatesReducer.coachTemplates,
     currentUser: state.AuthReducer.currentUser
   }
 }
