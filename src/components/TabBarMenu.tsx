@@ -27,6 +27,7 @@ class TabBarMenu extends Component {
 
   logout() {
     AsyncStorage.clear();
+    this.props.signInLoading=false;
     Actions.loginScreen();
   }
 

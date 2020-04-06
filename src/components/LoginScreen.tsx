@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { addEmail, addPassword, SignIN } from '../actions/AuthActions';
 import { Card, CheckBox } from 'react-native-elements'
 
+
 class LoginScreen extends Component {
   _SignIN() {
     const { email, password } = this.props;
@@ -17,7 +18,6 @@ class LoginScreen extends Component {
       return (<ActivityIndicator size="large" color="#00ff00" />)
     }
     return (<Button title='Login' onPress={() => this._SignIN()} />)
-
   }
 
   render() {
@@ -30,22 +30,22 @@ class LoginScreen extends Component {
           <Card containerStyle={styles.loginCard}>
             <View style={styles.formGroup}>
               <TextInput
-                value={this.props.email}
-                onChangeText={email => this.props.addEmail(email)}
                 placeholder='Email & Phone'
                 placeholderTextColor='#000'
-                style={styles.textInput}
                 returnKeyType="next"
+                value={this.props.email}
+                onChangeText={email => this.props.addEmail(email)}
                 onSubmitEditing={() => this.passwordInput.focus()}
               />
               <TextInput
-                value={this.props.password}
-                onChangeText={password => this.props.addPassword(password)}
+               
                 placeholder='Password'
                 placeholderTextColor='#000'
                 style={styles.textInput}
                 returnKeyType="go"
                 ref={(input) => this.passwordInput = input}
+                onChangeText={password => this.props.addPassword(password)}
+                value={this.props.password}
               />
 
               <View style={styles.btnLogIn}>
@@ -54,8 +54,6 @@ class LoginScreen extends Component {
                 </View>
                 <View style={styles.btnLoginN}>
                   {this.renderAcessButton()}
-
-
                 </View>
               </View>
             </View>

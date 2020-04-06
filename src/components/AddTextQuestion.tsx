@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, StyleSheet, ScrollView, Button,Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Button, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import {
   addContact,
@@ -11,9 +11,10 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-class AddTextQuestion extends Component{
+class AddTextQuestion extends Component {
   constructor(props) {
     super();
+    console.log('---render render id-------', props.templateId.id );
     this.state = {
       "statement": "",
       "type": "text",
@@ -22,9 +23,6 @@ class AddTextQuestion extends Component{
       "value": "val"
     };
   }
- 
-  
-
   handleNameChange = statement => () => {
     this.setState({ statement: statement })
   }
@@ -34,6 +32,7 @@ class AddTextQuestion extends Component{
       .then((token) => {
         let url = api_url + "/api/v1/questions";
         let data = { question: { ...this.state, template_id: this.props.templateId.id } };
+        console.log('-------- data -----------', data);
         const headers = {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -43,8 +42,8 @@ class AddTextQuestion extends Component{
         }).then(response => {
           let question = response.data.data;
           console.log(response.data.data);
-          
-           //Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
+
+          //Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
         }).catch((error) => {
           console.log(error);
           return null;
@@ -68,28 +67,28 @@ class AddTextQuestion extends Component{
           <TextInput
             multiline
             style={{
-               borderColor: '#CBCAC9',
+              borderColor: '#CBCAC9',
               borderWidth: 1,
-              height:50 }}
+              height: 50
+            }}
             placeholder="Question Text"
             onChangeText={(value) => this.setState({ statement: value })}
           />
-           <View style={styles.inputContainer}>
-           <Button
-              title="Add "
-              style={styles.placeButtonAdd}
-              onPress={() => this.handleSave()}
-              color="blue"
-            />
-            <Button
+          <View style={styles.inputContainer}>
+           
+            {/* <Button
               title="Delete"
               style={styles.placeButtonDelete}
               onPress={() => this.handleDelete()}
               color="red"
-            />
-         
-           
+            /> */}
           </View>
+          <Button
+              title="Save "
+              style={styles.placeButtonAdd}
+              onPress={() => this.handleSave()}
+              color="#115E54"
+            />
         </View>
       </Fragment>
     );
@@ -113,14 +112,15 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-   
+    marginTop:40
+
   },
   placeButtonAdd: {
-    width: '50%',
-    left: 10
+    position: 'absolute',
+    bottom: 20
   },
   placeButtonDelete: {
     width: '50%',
@@ -128,6 +128,6 @@ const styles = StyleSheet.create({
   },
   textLbl: {
     color: 'green',
-    marginTop:20
+    marginTop: 20
   }
 });

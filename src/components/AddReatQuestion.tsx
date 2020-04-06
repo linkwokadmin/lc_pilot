@@ -15,8 +15,6 @@ import { Rating, AirbnbRating } from 'react-native-elements';
 class AddReatQuestion extends Component {
     constructor(props) {
         super();
-
-
         console.log('----------', props.templateId.id);
         this.state = {
             statement: "",
@@ -27,9 +25,7 @@ class AddReatQuestion extends Component {
     }
     handleSave = () => {
         console.log('----    ', this.props.templateId.id);
-
-
-        AsyncStorage.getItem("authorization")
+         AsyncStorage.getItem("authorization")
             .then((token) => {
                 let url = api_url + "/api/v1/questions";
                 let data = { question: { ...this.state, template_id: this.props.templateId.id } };
@@ -42,7 +38,8 @@ class AddReatQuestion extends Component {
                 }).then(response => {
                     let question = response.data.data;
                     console.log(question);
-                  //  Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
+                    alert('Add successfully')
+                     //  Actions.editSurvey({ title: this.props.title, id: this.props.templateId.id })
                 }).catch((error) => {
                     console.log(error);
                     return null;
@@ -57,6 +54,7 @@ class AddReatQuestion extends Component {
     render() {
         return (
             <View>
+                <Text style={styles.textLbl}>Question Rate</Text>
                 <TextInput
                     multiline
                     style={{
@@ -64,13 +62,13 @@ class AddReatQuestion extends Component {
                         borderWidth: 1,
                         height: 50
                     }}
-                    placeholder="Question Text"
+                    placeholder="Enter Question for Rating"
                     onChangeText={(value) => this.setState({ statement: value })}
                 />
                 <AirbnbRating
                     count={5}
                     reviews={["Terrible", "Bad", "Good", "Very Good", "Amazing"]}
-                    defaultRating={5}
+                    defaultRating={0}
                     size={20}
                 />
                 <Button
@@ -87,7 +85,10 @@ const styles = StyleSheet.create({
     saveBtn: {
         position: 'absolute',
         bottom: 20
-    }
+    },textLbl: {
+        color: 'green',
+        marginTop: 20
+      }, 
 })
 
 const mapStateToProps = state => (
@@ -95,6 +96,8 @@ const mapStateToProps = state => (
         email_contact: state.AppReducer.email_contact,
     }
 );
+
+
 export default connect(
     mapStateToProps, {
     addContact,

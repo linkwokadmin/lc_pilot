@@ -9,10 +9,12 @@ import { fetchQuestions } from '../actions/AppActions';
 import { FloatingAction } from "react-native-floating-action";
 import { QuestionText } from './QuestionTypeText'
 import { QuestionMcq } from './QuestionTypeMcq'
+import {QuestionRate} from './QuestionTypeRate'
 import { Card,AirbnbRating } from 'react-native-elements'
 import AddTextQuestion from './AddTextQuestion';
 import AddMcqQuestion from './AddMcqQuestion'
 import AddReatQuestion from './AddReatQuestion'
+
 
 const actions = [
   {
@@ -33,9 +35,6 @@ const actions = [
 class SurveyEditScreen extends Component {
   constructor(props) {
     super();
-    console.log(props.id);
-    
-
     this.state = {
       textType: true,
       mcqType: false,
@@ -44,7 +43,6 @@ class SurveyEditScreen extends Component {
   }
   viweQuestion: any;
   componentDidMount() {
-    
     this.fetchQuestions(this.props.id ? this.props.id : 0);
   }
 
@@ -74,6 +72,16 @@ class SurveyEditScreen extends Component {
           <View style={styles.container}>
             <Text style={styles.Header}>{q_number}. {question.statement}</Text>
             <QuestionMcq options={question.options} onChange={this.handleChange}></QuestionMcq>
+          </View>
+        </Card>
+      )
+    }
+    if(question.type == "rate"){
+      return (
+        <Card>
+          <View style={styles.container}>
+            <Text style={styles.Header}>{q_number}. {question.statement}</Text>
+            <QuestionRate options={question.options} onChange={this.handleChange}></QuestionRate>
           </View>
         </Card>
       )
@@ -153,12 +161,12 @@ class SurveyEditScreen extends Component {
         </Card>
 
         {this.loadQuestions()}
-        <FloatingAction
+        {/* <FloatingAction
           actions={actions}
           onPressItem={name => {
             this.handleNavigation(name);
           }}
-        />
+        /> */}
       </View>
     );
   }

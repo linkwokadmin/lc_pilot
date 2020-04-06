@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { View, Text, FlatList, StyleSheet, ScrollView, Button, AsyncStorage } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView, Button, AsyncStorage, TouchableOpacity, Image } from 'react-native';
 
 import { connect } from 'react-redux';
 import { compose } from "redux";
 import { fetchQuestions, saveFeedbacks, fetchResponses } from '../actions/AppActions';
 import { QuestionText } from './QuestionTypeText'
-import { QuestionMcq } from './QuestionTypeMcq'
+import { QuestionMcq } from './QuestionTypeMcq';
+import { QuestionRate } from './QuestionTypeRate'
 import { Card } from 'react-native-elements'
+import { Accordion } from 'react-native-paper/lib/typescript/src/components/List/List';
+import { Actions } from 'react-native-router-flux';
 
 class SurveyShowScreen extends Component {
   constructor(props) {
     super()
     this.state = { mcq: {}, feedbacks: [] }
+    console.log('constructor')
+  }
+
+  componentWillMount() {
+    console.log('componentWillMount')
   }
 
   componentDidMount() {
     this.fetchResponses(this.props.id);
     this.fetchQuestions(this.props.id);
-    console.log()
+    console.log('componentDidMount')
     if (this.props.filled) {
       this.setState({ 'feedbacks': this.props.feedbacks });
     } else {
@@ -52,10 +60,13 @@ class SurveyShowScreen extends Component {
     });
     this.setState({ 'feedbacks': newFeedbacks })
   }
+  onRateChange = (question, item) => {
+    console.log(question, '---------', item);
+
+  }
 
   renderQuestion(questionContent) {
-    console.log('render  ----- show --- ',questionContent);
-    
+
     let question = questionContent.item
     let q_number = (questionContent.index) + 1;
     if (question.type == "text") {
@@ -79,11 +90,14 @@ class SurveyShowScreen extends Component {
       )
     }
     if (question.type == "rate") {
+      console.log('********** IN RATE **************',question);
+      
+
       return (
         <Card>
           <View style={styles.container}>
             <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-           
+            <QuestionRate question={question} options={question.options} onChange={this.onRateChange}></QuestionRate>
           </View>
         </Card>
       )
@@ -93,22 +107,27 @@ class SurveyShowScreen extends Component {
   handleSave = () => {
     this.props.actions.saveFeedbacks(this.props.id, this.state.feedbacks);
   }
-  
+
   render() {
+    console.log('render');
+
+
     return (
       <View style={styles.container}>
-       <Card>
-          <Text>MIt</Text>
+        <FlatList
+          keyExtractor={(item) => item.id}
+          enableEmptySections
+          data={(this.props.filled ? this.props.feedbacks : this.props.questions)}
+          renderItem={data => this.renderQuestion(data)}
+        />
 
-        </Card>
-          <FlatList
-            keyExtractor={(item) => item.id}
-            enableEmptySections
-            data={(this.props.filled ? this.props.feedbacks : this.props.questions)}
-            renderItem={data => this.renderQuestion(data)}
-          />
-       
-        {
+        <TouchableOpacity activeOpacity={0.5} style={styles.touchableOpacityStyle} onPress={() => {
+          Actions.editSurvey({ id: this.props.id })
+        }} >
+          <Image source={require('../images/edit_black_18dp.png')} style={styles.floatingButtonStyle} />
+        </TouchableOpacity>
+
+        {/* {
           this.props.filled ?
             null :
             <Button
@@ -117,7 +136,7 @@ class SurveyShowScreen extends Component {
               color="#115E54"
               onPress={() => this.handleSave()}
             />
-        }
+        } */}
       </View>
     );
   }
@@ -184,7 +203,23 @@ const styles = StyleSheet.create({
   saveBtn: {
     position: 'absolute',
     bottom: 20
-  }
+  },
+  floatingButtonStyle: {
+    resizeMode: 'contain',
+    width: 30,
+    height: 30,
+
+  },
+  touchableOpacityStyle: {
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+
+  },
 });
 
 
