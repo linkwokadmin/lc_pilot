@@ -47,18 +47,75 @@ export default class splashScreen extends Component {
     renderSplash = () => {
         return (
             <ScrollView>
-                <View style={styles.MainContainer}>
-                    <View style={styles.heder}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignContent:'center'
+                 }}>
+
+                    <View style={{
+                        marginTop: Platform.OS === 'ios' ? 100 : 30,
+                        alignItems: 'center'
+                    }}>
                         <Image source={require('../images/SuperCoach.png')} />
                     </View>
-                    <View style={styles.notes} >
-                        <Text style={styles.notesName}>Mobile first Coaching Management App </Text>
-                        <Text style={styles.notesName}>Secure chat, voice and video call with Clients (with recording features) </Text>
-                        <Text style={styles.notesName}>Scheduling assistance, integrated with your favorite calendar apps. </Text>
-                        <Text style={styles.notesName}>Create interactive and fun progress plans with your Clients. </Text>
-                        <Text style={styles.notesName}>Create your own forms for discovery, session feedback, etc. </Text>
-                        <Text style={styles.notesName}>Digital Contracts. </Text>
-                        <Text style={styles.notesName}>Send Invoices and receive Payments. </Text>
+
+
+                    <View style={{
+                        marginTop: Platform.OS === 'ios' ? 50 : 30,
+                        justifyContent: Platform.OS === 'ios' ? 'center' : 'center',
+                        alignSelf:'center',
+                         width:'90%',
+                        
+                    }} >
+                        <Text style={{
+                            fontSize: Platform.OS === 'ios' ? 18 : 15,
+                            fontStyle: 'normal',
+                            fontWeight: '300',
+                            color:'#727272',textAlign: 'center',
+                            margin: Platform.OS === 'ios' ? 10 : 11
+                        }}>Mobile first Coaching Management App </Text>
+                        <Text style={{
+                            fontSize: Platform.OS === 'ios' ? 18 : 15,
+                            fontStyle: 'normal',
+                            fontWeight: '300',
+                            color:'#727272',textAlign: 'center',
+                            margin: Platform.OS === 'ios' ? 10 : 11
+                        }}>Secure chat, voice and video call with Clients (with recording features) </Text>
+                        
+
+
+                        <Text style={{
+                            fontSize: Platform.OS === 'ios' ? 18 : 15,
+                            fontStyle: 'normal',
+                            fontWeight: '300',color:'#727272',textAlign: 'center',
+                            margin: Platform.OS === 'ios' ? 10 : 11
+                        }}>Scheduling assistance, integrated with your favorite calendar apps. </Text>
+                        <Text style={{
+                            fontSize: Platform.OS === 'ios' ? 18 : 15,
+                            fontStyle: 'normal',
+                            fontWeight: '300',color:'#727272',textAlign: 'center',
+                            margin: Platform.OS === 'ios' ? 10 : 11
+                        }}>Create interactive and fun progress plans with your Clients. </Text>
+                        <Text style={{
+                            fontSize: Platform.OS === 'ios' ? 18 : 15,
+                            fontStyle: 'normal',
+                            fontWeight: '300',color:'#727272',textAlign: 'center',
+                            margin: Platform.OS === 'ios' ? 10 : 11
+                        }}>Create your own forms for discovery, session feedback, etc. </Text>
+                        <Text style={{
+                            fontSize: Platform.OS === 'ios' ? 18 : 15,
+                            fontStyle: 'normal',
+                            fontWeight: '300',color:'#727272',textAlign: 'center',
+                            margin: Platform.OS === 'ios' ? 10 : 11
+                        }}>Digital Contracts. </Text>
+                        <Text style={{
+                            fontSize: Platform.OS === 'ios' ? 18 : 15,
+                            fontStyle: 'normal',
+                            fontWeight: '300',color:'#727272',textAlign: 'center',
+                            margin: Platform.OS === 'ios' ? 10 : 11
+                        }}>Send Invoices and receive Payments. </Text>
 
                     </View>
                     <View style={styles.btnStart}>
@@ -475,7 +532,7 @@ export default class splashScreen extends Component {
                                         returnKeyType="next"
                                         style={{ borderBottomColor: '#rgba(114, 114, 114, 0.5)', borderBottomWidth: 1, marginBottom: 10 }}
                                     />
-                                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', padding: 0, margin: 0, marginTop: 20 }}>
+                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', padding: 0, margin: 0, marginTop: 20 }}>
                                         <TouchableOpacity style={{ padding: 0, margin: 0, marginLeft: 16, borderBottomColor: '#4BA843', borderStyle: 'solid', borderBottomWidth: 1 }}>
                                             <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>Slider</Text>
                                         </TouchableOpacity>
@@ -506,7 +563,7 @@ export default class splashScreen extends Component {
                                             />
                                         </View>
                                     </View>
-                                     {/* ----------slider rating end-------- */}
+                                    {/* ----------slider rating end-------- */}
                                     {/* ----------star rating start-------- */}
                                     <View style={{ width: '90%', alignSelf: 'center', marginTop: 30 }}>
                                         <Rating
@@ -519,7 +576,7 @@ export default class splashScreen extends Component {
                                     </View>
 
                                     {/* ----------star rating stop-------- */}
-                                 </View>
+                                </View>
                                 <View style={{ flex: 1, width: '100%', marginTop: 18, marginBottom: 20, flexDirection: 'row', justifyContent: 'flex-end' }}>
                                     <View style={{ width: 30, borderBottomColor: '#C4C4C4', borderStyle: 'solid', borderBottomWidth: 4, marginRight: '20%' }}></View>
                                     <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 18, padding: 0, margin: 0, marginBottom: 5 }}>
@@ -530,43 +587,43 @@ export default class splashScreen extends Component {
                                         <Image source={require('../images/remove.png')} />
                                     </TouchableOpacity>
                                 </View>
-                              </Card.Content>
+                            </Card.Content>
                         </Card>
                     </View>
-                      {/* ----------------------------------Add  Question close ------------------------ */}
-                      <View style={{ flex: 1, marginBottom: 20, marginTop: 20,width:'90%',justifyContent:'center',alignSelf: 'center'}}>
-                      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: 53 }}>
-                                        <TouchableOpacity activeOpacity={.5}>
-                                            <LinearGradient colors={['#C4C4C4', '#C4C4C4']} style={{ height: 44, width: 147, borderRadius: 4 }} start={{ x: 0, y: 1 }}
-                                                end={{ x: 4, y: 1 }}
-                                                locations={[0, 0.3, 0.9]}><Text style={{
-                                                    fontSize: 18,
-                                                    textAlign: 'center',
-                                                    margin: 7,
-                                                    color: '#fff',
-                                                    backgroundColor: 'transparent'
-                                                }}> Cancel </Text>
-                                            </LinearGradient>
-                                        </TouchableOpacity >
-                                        <TouchableOpacity activeOpacity={.5}>
-                                            <LinearGradient colors={['#1A7128', '#7BC035']} style={{ height: 44, width: 147, borderRadius: 4 }} start={{ x: 0, y: 1 }}
-                                                end={{ x: 4, y: 1 }}
-                                                locations={[0, 0.3, 0.9]}><Text style={{
-                                                    fontSize: 18,
-                                                    textAlign: 'center',
-                                                    margin: 7,
-                                                    color: '#fff',
-                                                    backgroundColor: 'transparent'
-                                                }}> Save </Text>
-                                            </LinearGradient>
-                                        </TouchableOpacity >
-                                    </View>
+                    {/* ----------------------------------Add  Question close ------------------------ */}
+                    <View style={{ flex: 1, marginBottom: 20, marginTop: 20, width: '90%', justifyContent: 'center', alignSelf: 'center' }}>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: 53 }}>
+                            <TouchableOpacity activeOpacity={.5}>
+                                <LinearGradient colors={['#C4C4C4', '#C4C4C4']} style={{ height: 44, width: 147, borderRadius: 4 }} start={{ x: 0, y: 1 }}
+                                    end={{ x: 4, y: 1 }}
+                                    locations={[0, 0.3, 0.9]}><Text style={{
+                                        fontSize: 18,
+                                        textAlign: 'center',
+                                        margin: 7,
+                                        color: '#fff',
+                                        backgroundColor: 'transparent'
+                                    }}> Cancel </Text>
+                                </LinearGradient>
+                            </TouchableOpacity >
+                            <TouchableOpacity activeOpacity={.5}>
+                                <LinearGradient colors={['#1A7128', '#7BC035']} style={{ height: 44, width: 147, borderRadius: 4 }} start={{ x: 0, y: 1 }}
+                                    end={{ x: 4, y: 1 }}
+                                    locations={[0, 0.3, 0.9]}><Text style={{
+                                        fontSize: 18,
+                                        textAlign: 'center',
+                                        margin: 7,
+                                        color: '#fff',
+                                        backgroundColor: 'transparent'
+                                    }}> Save </Text>
+                                </LinearGradient>
+                            </TouchableOpacity >
+                        </View>
 
-                      </View>
+                    </View>
 
 
-                      
-                 </View>
+
+                </View>
             </ScrollView>
         )
     }
