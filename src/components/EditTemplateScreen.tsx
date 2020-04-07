@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Button, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Input, TextLink, Loading,  } from './common';
 import { compose } from "redux";
@@ -13,12 +13,12 @@ import { TextInput } from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
 import { FloatingAction } from "react-native-floating-action";
 import { Actions } from 'react-native-router-flux';
-import { Card,AirbnbRating } from 'react-native-elements'
+import { Card } from 'react-native-paper'
 
 import AddTextQuestion from './AddTextQuestion';
 import AddMcqQuestion from './AddMcqQuestion'
 import AddReatQuestion from './AddReatQuestion'
-import { template } from '@babel/core';
+import LinearGradient from 'react-native-linear-gradient';
 
 class EditTemplateScreen extends Component {
   constructor(props) {
@@ -129,15 +129,10 @@ class EditTemplateScreen extends Component {
     // console.log(this.state.template);
     this.updateTemplates(this.state.template);
     Actions.mainScreen({currentUser: this.props.currentUser});
-    // this.props.createTemplates(this.state);
   }
 
   handleNavigation = (name) => {
     name === 'bt_add_text_question' ? Actions.addTextQuestion() : console.log("MCQ template is not ready yet");
-  }
-
-  renderQuestionType = (question_type) => {
-    
   }
 
   rendrUI(l) {
@@ -154,24 +149,45 @@ class EditTemplateScreen extends Component {
  
   renderCard(shareholder, idx) {
     return(
-      <Card>
-        <View style={styles.questionType}>
-          <Button title="MCQ" color='green' onPress={() => this.handleQuestionTypeChange('mcq', idx)} />
-          <Button title="Text" color='green' onPress={() => this.handleQuestionTypeChange('text', idx)} />
-          <Button title="Rate" color='green' onPress={() => this.handleQuestionTypeChange('rate', idx)} />
-        </View>
-        <View>
-          {
-            shareholder.type === "mcq"
-            ? 
-              <AddMcqQuestion handleUpdate={this.handleUpdate} idx={idx} savedState={shareholder}/> : 
-            (shareholder.type === 'rate' ? 
-              <AddReatQuestion handleUpdate={this.handleUpdate} idx={idx} savedState={shareholder}/> : 
-              <AddTextQuestion handleUpdate={this.handleUpdate} idx={idx} savedState={shareholder}/>
-            )
-          }
-        </View>
-      </Card>
+      <View style={{ flex: 1, marginBottom: 5, marginTop: 5, justifyContent: 'center', alignItems: 'center' }}>
+        <Card style={{ width: '96%', elevation: 2 }}>
+          <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding: 0, margin: 0, marginTop: 20 }}>
+              <TouchableOpacity 
+                style={shareholder.type === "mcq" ? {...styles.selected, padding: 0, margin: 0, marginLeft: 16} : {padding: 0, margin: 0, marginLeft: 16}}
+                onPress={() => this.handleQuestionTypeChange('mcq', idx)}
+              >
+                  <Text style={{ fontFamily: 'Roboto', fontSize: 19, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>
+                    Mcq
+                  </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={shareholder.type === "text" ? {...styles.selected} : {}}
+                onPress={() => this.handleQuestionTypeChange('text', idx)}
+              >
+                  <Text style={{ fontFamily: 'Roboto', fontSize: 19, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>Text</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={shareholder.type === "rate" ? {...styles.selected, marginRight: 16} : { marginRight: 16 }}
+                onPress={() => this.handleQuestionTypeChange('rate', idx)}
+              >
+                  <Text style={{ fontFamily: 'Roboto', fontSize: 19, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>Rate</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              {
+                shareholder.type === "mcq"
+                ? 
+                  <AddMcqQuestion handleUpdate={this.handleUpdate} idx={idx} savedState={shareholder}/> : 
+                (shareholder.type === 'rate' ? 
+                  <AddReatQuestion handleUpdate={this.handleUpdate} idx={idx} savedState={shareholder}/> : 
+                  <AddTextQuestion handleUpdate={this.handleUpdate} idx={idx} savedState={shareholder}/>
+                )
+              }
+            </View>
+          </Card.Content>
+        </Card>
+      </View>
     );
   }
 
@@ -215,30 +231,68 @@ class EditTemplateScreen extends Component {
     return (
       <Fragment>
         <ScrollView style={styles.form}>
-          <Card>
-            <Input
-              placeholder="Form 1"
-              label="Name"
-              value={this.state.name}
-              onChangeText={name => this.setState({ name })}
-            />
-          </Card>
+          <View style={{ flex: 1, marginBottom: 5, marginTop: 5, justifyContent: 'center', alignItems: 'center' }}>
+            <Card style={{ width: '96%', elevation: 2 }}>
+              <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
+                <View style={{ alignSelf: 'center', width: '90%', marginTop: 16 }}>
+                  <TextInput
+                    placeholder='Template Name'
+                    placeholderTextColor='#C4C4C4'
+                    returnKeyType="next"
+                    style={{ borderBottomColor: '#rgba(114, 114, 114, 0.5)', borderBottomWidth: 1, marginBottom: 10 }}
+                    value={this.state.template.name}
+                    onChangeText={name => this.handleNameChange(name)}
+                  />
+                </View>
+              </Card.Content>
+            </Card>
+          </View>
           {
             (this.state.loaded == true && this.state.template !== null && this.state.template.questions !== undefined) ?
             this.state.template.questions.map((shareholder, idx) => (
               this.renderCard(shareholder, idx)
             )) : null
           }
-          <Button
-            title="Add Question"
-            onPress={this.handleAddQuestion}
-          />
+          <View style={{ flex: 1, marginBottom: 20, marginTop: 10, justifyContent: 'center', alignItems: 'center' }}>
+            <Card style={{ height: 86, width: '96%', elevation: 2 }}>
+              <Card.Content style={{ alignItems: 'center' }}>
+                <TouchableHighlight
+                  onPress={this.handleAddQuestion}
+                >
+                    <Text style={{ padding: 10, fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>+ Add New Question</Text>
+                </TouchableHighlight>
+              </Card.Content>
+            </Card>
+          </View>
+          <View style={{ flex: 1, marginBottom: 20, marginTop: 0, width: '90%', justifyContent: 'center', alignSelf: 'center' }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: 53 }}>
+                <TouchableOpacity activeOpacity={.5}>
+                    <LinearGradient colors={['#C4C4C4', '#C4C4C4']} style={{ height: 44, width: 147, borderRadius: 4 }} start={{ x: 0, y: 1 }}
+                        end={{ x: 4, y: 1 }}
+                        locations={[0, 0.3]}><Text style={{
+                            fontSize: 18,
+                            textAlign: 'center',
+                            margin: 7,
+                            color: '#fff',
+                            backgroundColor: 'transparent'
+                        }}> Cancel </Text>
+                    </LinearGradient>
+                </TouchableOpacity >
+                <TouchableOpacity activeOpacity={.5} onPress={this.handleSave} >
+                    <LinearGradient colors={['#1A7128', '#7BC035']} style={{ height: 44, width: 147, borderRadius: 4 }} start={{ x: 0, y: 1 }}
+                        end={{ x: 4, y: 1 }}
+                        locations={[0, 0.3]}><Text style={{
+                            fontSize: 18,
+                            textAlign: 'center',
+                            margin: 7,
+                            color: '#fff',
+                            backgroundColor: 'transparent'
+                        }}> Save </Text>
+                    </LinearGradient>
+                </TouchableOpacity >
+              </View>
+          </View>
         </ScrollView>
-        <Button 
-          style = {styles.saveBtn}
-          title="Save"
-          onPress={this.handleSave} 
-        />
       </Fragment>
     );
   }
@@ -327,4 +381,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  selected: { 
+    borderBottomColor: '#4BA843', 
+    borderStyle: 'solid', 
+    borderBottomWidth: 1 
+  }
 });
