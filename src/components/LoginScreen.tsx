@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableHighlight, ImageBackground, ActivityIndicator, Image, TouchableOpacity, Platform } from 'react-native';
-import * as Strings from '../resources/strings';
-
+import { View, Text, TextInput, StyleSheet, ActivityIndicator, Image, TouchableOpacity, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { addEmail, addPassword, SignIN } from '../actions/AuthActions';
-import { Card, CheckBox } from 'react-native-elements'
+import LinearGradient from 'react-native-linear-gradient';
+import { Card, Button } from 'react-native-paper'
 
 
 class LoginScreen extends Component {
@@ -13,11 +12,9 @@ class LoginScreen extends Component {
     const { email, password } = this.props;
     this.props.SignIN({ email, password });
   }
-  renderAcessButton() {
-    if (this.props.signInLoading) {
-      return (<ActivityIndicator size="large" color="#00ff00" />)
-    }
-    return (<Button title='Login' onPress={() => this._SignIN()} />)
+
+  handleSignUp(){
+    Actions.signUpScreen()
   }
 
   render() {
@@ -26,41 +23,63 @@ class LoginScreen extends Component {
         <View style={styles.heder}>
           <Image source={require('../images/SuperCoach.png')} />
         </View>
-        <View>
-          <Card containerStyle={styles.loginCard}>
-            <View style={styles.formGroup}>
-              <TextInput
-                placeholder='Email & Phone'
-                placeholderTextColor='#000'
-                returnKeyType="next"
-                value={this.props.email}
-                onChangeText={email => this.props.addEmail(email)}
-                onSubmitEditing={() => this.passwordInput.focus()}
-              />
-              <TextInput
-               
-                placeholder='Password'
-                placeholderTextColor='#000'
-                style={styles.textInput}
-                returnKeyType="go"
-                ref={(input) => this.passwordInput = input}
-                onChangeText={password => this.props.addPassword(password)}
-                value={this.props.password}
-              />
-
-              <View style={styles.btnLogIn}>
-                <View style={styles.btnLoginN}>
-                  <Button title='Sign Up' onPress={() => Actions.signUpScreen()} />
-                </View>
-                <View style={styles.btnLoginN}>
-                  {this.renderAcessButton()}
-                </View>
-              </View>
-            </View>
+        <View style={{ flex: 1, top: 100, alignItems: 'center', marginBottom: 0 }}>
+          <Card style={{ width: '90%', elevation: 5, borderRadius: 5 }}>
+              <Card.Content>
+                  <View >
+                      <View style={{ padding: 16 }}>
+                          <TextInput
+                            placeholder=' Phone or Email'
+                            placeholderTextColor='#C4C4C4'
+                            returnKeyType="next"
+                            style={{ borderBottomColor: '#rgba(114, 114, 114, 0.5)', borderBottomWidth: 1 }}
+                            value={this.props.email}
+                            onChangeText={email => this.props.addEmail(email)}
+                            onSubmitEditing={() => this.passwordInput.focus()} 
+                          />
+                          <TextInput placeholder='Password'
+                            placeholderTextColor='#C4C4C4'
+                            returnKeyType="go"
+                            style={{ borderBottomColor: '#rgba(114, 114, 114, 0.5)', borderBottomWidth: 1 }}
+                            ref={(input) => this.passwordInput = input}
+                            onChangeText={password => this.props.addPassword(password)}
+                            value={this.props.password} 
+                          />
+                      </View>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 30 }}>
+                          <TouchableOpacity activeOpacity={.5} onPress={this.handleSignUp}>
+                              <LinearGradient colors={['#1A7128', '#7BC035']} style={{ height: 44, width: 147, borderRadius: 4 }} start={{ x: 0, y: 1 } }
+                                  end={{ x: 4, y: 1 }}
+                                  locations={[0, 0.3]}
+                              >
+                                <Text style={{
+                                      fontSize: 18,
+                                      textAlign: 'center',
+                                      margin: 7,
+                                      color: '#fff',
+                                      backgroundColor: 'transparent'
+                                  }}> Sign up </Text>
+                              </LinearGradient>
+                          </TouchableOpacity >
+                          <TouchableOpacity activeOpacity={.5} onPress={() => this._SignIN()}>
+                              <LinearGradient colors={['#1A7128', '#7BC035']} style={{ height: 44, width: 147, borderRadius: 4 }} start={{ x: 0, y: 1 }}
+                                  end={{ x: 4, y: 1 }}
+                                  locations={[0, 0.3]}><Text style={{
+                                      fontSize: 18,
+                                      textAlign: 'center',
+                                      margin: 7,
+                                      color: '#fff',
+                                      backgroundColor: 'transparent'
+                                  }}> Login </Text>
+                              </LinearGradient>
+                          </TouchableOpacity >
+                      </View>
+                  </View>
+              </Card.Content>
           </Card>
         </View>
       </View>
-
+      
     );
   }
 }

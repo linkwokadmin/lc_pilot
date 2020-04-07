@@ -1,16 +1,17 @@
 import React from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
-import { Rating, AirbnbRating } from 'react-native-elements';
+import { Rating } from 'react-native-elements';
 
 export const QuestionRate = ({ question, number, filled, onChange }) => {
     return (
         <View>
-            <AirbnbRating
-                style={{width: 100}}
-                count={5}
-                reviews={["Terrible", "Bad", 'Good', "Very Good", "Amazing"]}
+            <Rating
+                type='custom'
+                ratingCount={5}
+                imageSize={30}
                 defaultRating={filled ? question.value : 0 }
-                size={30}
+                ratingColor='#4BA843'
+                ratingBackgroundColor='#fff'
                 onFinishRating={(rating) => onChange(question, rating) }
             />
         </View>

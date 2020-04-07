@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { View, Text, FlatList, StyleSheet, ScrollView, Button, AsyncStorage, TouchableOpacity, Image } from 'react-native';
+import moment from 'moment'
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, AsyncStorage, TouchableHighlight } from 'react-native';
 
 import { connect } from 'react-redux';
 import { compose } from "redux";
 import { fetchQuestions, saveFeedbacks, fetchResponses } from '../actions/AppActions';
 import { QuestionText } from './QuestionTypeText'
-import { QuestionMcq } from './QuestionTypeMcq';
+import { QuestionMcq } from './QuestionTypeMcq'
 import { QuestionRate } from './QuestionTypeRate'
-import { Card } from 'react-native-elements'
-import { Accordion } from 'react-native-paper/lib/typescript/src/components/List/List';
+// import { Card } from 'react-native-elements'
+import { Card } from 'react-native-paper'
 import { Actions } from 'react-native-router-flux';
+import LinearGradient from 'react-native-linear-gradient';
 
 class SurveyShowScreen extends Component {
   constructor(props) {
     super(props)
     this.state = { mcq: {}, feedbacks: [] }
-    console.log('constructor')
-  }
-
-  componentWillMount() {
-    console.log('componentWillMount')
   }
 
   componentDidMount() {
@@ -61,10 +58,12 @@ class SurveyShowScreen extends Component {
       if (feedback.id !== question.id) return feedback;
       return questionFeedback;
     });
+    console.log("NEW: ",newFeedbacks);
     this.setState({ 'feedbacks': newFeedbacks })
   }
 
   onMcqChange = (question, item) => {
+    console.log(item);
     let val = (val !== undefined ? val : "") + "" + item.label;
     let questionFeedback = { ...question, value: val }
     let newFeedbacks = this.state.feedbacks.map((feedback, idx) => {
@@ -72,10 +71,6 @@ class SurveyShowScreen extends Component {
       return questionFeedback;
     });
     this.setState({ 'feedbacks': newFeedbacks })
-  }
-  onRateChange = (question, item) => {
-    console.log(question, '---------', item);
-
   }
 
   onRateChange = (question, text) => {
@@ -91,39 +86,37 @@ class SurveyShowScreen extends Component {
   renderQuestion(questionContent) {
     let question = questionContent.item
     let q_number = (questionContent.index) + 1;
-    if (question.type == "text") {
-      return (
-        <Card>
-          <View style={styles.container}>
-            <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-            <QuestionText question={question} number={q_number} filled={this.props.filled} onChange={this.onTextChange}></QuestionText>
-          </View>
+    return (
+      <View style={{ flex: 1, marginBottom: 5, marginTop: 5, justifyContent: 'center', alignItems: 'center' }}>
+        <Card style={{ width: '94%', elevation: 2 }}>
+          <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
+              <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontStyle: 'normal', fontWeight: '300', color: '#000000', marginTop: 12, marginLeft: 16 }}> 
+                {question.statement}
+              </Text>
+              {
+                question.type == "text" ?
+                  <View style={{ width: '94%', alignSelf: 'center',marginBottom: 20 }}>
+                    <Card style={{ height: 80, elevation: 1, marginTop: 5, borderRadius: 5 }}>
+                      <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
+                        <QuestionText question={question} number={q_number} filled={this.props.filled} onChange={this.onTextChange}></QuestionText>
+                      </Card.Content>
+                    </Card>
+                  </View> : 
+                (question.type == "mcq" ? 
+                  <View style={{ width: '80%', alignSelf: 'flex-start', marginLeft: 16, marginTop: 22, marginBottom: 20 }}>
+                    <QuestionMcq question={question} options={question.options} onChange={this.onMcqChange}></QuestionMcq>
+                  </View>
+                :
+                  <View style={{ width: '80%', alignSelf: 'center', marginTop: 22, marginBottom: 20 }}>
+                    <QuestionRate question={question} number={q_number} filled={this.props.filled} onChange={this.onRateChange}></QuestionRate>
+                  </View>
+                )
+              }
+              
+          </Card.Content>
         </Card>
-      )
-    }
-    if (question.type == "mcq") {
-      return (
-        <Card>
-          <View style={styles.container}>
-            <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-            <QuestionMcq question={question} options={question.options} onChange={this.onMcqChange}></QuestionMcq>
-          </View>
-        </Card>
-      )
-    }
-    if (question.type == "rate") {
-      console.log('********** IN RATE **************',question);
-      
-
-      return (
-        <Card>
-          <View style={styles.container}>
-            <Text style={styles.Header}>{q_number}. {question.statement}</Text>
-            <QuestionRate question={question} number={q_number} filled={this.props.filled} onChange={this.onRateChange}></QuestionRate>
-          </View>
-        </Card>
-      )
-    }
+      </View>
+    )
   }
 
   handleSave = () => {
@@ -135,25 +128,69 @@ class SurveyShowScreen extends Component {
     Actions.mainScreen();
   }
 
+  getColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+  
   render() {
-    console.log('render');
-
-
     return (
       <View style={styles.container}>
-        <Card>
-          <Text>
-            {this.props.title}
-          </Text>
+        <View style={{ flex: 1, marginBottom: 50, marginTop: 50, justifyContent: 'center', alignItems: 'center' }}>
+          <Card style={{ height: 86, width: '94%', elevation: 2, borderRadius: 5 }}>
+              <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
+                  <TouchableHighlight >
+                      <View style={{ flex: 1, flexDirection: "row", justifyContent: 'space-between' }}>
+                          <View style={{ height: 86, width: 86, backgroundColor: this.getColor(), alignItems: 'flex-start' }}></View>
+                          <View style={{ alignContent: 'center', left: 10 }}>
+                              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeightn: 'normal', color: '#000000', marginTop: 10 }}>
+                                {this.props.title}
+                              </Text>
+                              <Text style={{ fontFamily: 'Roboto', fontSize: 14, fontStyle: 'normal', fontWeightn: 'normal', color: '#D3D2D1', marginTop: 5 }}>
+                                Created on {moment(this.props.createdAt).format('Do MMMM, YYYY')}
+                              </Text>
+                            </View>
 
-        </Card>
+                          <View style={{ height: 86, width: 70, backgroundColor: this.getColor(), alignItems: 'flex-end' }}>
+                              <TouchableOpacity 
+                                activeOpacity={.5} 
+                                style={{ height: 86, width: 70 }} 
+                                onPress={() => Actions.editSurvey({currentUser: this.props.currentUser, id: this.props.id})}
+                              >
+                                  <LinearGradient colors={['#466A43', '#44D237']} style={{ height: 86, width: 70 }} start={{ x: 0, y: 2 }}
+                                      end={{ x: 4, y: 1 }}
+                                      locations={[0, 0.3]}><Text style={{
+                                          fontSize: 18,
+                                          textAlign: 'center',
+                                          alignItems: 'center',
+                                          color: '#fff',
+                                          marginTop: 32,
+                                          backgroundColor: 'transparent'
+                                      }}> 
+                                        Edit 
+                                      </Text>
+                                  </LinearGradient>
+                              </TouchableOpacity >
+
+                          </View>
+
+                      </View>
+                  </TouchableHighlight>
+              </Card.Content>
+          </Card>
+
+        </View>
           <FlatList
             enableEmptySections
             data={(this.props.filled ? this.props.feedbacks : this.props.questions )}
             renderItem={data => this.renderQuestion(data)}
           />
        
-        {
+        {/*
           this.props.filled ?
             null :
             <Button
@@ -162,7 +199,7 @@ class SurveyShowScreen extends Component {
               color="#115E54"
               onPress={() => this.handleSave()}
             />
-        } */}
+        */}
       </View>
     );
   }
@@ -229,23 +266,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     position: 'absolute',
     bottom: 20
-  },
-  floatingButtonStyle: {
-    resizeMode: 'contain',
-    width: 30,
-    height: 30,
-
-  },
-  touchableOpacityStyle: {
-    position: 'absolute',
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    right: 30,
-    bottom: 30,
-
-  },
+  }
 });
 
 

@@ -40,7 +40,7 @@ class EditTemplateScreen extends Component {
   static getDerivedStateFromProps(nextProps, prevState){
     console.log("PrevState: ", prevState);
     console.log("nextProps: ", nextProps);
-    if(prevState.template === null || nextProps.template.id !== prevState.template.id || nextProps.template.questions.length != prevState.template.questions.length){
+    if(prevState.template === null || nextProps.template !== undefined || nextProps.template.id !== prevState.template.id || nextProps.template.questions.length != prevState.template.questions.length){
       let updatedTemplate =  {...nextProps.template, questions: nextProps.template.questions}
       return {template: updatedTemplate, loaded: true};
     }

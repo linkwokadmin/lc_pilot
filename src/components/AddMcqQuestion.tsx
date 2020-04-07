@@ -1,15 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 import {
   addContact,
   registerNewContact
 } from '../actions/AppActions';
 import { TextInput } from 'react-native-gesture-handler';
-import axios from 'axios';
-import { AsyncStorage } from 'react-native';
-import { api_url } from './../resources/constants';
 import { CheckBox } from 'react-native-elements'
 
 
@@ -103,52 +99,58 @@ class AddMcqQuestion extends Component {
  render() {
     return (
       <Fragment>
-        <View>
-          <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:20}}>
-            <Text style={styles.textLbl}>Question Rate</Text>
-           </View>
+        <View style={{ alignSelf: 'center', width: '90%', marginTop: 16 }}>
           <TextInput
-            style={{marginTop:20,width:'100%',height:50, borderBottomWidth: 1,
-            borderColor: '#ddd'}}
-            placeholder={this.props.savedState !== undefined ? this.props.savedState.statement : `Enter your question statement`}
-            label="text"
+            placeholder={this.props.savedState !== undefined ? this.props.savedState.statement : `Type question here*`}
             onChangeText={(value) => this.setState({ statement: value })}
-          />
-          {
-            this.state.options.map((option, idx) => (
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.placeInput}
-                  placeholder={`Enter Option Text `}
-                  label="text"
-                  value={option.test}
-                  onChangeText={(value) => this.handleOptionsNameChange(value, idx)}
-                />
-                <Button
-                  title=" X "
-                  style={styles.placeButton}
-                  onPress={this.handleRemoveOptions(idx)}
-                  color="red"
-                />
-              </View>
-            ))
-          }
-        </View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.textLbl}>Add Options</Text>
-          <Button
-            title=" + "
-            style={styles.placeButtonAdd}
-            onPress={() => this.handleAddOption()}
-            color="blue"
+            placeholderTextColor='#C4C4C4'
+            returnKeyType="next"
+            style={{ borderBottomColor: '#rgba(114, 114, 114, 0.5)', borderBottomWidth: 1, marginBottom: 10 }}
           />
         </View>
-        <Button
-          style={styles.saveBtn}
-          title="Save"
-          color="#115E54"
-          onPress={() => this.handleSave()}
-        />
+        <View style={{ flex: 1, width: '90%' }}>
+          <View>
+            {
+              this.state.options.map((option, idx) => (
+                <View style={{ flex: 1, flexDirection: 'row', width: '85%', padding: 0, margin: 0, marginLeft: 16 }}>
+                  <CheckBox
+                      containerStyle={{ backgroundColor: '#fff', alignItems: 'flex-start', padding: 0, margin: 0 }}
+                      checkedIcon='dot-circle-o'
+                      uncheckedIcon='circle-o'
+                      checkedColor='#4BA843'
+                  />
+                  <TextInput
+                    multiline
+                    style={{ marginLeft: 10,marginTop: -2, padding: 0, margin: 0 }}
+                    placeholder='Type option here*'
+                    placeholderTextColor='#C4C4C4'
+                    returnKeyType="next" 
+                    value={option.test}
+                    onChangeText={(value) => this.handleOptionsNameChange(value, idx)}
+                  />
+                  
+                </View>
+              ))
+            }
+          </View>
+        </View>
+        <View style={{ flex: 1, width: '90%', marginTop: 18, marginBottom: 10 }}>
+          <TouchableOpacity style={{ marginLeft: 20 }} onPress={() => this.handleAddOption()}>
+            <Text style={{ fontFamily: 'Roboto', fontSize: 12, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>+ Add option</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1, width: '100%', marginTop: 18, marginBottom: 20, flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <View style={{ width: 30, borderBottomColor: '#C4C4C4', borderStyle: 'solid', borderBottomWidth: 4, marginRight: '20%' }}></View>
+            <TouchableOpacity 
+              style={{ alignItems: 'flex-end', marginRight: 18, padding: 0, margin: 0, marginBottom: 5 }}
+              onPress={() => this.handleSave()}
+            >
+                <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1', margin: 0, padding: 0 }}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 18 }}>
+                <Image source={require('../images/remove.png')} />
+            </TouchableOpacity>
+        </View>
       </Fragment>
     );
   }

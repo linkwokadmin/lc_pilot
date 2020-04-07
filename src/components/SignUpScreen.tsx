@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View, TextInput, Button, StyleSheet, ImageBackground, Text, ActivityIndicator, Image, Platform } from 'react-native';
+import { View, TextInput, StyleSheet, ImageBackground, Text, ActivityIndicator, TouchableOpacity, ScrollView, Image, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { addName, addEmail, addPassword, registerUser } from '../actions/AuthActions';
-import { Card, CheckBox } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Actions } from 'react-native-router-flux';
+import { Avatar, Card, RadioButton, Badge, Button } from 'react-native-paper'
+import LinearGradient from 'react-native-linear-gradient';
 Icon.loadFont();
 class SignUpScreen extends Component {
   constructor() {
@@ -21,82 +23,101 @@ class SignUpScreen extends Component {
     this.props.registerUser({ name, email, password, userType });
   }
 
-  renderRegisterButton() {
-    if (this.props.signUpLoading) {
-      return (<ActivityIndicator size="large" color="#00ff00" />)
-    }
-    return (
-      <View style={styles.btnSignUp}>
-        <Button title="SignUp" color='green' onPress={() => this._registerUser()} />
-      </View>
-    )
-  }
-
   render() {
     return (
-
-      <View style={styles.container}>
-
-        <View style={styles.heder}>
-          <Image source={require('../images/SuperCoach.png')} />
+      <ScrollView>
+      <View style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent:'center'
+      }}>
+        <View style={{
+            marginTop: Platform.OS === 'ios' ? 100 : 30,
+            alignItems: 'center'
+        }}>
+            <Image source={require('../images/SuperCoach.png')} />
         </View>
-        <View>
-          <Card containerStyle={styles.loginCard}>
-            <View style={styles.radioBtn}>
-              <CheckBox
-                center
-                title='Client'
-                checkedIcon='dot-circle-o'
-                uncheckedIcon='circle-o'
-                checked={this.state.Client}
-                onPress={() => this.setState({
-                  Coach: false,
-                  Client: !this.state.Client
-                })}
-              />
-              <CheckBox
-                center
-                title='Coach'
-                checkedIcon='dot-circle-o'
-                uncheckedIcon='circle-o'
-                checked={this.state.Coach}
-                onPress={() => this.setState({
-                  Coach: !this.state.Coach,
-                  Client: false
-                })}
-              />
-            </View>
-             <TextInput
-              placeholder='Name:'
-              placeholderTextColor='#000'
-              style={styles.textInput}
-              value={this.props.name}
-              onChangeText={name => this.props.addName(name)}
-            />
-            <TextInput
-              placeholder='Email:'
-              placeholderTextColor='#000'
-              style={styles.textInput}
-              value={this.props.email}
-              onChangeText={email => this.props.addEmail(email)}
-            />
-            <TextInput
-              placeholder='Password:'
-              placeholderTextColor='#000'
-              style={styles.textInput}
-              value={this.props.password}
-              onChangeText={password => this.props.addPassword(password)}
-            />
-            <View style={styles.btnSignUpContainer}>
-              {this.renderRegisterButton()}
-              <View style={styles.btnSignUp}>
-                <Button title="SignIn" color='green' onPress={() => Actions.loginScreen()} />
-              </View>
-            </View>
-          </Card>
-        </View>
+        
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 20, marginTop: 20 }}>
+            <Card style={{ width: '90%', elevation: 5, borderRadius: 5 }}>
+                <Card.Content>
 
-      </View>
+                    <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontStyle: 'normal', fontWeight: '300', marginLeft: 20 }} >I am a</Text>
+
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
+
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <RadioButton
+                                value={this.state.Client}
+                                status={this.state.Client === true ? 'checked' : 'unchecked'}
+                                onPress={() => this.setState({
+                                    Coach: false,
+                                    Client: !this.state.Client
+                                })}
+                            />
+                            <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontStyle: 'normal', fontWeight: '300' }} >Client</Text>
+                        </View>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <RadioButton
+                                value={this.state.Coach}
+                                status={this.state.Coach === true ? 'checked' : 'unchecked'}
+                                onPress={() => this.setState({
+                                    Coach: !this.state.Coach,
+                                    Client: false
+                                })}
+                            />
+                            <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontStyle: 'normal', fontWeight: '300', marginLeft: 10 }} >Coach</Text>
+                        </View>
+
+                    </View>
+                    <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+                        <TextInput
+                            placeholder=' Phone or Email'
+                            placeholderTextColor='#C4C4C4'
+                            returnKeyType="next"
+                            style={{ borderBottomColor: '#rgba(114, 114, 114, 0.5)', borderBottomWidth: 1 }}
+                            value={this.props.email}
+                            onChangeText={email => this.props.addEmail(email)}
+                        />
+                        <TextInput
+                            placeholder=' Password'
+                            placeholderTextColor='#C4C4C4'
+                            returnKeyType="next"
+                            style={{ borderBottomColor: '#rgba(114, 114, 114, 0.5)', borderBottomWidth: 1 }}
+                            value={this.props.password}
+                            onChangeText={password => this.props.addPassword(password)}
+                        />
+                        <TextInput
+                            placeholder=' Your name'
+                            placeholderTextColor='#C4C4C4'
+                            returnKeyType="next"
+                            style={{ borderBottomColor: '#rgba(114, 114, 114, 0.5)', borderBottomWidth: 1 }}
+                            value={this.props.name}
+                            onChangeText={name => this.props.addName(name)}
+                        />
+                    </View>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableOpacity activeOpacity={.5} style={{ marginTop: 20 }}>
+                            <LinearGradient colors={['#466A43', '#44D237']} style={{
+                                height: 44, width: 269, alignSelf: 'center', borderRadius: 4,
+                            }} start={{ x: 0, y: 2 }}
+                                end={{ x: 4, y: 1 }}
+                                locations={[0, 0.3]}><Text style={styles.btnStart}>  Upload Image </Text>
+                            </LinearGradient>
+                        </TouchableOpacity >
+                        <TouchableOpacity activeOpacity={.5} style={{ marginTop: 35 }} onPress={() => this._registerUser()}>
+                            <LinearGradient colors={['#466A43', '#44D237']} style={{ height: 44, width: 269, borderRadius: 4 }} start={{ x: 0, y: 2 }}
+                                end={{ x: 4, y: 1 }}
+                                locations={[0, 0.3]}><Text style={styles.btnStart}> Done </Text>
+                            </LinearGradient>
+                        </TouchableOpacity >
+                    </View>
+                </Card.Content>
+            </Card>
+        </View>
+     </View>
+    </ScrollView>
 
     );
   }
@@ -166,5 +187,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent:'center',
     justifyContent:'center'
+  },
+  btnStart: {
+    fontSize: 18,
+    textAlign: 'center',
+    margin: 7,
+    color: '#fff',
+    backgroundColor: 'transparent',
   },
 });

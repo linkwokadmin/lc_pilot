@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, StyleSheet, ScrollView, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, Alert, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import {
   addContact,
@@ -27,8 +27,6 @@ class AddTextQuestion extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState){
-    console.log(nextProps);
-    console.log(prevState);
     if(nextProps.savedState === undefined) {
       return prevState
     } else if(prevState.statement !== nextProps.savedState.statement) {
@@ -57,23 +55,28 @@ class AddTextQuestion extends Component {
   render() {
     return (
       <Fragment>
-        <View style={styles.container}>
-          <Text style={styles.textLbl}>Question Text</Text>
+        <View style={{ alignSelf: 'center', width: '90%', marginTop: 16 }}>
           <TextInput
-            multiline
-            style={{
-              borderColor: '#CBCAC9',
-              borderWidth: 1,
-              height:50 }}
-            placeholder={this.props.savedState !== undefined ? this.props.savedState.statement : `Enter your question statement`}
-            onChangeText={(value) => this.setState({ statement: value })}
+              placeholder={this.props.savedState !== undefined ? this.props.savedState.statement : `Type your question here*`}
+              onChangeText={(value) => this.setState({ statement: value })}
+              placeholderTextColor='#C4C4C4'
+              returnKeyType="next"
+              style={{ borderBottomColor: '#rgba(114, 114, 114, 0.5)', borderBottomWidth: 1, marginBottom: 10 }}
           />
-             <Button
-                  style={styles.saveBtn}
-                  title="Save"
-                  color="#115E54"
-                  onPress={() => this.handleSave()}
-              />
+          <Text style={{ fontFamily: 'Roboto', fontSize: 12, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>Text box will appear under question.</Text>
+        </View>
+        <View style={{ flex: 1, width: '100%', marginTop: 18, marginBottom: 20, flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <View style={{ width: 30, borderBottomColor: '#C4C4C4', borderStyle: 'solid', borderBottomWidth: 4, marginRight: '20%' }}></View>
+            <TouchableOpacity 
+              style={{ alignItems: 'flex-end', marginRight: 18, padding: 0, margin: 0, marginBottom: 5 }}
+              onPress={() => this.handleSave()}
+            >
+                {/* <Image source={require('../images/outline_save_black_18dp.png' )} style={{padding:0,margin:0}} /> */}
+                <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1', margin: 0, padding: 0 }}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 18 }}>
+                <Image source={require('../images/remove.png')} />
+            </TouchableOpacity>
         </View>
       </Fragment>
     );

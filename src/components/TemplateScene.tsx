@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
-import base64 from 'base-64';
+import moment from 'moment'
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
-import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 import { connect } from 'react-redux';
 import { compose } from "redux";
@@ -12,7 +11,7 @@ import DialogInput from 'react-native-dialog-input';
 import axios from 'axios';
 import { api_url } from '../resources/constants'
 import { AsyncStorage } from 'react-native';
-import { Card, Badge } from 'react-native-elements'
+import { Card, Badge } from 'react-native-paper'
 import { template } from '@babel/core';
 
 class TemplateScene extends Component {
@@ -105,41 +104,67 @@ class TemplateScene extends Component {
     return (
       <Card containerStyle={styles.cardChat}>
         <TouchableHighlight
-          onPress={() => Actions.showSurvey({ title: survey.name, id: survey.id, currentUser: this.props.currentUser })}
+          onPress={() => Actions.showSurvey({ title: survey.name, id: survey.id, currentUser: this.props.currentUser, createdAt: survey.created_at })}
         >
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-            <View style={{ width: 50, height: 50, backgroundColor: this.getColor() }} />
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+          <View style={{ width: 50, height: 50, backgroundColor: this.getColor() }} />
 
-            <View style={{ marginLeft: 40 }}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{survey.name}</Text>
-              <Text style={{ fontSize: 13 }}>{survey.inserted_at}</Text>
-            </View>
+          <View style={{ marginLeft: 40 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{survey.name}</Text>
+            <Text style={{ fontSize: 13 }}>{survey.inserted_at}</Text>
           </View>
-        </TouchableHighlight></Card>
+        </View>
+      </TouchableHighlight></Card>
+    )
+  }
+
+  renderNewRow(item) {
+    const survey = item.item;
+    return (
+      <View style={{ flex: 1, marginBottom: 2, marginTop: 2, justifyContent: 'center', alignItems: 'center' }}>
+        <Card style={{ height: 86, width: '94%', elevation: 2, borderRadius: 5 }}>
+          <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
+            <TouchableHighlight 
+              style={{width: '100%', height: '100%'}}  
+              onPress={() => Actions.showSurvey({ title: survey.name, id: survey.id, currentUser: this.props.currentUser })}
+            >
+              <View style={{ flex: 1, flexDirection: "row" }}>
+                  <View style={{ height: 86, width: 86, backgroundColor: this.getColor(), alignItems: 'flex-start' }}></View>
+                  <View style={{ alignContent: 'center', left: 20 }}>
+                    <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeightn: 'normal', color: '#000000', marginTop: 10 }}>
+                      {survey.name}
+                    </Text>
+                    <Text style={{ fontFamily: 'Roboto', fontSize: 14, fontStyle: 'normal', fontWeightn: 'normal', color: '#D3D2D1', marginTop: 5 }}>
+                      Created on {moment(survey.created_at).format('Do MMMM, YYYY')}
+                    </Text>
+                  </View>
+              </View>
+            </TouchableHighlight>
+          </Card.Content>
+        </Card>
+      </View>
     )
   }
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <FlatList
           enableEmptySections
           data={(this.props.currentUser.user_type.toLowerCase() === 'coach' ? this.props.coachTemplates : this.props.userTemplates)}
-          renderItem={data => this.renderRow(data)}
+          renderItem={data => this.renderNewRow(data)}
         />
-        <View>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => this.showDialog()} style={styles.touchableOpacityStyle} >
-            <Image source={require('../images/ic_add.png')} style={styles.floatingButtonStyle} />
-          </TouchableOpacity>
-          <DialogInput isDialogVisible={this.state.dialogVisible}
-            title={"Template"}
-            message={"Enter name of the template"}
-            hintInput={"hint for the input"}
-            submitInput={(inputText) => { this.handleName(inputText) }}
-            closeDialog={() => this.setState({ dialogVisible: false })}>
-          </DialogInput>
+        <View style={{ flex: 8, marginBottom: 20, marginTop: 5, justifyContent: 'flex-start', alignItems: 'center' }}>
+            <Card style={{ height: 86, width: '94%', elevation: 2 }}>
+                <Card.Content style={{ alignItems: 'center' }}>
+                    <TouchableHighlight style={{width: '100%', height: '100%', alignItems: 'center'}} onPress={this.showDialog}>
+                        <Text style={{ padding: 10, fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>+ Add New</Text>
+                    </TouchableHighlight>
+                </Card.Content>
+            </Card>
         </View>
-      </View>
+        
+      </ScrollView>
     );
   }
 }

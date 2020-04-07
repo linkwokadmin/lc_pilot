@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
-import base64 from 'base-64';
+import moment from 'moment'
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet } from 'react-native';
@@ -8,7 +7,7 @@ import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet } from 'rea
 import { connect } from 'react-redux';
 import { fetchContacts } from '../actions/AppActions';
 import { fetchCurrentUser } from '../actions/AuthActions';
-import { Card,Badge } from 'react-native-elements'
+import { Card, Badge } from 'react-native-paper'
 import  Status from './../services/Status';
 
 class ContactsList extends Component {
@@ -108,13 +107,49 @@ class ContactsList extends Component {
     }
   }
 
+  renderRowNew(contact) {
+    let newContact = _.first(_.values(contact));
+    if(newContact.email!=null && this.props.currentUser !== null && newContact.email !== this.props.currentUser.email){
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 5, marginTop: 0 }}>
+          <Card style={{ width: '95%', elevation: 3, height: 80, borderRadius: 5 }}>
+              <Card.Content>
+                  <TouchableHighlight onPress={() => this.readMessagesRedirect(newContact)} style={{width: '100%', height: '100%'}}>
+                      <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                        <Image source={{ uri: newContact.profileImage }} style={{ width: 50, height: 50, borderRadius: 50,alignContent:'flex-start',backgroundColor: this.getColor() }} />
+                          <View style={{ alignContent: 'center', position: 'absolute', left: 55 }}>
+                              <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontStyle: 'normal', fontWeightn: 'normal', color: '#000000' }}>{newContact.name}</Text>
+                              <Text style={{ fontFamily: 'Roboto', fontSize: 14, fontStyle: 'normal', fontWeightn: 'normal', color: '#000000', marginTop: 5 }}>{newContact.email}</Text>
+                          </View>
+                          {
+                            (newContact.sent_at !== null) ? 
+                            <View style={{ alignContent: 'flex-end' }}>
+                                <Text style={{ fontFamily: 'Roboto', fontSize: 12, fontStyle: 'normal', fontWeightn: 'norma', color: '#D5D2D2', padding: 0 }}>{moment(newContact.sent_at).fromNow()}</Text>
+                                {
+                                  newContact.count > 0 ? <Badge size={25} style={{ marginRight: 10, marginTop: 5 }} >{newContact.count}</Badge> : null
+                                }
+                            </View>
+                            : 
+                            <View style={{ alignContent: 'flex-end' }}>
+                              <Text style={{ fontFamily: 'Roboto', fontSize: 12, fontStyle: 'normal', fontWeightn: 'norma', color: '#D5D2D2', padding: 0 }}></Text>
+                            </View>
+                          }
+                      </View>
+                  </TouchableHighlight >
+              </Card.Content>
+          </Card>
+        </View>
+      )
+    }
+  }
+
   render() {
     return (
       <FlatList
         keyExtractor={(data) => { data.id }}
         enableEmptySections
         data={this.state.contacts}
-        renderItem={data => this.renderRow(data)}
+        renderItem={data => this.renderRowNew(data)}
       />
     );
   }

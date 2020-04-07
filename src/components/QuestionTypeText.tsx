@@ -8,20 +8,12 @@ export const QuestionText = ({ question, number, filled, onChange }) => {
             filled ?
             <TextInput
                 multiline
-                style={{
-                    height: 100, borderColor: '#CBCAC9',
-                    borderWidth: 1
-                }}
                 value={question.value}
                 onChangeText={(text) => {onChange(question, text) }}
             /> 
             : 
             <TextInput
                 multiline
-                style={{
-                    height: 100, borderColor: '#CBCAC9',
-                    borderWidth: 1
-                }}
                 placeholder="Type here"
                 onChangeText={(text) => {onChange(question, text) }}
             />

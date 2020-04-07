@@ -19,6 +19,7 @@ import UserTemplateScene from './components/UserTemplateScene'
 import CoachTemplateScene from './components/CoachTemplateScene'
 import Mess from './services/Mess';
 import splashScreen from './screens/splash';
+import NewSplashScreen from './screens/NewSplash';
 import { Icon } from 'react-native-vector-icons/Icon';
 
 export default class Routes extends Component {
