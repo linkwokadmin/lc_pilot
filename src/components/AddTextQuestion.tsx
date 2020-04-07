@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, StyleSheet, ScrollView, Button,Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Button, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import {
   addContact,
@@ -11,7 +11,7 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-class AddTextQuestion extends Component{
+class AddTextQuestion extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,7 +62,7 @@ class AddTextQuestion extends Component{
           <TextInput
             multiline
             style={{
-               borderColor: '#CBCAC9',
+              borderColor: '#CBCAC9',
               borderWidth: 1,
               height:50 }}
             placeholder={this.props.savedState !== undefined ? this.props.savedState.statement : `Enter your question statement`}
@@ -97,14 +97,15 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-   
+    marginTop:40
+
   },
   placeButtonAdd: {
-    width: '50%',
-    left: 10
+    position: 'absolute',
+    bottom: 20
   },
   placeButtonDelete: {
     width: '50%',

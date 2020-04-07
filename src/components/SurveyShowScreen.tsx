@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, AsyncStorage } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView, Button, AsyncStorage, TouchableOpacity, Image } from 'react-native';
 
 import { connect } from 'react-redux';
 import { compose } from "redux";
 import { fetchQuestions, saveFeedbacks, fetchResponses } from '../actions/AppActions';
 import { QuestionText } from './QuestionTypeText'
-import { QuestionMcq } from './QuestionTypeMcq'
+import { QuestionMcq } from './QuestionTypeMcq';
 import { QuestionRate } from './QuestionTypeRate'
 import { Card } from 'react-native-elements'
+import { Accordion } from 'react-native-paper/lib/typescript/src/components/List/List';
 import { Actions } from 'react-native-router-flux';
 
 class SurveyShowScreen extends Component {
   constructor(props) {
     super(props)
     this.state = { mcq: {}, feedbacks: [] }
+    console.log('constructor')
+  }
+
+  componentWillMount() {
+    console.log('componentWillMount')
   }
 
   componentDidMount() {
@@ -67,6 +73,10 @@ class SurveyShowScreen extends Component {
     });
     this.setState({ 'feedbacks': newFeedbacks })
   }
+  onRateChange = (question, item) => {
+    console.log(question, '---------', item);
+
+  }
 
   onRateChange = (question, text) => {
     let questionFeedback = { ...question, value: text.toString(), rating: parseInt(text) }
@@ -102,6 +112,9 @@ class SurveyShowScreen extends Component {
       )
     }
     if (question.type == "rate") {
+      console.log('********** IN RATE **************',question);
+      
+
       return (
         <Card>
           <View style={styles.container}>
@@ -121,8 +134,11 @@ class SurveyShowScreen extends Component {
     // })
     Actions.mainScreen();
   }
-  
+
   render() {
+    console.log('render');
+
+
     return (
       <View style={styles.container}>
         <Card>
@@ -146,7 +162,7 @@ class SurveyShowScreen extends Component {
               color="#115E54"
               onPress={() => this.handleSave()}
             />
-        }
+        } */}
       </View>
     );
   }
@@ -213,7 +229,23 @@ const styles = StyleSheet.create({
   saveBtn: {
     position: 'absolute',
     bottom: 20
-  }
+  },
+  floatingButtonStyle: {
+    resizeMode: 'contain',
+    width: 30,
+    height: 30,
+
+  },
+  touchableOpacityStyle: {
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+
+  },
 });
 
 

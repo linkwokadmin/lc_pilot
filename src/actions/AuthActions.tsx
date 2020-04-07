@@ -68,10 +68,8 @@ export const SignIN = ({ email, password }) => {
       AsyncStorage.setItem('@mytoken:key', TOKEN_KEY);
       AsyncStorage.setItem('authorization', TOKEN_KEY);
       AsyncStorage.setItem('currentUser', response.data.user);
-      console.log("Done")
       authSuccess(dispatch, response.data.user)
-    })
-    .catch(error => authUnsuccess(error, dispatch))
+    }).catch(error => authUnsuccess(error, dispatch));
   }
 }
 /*

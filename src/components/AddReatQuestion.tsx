@@ -51,7 +51,7 @@ class AddReatQuestion extends Component {
                 <AirbnbRating
                     count={5}
                     reviews={["Terrible", "Bad", "Good", "Very Good", "Amazing"]}
-                    defaultRating={5}
+                    defaultRating={0}
                     size={20}
                 />
                 <Button
@@ -80,6 +80,8 @@ const mapStateToProps = state => (
         email_contact: state.AppReducer.email_contact,
     }
 );
+
+
 export default connect(
     mapStateToProps, {
     addContact,

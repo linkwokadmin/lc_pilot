@@ -105,7 +105,7 @@ class AddMcqQuestion extends Component {
       <Fragment>
         <View>
           <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:20}}>
-            <Text style={styles.textLbl}>Question Text</Text>
+            <Text style={styles.textLbl}>Question Rate</Text>
            </View>
           <TextInput
             style={{marginTop:20,width:'100%',height:50, borderBottomWidth: 1,
@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     top: 1,
-    marginTop:20
+    marginTop:20,
+    marginBottom:20
   },
   placeButtonAdd: {
     width: '50%',
