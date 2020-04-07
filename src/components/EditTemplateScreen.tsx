@@ -6,7 +6,8 @@ import { compose } from "redux";
 import _ from 'lodash';
 // import { Formik } from 'formik';
 import {
-  fetchSingleTemplate
+  fetchSingleTemplate,
+  updateTemplates
 } from '../actions/AppActions';
 import { TextInput } from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
@@ -22,30 +23,26 @@ import { template } from '@babel/core';
 class EditTemplateScreen extends Component {
   constructor(props) {
     super(props);
-    console.log("Temp: ", this.props.template);
     this.state = {
+      template: {},
+      loaded: false
     };
   } 
 
   componentDidMount() {
     this.fetchSingleTemplate(this.props.id);
-    // this.setState(this.props.template)
+    // this.setState({template: this.props.template, loaded: true})
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log("PP:",prevProps.template);
-  //   console.log("PS:",prevState);
-  //   console.log("TS",this.state);
-  //   if (prevProps.template.id !== this.state.id) {
-  //     this.setState(this.props.template);
-  //   }
-  // }
+  componentDidUpdate(prevProps, prevState) {
+  }
 
   static getDerivedStateFromProps(nextProps, prevState){
-    console.log("NP:",nextProps.template);
-    console.log("PPS:",prevState);
-    if(nextProps.template.id !== prevState.id){
-      return nextProps.template;
+    console.log("PrevState: ", prevState);
+    console.log("nextProps: ", nextProps);
+    if(prevState.template === null || nextProps.template.id !== prevState.template.id || nextProps.template.questions.length != prevState.template.questions.length){
+      let updatedTemplate =  {...nextProps.template, questions: nextProps.template.questions}
+      return {template: updatedTemplate, loaded: true};
     }
     else return null;
   }
@@ -54,20 +51,27 @@ class EditTemplateScreen extends Component {
     this.props.actions.fetchSingleTemplate(id);
   }
 
+  updateTemplates = (template) => {
+    this.props.actions.updateTemplates(template);
+  }
+
   handleQuestionStatementChange = (text, idx) => {
-    const newQuestion = this.state.questions.map((question, sidx) => {
+
+    const newQuestion = this.state.template.questions.map((question, sidx) => {
       if (idx !== sidx) return question;
       return { ...question, statement: text };
     });
-    this.setState({ questions: newQuestion });
+    let updatedTemplate =  {...this.state.template, questions: newQuestion}
+    this.setState({template: updatedTemplate})
   };
 
   handleQuestionTypeChange = (text, idx) => {
-    const newquestions = this.state.questions.map((shareholder, sidx) => {
+    const newquestions = this.state.template.questions.map((shareholder, sidx) => {
       if (idx !== sidx) return shareholder;
       return { ...shareholder, type: text };
     });
-    this.setState({ questions: newquestions });
+    let updatedTemplate =  {...this.state.template, questions: newquestions}
+    this.setState({template: updatedTemplate})
   };
 
   handleSubmit = evt => {
@@ -76,51 +80,55 @@ class EditTemplateScreen extends Component {
   };
 
   handleAddQuestion = () => {
-    this.setState({
-      questions: this.state.questions.concat([
-        { 
-          statement: "",
-          type: "text",
-          weight: "1",
-          options: [
-            {
-              "test": "",
-              "label": "",
-              "value": ""
-            },
-            {
-              "test": "",
-              "label": "",
-              "value": ""
-            }
-          ],
-          value: "val",
-          sequence: this.state.questions.length
-        }
-      ])
-    });
+    let newQuestions = this.state.template.questions.concat([
+      { 
+        statement: "",
+        type: "text",
+        weight: "1",
+        options: [
+          {
+            "test": "",
+            "label": "",
+            "value": ""
+          },
+          {
+            "test": "",
+            "label": "",
+            "value": ""
+          }
+        ],
+        value: "val",
+        sequence: this.state.template.questions.length
+      }
+    ]);
+    let updatedTemplate =  {...this.state.template, questions: newQuestions}
+    this.setState({template: updatedTemplate})
   };
 
   handleRemoveShareholder = idx => () => {
-    this.setState({
-      questions: this.state.questions.filter((s, sidx) => idx !== sidx)
-    });
+    let updatedQuestion =  this.state.template.questions.filter((s, sidx) => idx !== sidx)
+    let updatedTemplate =  {...this.state.template, questions: updatedQuestion}
+    this.setState({template: updatedTemplate})
   };
 
   handleNameChange = name => () => {
-    this.setState({name: name})
+    let updatedTemplate =  {...this.state.template, name: name}
+    this.setState({template: updatedTemplate})
   }
 
   handleUpdate = (idx, updatedState) => {
-    const newquestions = this.state.questions.map((shareholder, sidx) => {
+    const newquestions = this.state.template.questions.map((shareholder, sidx) => {
       if (idx !== sidx) return shareholder;
       return { ...shareholder, ...updatedState };
     });
-    this.setState({ questions: newquestions });
+    let updatedTemplate =  {...this.state.template, questions: newquestions}
+    this.setState({template: updatedTemplate})
   }
 
   handleSave = () => {
-    console.log(this.state);
+    // console.log(this.state.template);
+    this.updateTemplates(this.state.template);
+    Actions.mainScreen({currentUser: this.props.currentUser});
     // this.props.createTemplates(this.state);
   }
 
@@ -216,8 +224,8 @@ class EditTemplateScreen extends Component {
             />
           </Card>
           {
-            this.state.questions !== undefined ?
-            this.state.questions.map((shareholder, idx) => (
+            (this.state.loaded == true && this.state.template !== null && this.state.template.questions !== undefined) ?
+            this.state.template.questions.map((shareholder, idx) => (
               this.renderCard(shareholder, idx)
             )) : null
           }
@@ -252,6 +260,11 @@ const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch =
         return dispatch(
           fetchSingleTemplate(id)
         );
+      },
+      updateTemplates: (template) => {
+        return dispatch(
+          updateTemplates(template)
+        )
       }
     }
   }

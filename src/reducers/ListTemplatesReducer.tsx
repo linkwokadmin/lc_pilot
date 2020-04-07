@@ -13,7 +13,13 @@ export default (state = INITIAL_STATE, action) => {
     case TEMPLATES_LIST:
       return {...state, coachTemplates: action.payload}
     case SINGLE_TEMPLATE:
-      return {...state, editedTemplate: action.payload}
+      return {...state, 
+        editedTemplate: {
+          id: action.payload.id,
+          name: action.payload.name,
+          questions: action.payload.questions
+        }
+      }
     case USER_TEMPLATE_LIST:
       return {...state, userTemplates: action.payload}
     case COACH_TEMPLATE_LIST:

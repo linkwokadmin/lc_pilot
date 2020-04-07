@@ -373,6 +373,37 @@ export const createTemplates = (template) => {
   }
 }
 
+// Fetch templates
+export const updateTemplates = (template) => {
+  return dispatch => {
+    let data = {
+      "template": template
+    }
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/templates/" + template.id;
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+      axios.put(url, data, {
+        headers: headers
+      }).then(response => {
+        let newTemplate = response.data.data;
+        console.log("Updated Templates");
+        return newTemplate;
+      }).catch((error) => {
+        console.log("dispatchError: ",error);
+        return null;
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+      return null;
+    })
+  }
+}
+
 // Share template to user
 export const shareTemplate = (userId, templateId) => {
   return dispatch => {

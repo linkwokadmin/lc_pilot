@@ -24,7 +24,21 @@ class AddTextQuestion extends Component{
   }
  
   componentDidMount(){
-    this.setState(this.props.savedState)
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState){
+    console.log(nextProps);
+    console.log(prevState);
+    if(nextProps.savedState === undefined) {
+      return prevState
+    } else if(prevState.statement !== nextProps.savedState.statement) {
+      return {statement: prevState.statement};
+    } else if(prevState.savedState === undefined){
+      return {statement: nextProps.savedState.statement};
+    } else if(nextProps.savedState.id !== prevState.savedState.id) {
+      return {statement: nextProps.savedState.statement};
+    }
+    else return null;
   }
 
   handleNameChange = statement => () => {
@@ -51,8 +65,7 @@ class AddTextQuestion extends Component{
                borderColor: '#CBCAC9',
               borderWidth: 1,
               height:50 }}
-            placeholder="Question Text"
-            value={this.state.statement}
+            placeholder={this.props.savedState !== undefined ? this.props.savedState.statement : `Enter your question statement`}
             onChangeText={(value) => this.setState({ statement: value })}
           />
              <Button

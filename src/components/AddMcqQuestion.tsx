@@ -15,10 +15,7 @@ import { CheckBox } from 'react-native-elements'
 
 class AddMcqQuestion extends Component {
   constructor(props) {
-    super();
-   
-    
-
+    super(props);
     this.state = {
       statement: "",
       type: "mcq",
@@ -40,11 +37,37 @@ class AddMcqQuestion extends Component {
   }
 
   componentDidMount(){
-    this.setState(this.props.savedState)
   }
 
+  static getDerivedStateFromProps(nextProps, prevState){
+    if(nextProps.savedState === undefined) {
+      return prevState
+    } else if(prevState.statement === ''){
+      return {
+        statement: nextProps.savedState.statement,
+        options: nextProps.savedState.options
+      };
+    } else if(prevState.statement !== nextProps.savedState.statement || prevState.options.length > nextProps.savedState.options.length){
+      return {
+        statement: prevState.statement,
+        options: prevState.options
+      };
+    } else if(prevState.savedState === undefined){
+      return {
+        statement: nextProps.savedState.statement,
+        options: nextProps.savedState.options
+      };
+    } else if(nextProps.savedState.id !== prevState.savedState.id) {
+      return {
+        statement: nextProps.savedState.statement,
+        options: nextProps.savedState.options
+      };
+    }
+    else return null;
+  }
+
+
   handleNameChange = (statement) => () => {
-    console.log("statement : ", statement);
     this.setState({ statement: statement })
   }
 
@@ -64,13 +87,13 @@ class AddMcqQuestion extends Component {
   };
   
   handleAddOption = () => {
-    this.setState({
-      options: this.state.options.concat([{ text: "" }])
-    });
+    let newOptions = this.state.options.concat([{ test: '', label: '', value: '' }])
+    console.log('hhhhhhhh', newOptions);
+    this.setState({options: newOptions});
   };
 
   handleSave = () => {
-    console.log(this.state);
+    console.log("Save: ",this.state);
     this.props.handleUpdate(this.props.idx, this.state);
   }
 
@@ -87,28 +110,29 @@ class AddMcqQuestion extends Component {
           <TextInput
             style={{marginTop:20,width:'100%',height:50, borderBottomWidth: 1,
             borderColor: '#ddd'}}
-            placeholder={`Enter question statement`}
+            placeholder={this.props.savedState !== undefined ? this.props.savedState.statement : `Enter your question statement`}
             label="text"
-            value={this.state.statement}
             onChangeText={(value) => this.setState({ statement: value })}
           />
-          {this.state.options.map((option, idx) => (
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.placeInput}
-                placeholder={`Enter Opction Text `}
-                label="text"
-                value={option.test}
-                onChangeText={(value) => this.handleOptionsNameChange(value, idx)}
-              />
-              <Button
-                title=" X "
-                style={styles.placeButton}
-                onPress={this.handleRemoveOptions(idx)}
-                color="red"
-              />
-            </View>
-          ))}
+          {
+            this.state.options.map((option, idx) => (
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.placeInput}
+                  placeholder={`Enter Option Text `}
+                  label="text"
+                  value={option.test}
+                  onChangeText={(value) => this.handleOptionsNameChange(value, idx)}
+                />
+                <Button
+                  title=" X "
+                  style={styles.placeButton}
+                  onPress={this.handleRemoveOptions(idx)}
+                  color="red"
+                />
+              </View>
+            ))
+          }
         </View>
         <View style={styles.titleContainer}>
           <Text style={styles.textLbl}>Add Options</Text>
