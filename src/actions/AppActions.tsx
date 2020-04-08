@@ -313,17 +313,18 @@ export const fetchSingleTemplate = (id) => {
 }
 
 // Fetch templates
-export const fetchUserTemplates = () => {
+export const fetchUserTemplates = (creatorId, userId) => {
   return dispatch => {
     AsyncStorage.getItem("authorization")
     .then((token) => {
-      let url = api_url + "/api/v1/templates/my_templates/user";
+      let url = api_url + "/api/v1/templates/my_templates/user/" + creatorId + "/"+ userId;
       axios.get(url, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       }).then((response) => {
         let templates = response.data.data;
+        console.log("Tenp:", templates)
         dispatch({
           type: USER_TEMPLATE_LIST,
           payload: templates

@@ -79,7 +79,9 @@ export default class Mess extends Component {
       this.onSend(msgs)
     }
 
-    // Actions.refresh({ onRight: this.handleRight(), rightButton: this.renderRightButton() });
+    setTimeout(()=> 
+      Actions.refresh({ rightButton: this.renderRightButton() }),
+    0.5);
   }
 
   // fires when we receive a message
@@ -105,7 +107,16 @@ export default class Mess extends Component {
   };
 
   handleRight = () => {
-    Actions.userTemplateScene();
+    let creatorId = '';
+    let userId = '';
+    if(this.props.currentUser.user_type.toLowerCase() == 'coach') {
+      creatorId =  this.props.currentUser.id; 
+      userId = this.props.contactId;
+    } else {
+      creatorId = this.props.contactId;
+      userId =  this.props.currentUser.id; 
+    }
+    Actions.userTemplateScene({creatorId: creatorId, userId: userId});
   }
 
   componentDidMount() {
@@ -113,9 +124,7 @@ export default class Mess extends Component {
   }
 
   onSend(messages = []) {
-    // console.log("Msg: ", messages);
     this.chat.send(messages)
-
   }
 
   onPressPhoneNumber = () => {
