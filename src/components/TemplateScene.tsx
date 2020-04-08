@@ -12,7 +12,6 @@ import axios from 'axios';
 import { api_url } from '../resources/constants'
 import { AsyncStorage } from 'react-native';
 import { Card, Badge } from 'react-native-paper'
-import { template } from '@babel/core';
 
 class TemplateScene extends Component {
   constructor(props) {

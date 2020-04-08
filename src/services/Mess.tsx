@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, TouchableOpacity, Platform, Image, Button } from 'react-native';
+import { View, Dimensions, StyleSheet, TouchableOpacity, Platform, Image, Button, Text, TouchableHighlight } from 'react-native';
 import { Icon } from 'react-native-elements'
 import emojiUtils from 'emoji-utils'
 
@@ -9,6 +9,7 @@ import Chat from './Chat'
 import _ from 'lodash';
 import SlackMessage from './../components/SlackMessage';
 import Color from './../components/Color'
+import { Card } from 'react-native-paper'
 
 // layout numbers
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -146,13 +147,35 @@ export default class Mess extends Component {
     let isTemplate = props.currentMessage.text.includes('#')
     let templateId = props.currentMessage.text.split(':')[0].replace('#', '');
     let templateName = props.currentMessage.text.split(':')[1]
-    const customView = () => {
+    const getColor = () => {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    const customView = (template_name) => {
       return (
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <Button
-            title="Gooooooooooooooo"
-            onPress={() => Actions.showSurvey({ title: "bbbb", id: 48, currentUser: this.props.currentUser })}
-          />
+        <View style={{ flex: 1, marginBottom: -33, marginTop: 0, justifyContent: 'center', alignItems: 'center' }}>
+          <Card style={{ height: 70, width: '100%', elevation: 2, borderRadius: 5 }}>
+              <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
+                  <TouchableHighlight onPress={() => Actions.showSurveyTemplate({ title: "bbbb", id: 48, currentUser: this.props.currentUser })}>
+                      <View style={{ flex: 1, flexDirection: "row" }}>
+                        <View style={{ height: 70, width: 86, backgroundColor: getColor(), alignItems: 'flex-start' }}></View>
+                        <View style={{ alignContent: 'center', left: 20 }}>
+                          <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeightn: 'normal', color: '#000000', marginTop: 10 }}>
+                            {props.currentMessage.text.split(':')[1]}
+                          </Text>
+                          <Text style={{ fontFamily: 'Roboto', fontSize: 14, fontStyle: 'normal', fontWeightn: 'normal', color: '#D3D2D1', marginTop: 5 }}>
+                            Created on {moment(props.currentMessage.createdAt).format('Do MMMM, YYYY')}
+                          </Text>
+                        </View>
+                      </View>
+                  </TouchableHighlight>
+              </Card.Content>
+          </Card>
         </View>
       )
     }
@@ -174,12 +197,12 @@ export default class Mess extends Component {
             right: {
               backgroundColor: '#75d',
               width: 350,
-              height: 70
+              height: 65
             },
             left: {
               backgroundColor: '#75d',
               width: 350,
-              height: 70
+              height: 65
             }
           }}
           renderMessageText={null}
@@ -189,8 +212,8 @@ export default class Mess extends Component {
             image: ''
           }}
           optionTitles={["Templates", "44"]}
-          renderCustomView={1 == 1 ? null : customView}
-          onLongPress={() => { Actions.showSurvey({ title: templateName, id: templateId, currentUser: props.user.currentUser }) }}
+          renderCustomView={customView}
+          onLongPress={() => { Actions.showSurveyTemplate({ title: templateName, id: templateId, currentUser: props.user.currentUser }) }}
         />
         :
         <Bubble
@@ -211,13 +234,6 @@ export default class Mess extends Component {
 
   renderSend(props) {
     return (
-
-      // <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-      //   <Button
-      //     title="Seed"
-      //     onPress={() => Actions.coachTemplateScene({ currentUser: props.user.currentUser, contactId: props.user.opponent.id, contactEmail: props.user.opponent.email, contactName: props.user.opponent.name })}
-      //   />
-
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
         {
           props.user.currentUser.user_type === 'Coach' ?
@@ -239,6 +255,7 @@ export default class Mess extends Component {
     );
   }
 
+  
   // draw our ui
   render() {
     return (

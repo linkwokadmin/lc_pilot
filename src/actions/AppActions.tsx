@@ -207,6 +207,33 @@ export const fetchQuestions=(template_id)=>{
   }
 }
 
+export const fetchSurveyQuestions=(template_id)=>{
+  console.log(111)
+  return dispatch => {
+    AsyncStorage.getItem("authorization")
+    .then((token) => {
+      let url = api_url + "/api/v1/questions/survey_template_questions/" + template_id;
+      axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then((response) => {
+        let questions = response.data.data;
+        console.log("Questions: ", questions);
+        dispatch({
+          type: QUESTION_LIST,
+          payload: questions
+        })
+      }).catch((api_err) => {
+        console.log("API ERR: ", api_err)
+      })
+    })
+    .catch((err) => {
+      console.log("Token Error: ", err);
+    })
+  }
+}
+
 export const fetchResponses = (template_id) => {
   return dispatch => {
     AsyncStorage.getItem("authorization")
@@ -405,21 +432,49 @@ export const updateTemplates = (template) => {
 }
 
 // Share template to user
+// export const shareTemplate = (userId, templateId) => {
+//   return dispatch => {
+//     let data = {
+//       user: {
+//         template_ids: [templateId]
+//       }
+//     }
+//     AsyncStorage.getItem("authorization")
+//     .then((token) => {
+//       let url = api_url + "/api/v1/users/" + userId + "/upsert_templates";
+//       const headers = {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`
+//       }
+//       axios.put(url, data, {
+//         headers: headers
+//       }).then(response => {
+//         let template = response.data.data;
+//         console.log("Template: ", template);
+//         return template;
+//       }).catch((error) => {
+//         console.log(error);
+//         return null;
+//       })
+//     })
+//     .catch((err) => {
+//       console.log("Token Error: ", err);
+//       return null;
+//     })
+//   }
+// }
+
+// Create a survey template for user
 export const shareTemplate = (userId, templateId) => {
   return dispatch => {
-    let data = {
-      user: {
-        template_ids: [templateId]
-      }
-    }
     AsyncStorage.getItem("authorization")
     .then((token) => {
-      let url = api_url + "/api/v1/users/" + userId + "/upsert_templates";
+      let url = api_url + "/api/v1/survey_templates/create_and_share_survey/" + templateId + "/" + userId;
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
-      axios.put(url, data, {
+      axios.get(url, {
         headers: headers
       }).then(response => {
         let template = response.data.data;
