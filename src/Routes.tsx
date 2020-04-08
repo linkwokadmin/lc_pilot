@@ -59,7 +59,7 @@ export default class Routes extends Component {
       );
     }
     return (
-      <Router navigationBarStyle={{ backgroundColor: '#75daad' }} titleStyle={{ color: 'white' }}>
+      <Router navigationBarStyle={{ backgroundColor: '#fff' }} titleStyle={{ color: 'black' }}>
         <Scene key='app'>
           <Scene key='splashScreen' component={splashScreen} hideNavBar={true} title="Splash" initial={!this.state.logged} />
 

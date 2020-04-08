@@ -37,14 +37,10 @@ class TabBarMenu extends Component {
         <StatusBar backgroundColor="#75daad" />
         <View style={styles.statusBarTitle}>
           <View style={styles.header}>
-            <Text style={styles.headerName}>SuperCoach</Text>
+            <Image source={require('../images/SuperCoachSmall.png')} />
           </View>
           <View style={{ flexDirection: 'row', marginRight: 10 }}>
-            <View style={{ width: 35, justifyContent: 'center' }}>
-              <TouchableOpacity onPress={() => { Actions.addContactScreen(); this.props.enableInclusionContact(); }}>
-                <Image source={require('../images/ic_magnifying_glass.png')} />
-              </TouchableOpacity>
-            </View>
+            
             <View style={{ justifyContent: 'center' }}>
               <TouchableOpacity onPress={() => {
                 this.logout()
@@ -57,7 +53,7 @@ class TabBarMenu extends Component {
 
         <View style={{ flexDirection: 'row' }}>
           <View style={{ alignItems: 'center' }}>
-            <TabBar {...this.props} style={styles.tabBar} indicatorStyle={{ width: TAB_AND_INDICATOR_WIDTH }} tabStyle={{ width: TAB_AND_INDICATOR_WIDTH }} />
+            <TabBar {...this.props} style={styles.tabBar} indicatorStyle={{ width: TAB_AND_INDICATOR_WIDTH }} tabStyle={{ width: TAB_AND_INDICATOR_WIDTH }} labelStyle={styles.label} indicatorStyle={styles.indicatorStyle} />
           </View>
         </View>
       </View>
@@ -74,26 +70,35 @@ const styles = StyleSheet.create({
   tabBar: {
     width: TAB_BAR_WIDTH,
     elevation: 0,
-    backgroundColor: '#75daad',
+    backgroundColor: '#fff',
 
   },
   statusBarTitle: {
     marginTop: Platform.OS === 'ios' ? 50 : 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#75daad',
+    backgroundColor: '#fff',
+    borderBottomColor: '#C4C4C4',
+    borderBottomWidth: 2
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 40
+    height: 40,
+    marginLeft: 20
   },
   headerName: {
-    color: '#fff',
+    color: 'black',
     fontSize: 22,
     marginLeft: 30,
-    
+  },
+  label: {
+    color: 'black'
+  },
+  indicatorStyle: {
+    backgroundColor: 'green'
   }
+
 }
 );
 
