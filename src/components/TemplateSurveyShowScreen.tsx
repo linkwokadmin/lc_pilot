@@ -21,11 +21,14 @@ class TemplateSurveyShowScreen extends Component {
   }
 
   componentDidMount() {
+    console.log("++++++++++++++++++++++++++++++=");
     this.fetchResponses(this.props.id);
     this.fetchSurveyQuestions(this.props.id);
     if (this.props.filled) {
+      console.log(111111);
       this.setState({ 'feedbacks': this.props.feedbacks });
     } else {
+      console.log(22222)
       this.setState({ 'feedbacks': this.props.questions });
     }
     setTimeout(()=> 
@@ -120,6 +123,7 @@ class TemplateSurveyShowScreen extends Component {
   }
 
   handleSave = () => {
+    console.log("My Records:", this.state.feedbacks);
     this.props.actions.saveFeedbacks(this.props.id, this.state.feedbacks)
     Actions.mainScreen();
   }
@@ -183,7 +187,7 @@ class TemplateSurveyShowScreen extends Component {
             renderItem={data => this.renderQuestion(data)}
           />
           {
-            this.props.feedbacks.length > 0 ? null :
+            (this.props.feedbacks !== undefined && this.props.feedbacks.length) > 0 ? null :
             <View style={{ flex: 1, marginBottom: 20, marginTop: 0, width: '90%', justifyContent: 'center', alignSelf: 'center' }}>
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: 53 }}>
                   <TouchableOpacity activeOpacity={.5}>
@@ -229,18 +233,14 @@ class TemplateSurveyShowScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const questions = _.map(state.ListQuestionsReducer, (value, uid) => {
-    return { ...value, uid }
-  });
-  const feedbacks = _.map(state.ListFeedbacksReducer, (value, uid) => {
-    return { ...value, uid }
-  });
-
+const mapStateToProps = (state, currentProps) => {
+  const questions = state.ListQuestionsReducer.questions[currentProps.id.toString()];
+  console.log(state.ListFeedbacksReducer.feedbacks[currentProps.id.toString()])
+  const feedbacks = state.ListFeedbacksReducer.feedbacks[currentProps.id.toString()];
   return {
     questions: questions,
     feedbacks: feedbacks,
-    filled: (feedbacks.length > 0 ? true : false)
+    filled: ((feedbacks === undefined ? false : (feedbacks.length) > 0 ? true : false))
   }
 }
 

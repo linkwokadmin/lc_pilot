@@ -22,7 +22,9 @@ import {
   USER_TEMPLATE_LIST,
   COACH_TEMPLATE_LIST,
   SINGLE_TEMPLATE,
-  CREATE_TEMPLATE
+  CREATE_TEMPLATE,
+  FETCH_SURVEY_QUESTION,
+  FETCH_SURVEY_FEEDBACK
 } from '../resources/types';
 import { template } from '@babel/core';
 import { log } from 'react-native-reanimated';
@@ -221,8 +223,8 @@ export const fetchSurveyQuestions=(template_id)=>{
         let questions = response.data.data;
         console.log("Questions: ", questions);
         dispatch({
-          type: QUESTION_LIST,
-          payload: questions
+          type: FETCH_SURVEY_QUESTION,
+          payload: {templateId: template_id, questions: questions}
         })
       }).catch((api_err) => {
         console.log("API ERR: ", api_err)
@@ -247,8 +249,8 @@ export const fetchResponses = (template_id) => {
         let feedbacks = response.data.data;
         console.log("feedbacks: ", feedbacks);
         dispatch({
-          type: FEEDBACK_LIST,
-          payload: feedbacks
+          type: FETCH_SURVEY_FEEDBACK,
+          payload: {templateId: template_id, feedbacks: feedbacks}
         })
       }).catch((api_err) => {
         console.log("API ERR: ", api_err)

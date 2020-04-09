@@ -25,7 +25,8 @@ class EditTemplateScreen extends Component {
     super(props);
     this.state = {
       template: {},
-      loaded: false
+      loaded: false,
+      edited: false
     };
   } 
 
@@ -38,13 +39,18 @@ class EditTemplateScreen extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState){
-    console.log("PrevState: ", prevState);
-    console.log("nextProps: ", nextProps);
-    if(prevState.template === null || nextProps.template !== undefined || nextProps.template.id !== prevState.template.id || nextProps.template.questions.length != prevState.template.questions.length){
-      let updatedTemplate =  {...nextProps.template, questions: nextProps.template.questions}
-      return {template: updatedTemplate, loaded: true};
+    console.log("PrevState:", prevState);
+    console.log("nextProps:", nextProps);
+    if(prevState.template === null || nextProps.template !== undefined){
+      let updatedTemplate = {...nextProps.template, questions: nextProps.template.questions}
+      if(prevState.template !== undefined && prevState.template.questions !== undefined && prevState.template.questions.length > nextProps.template.questions.length) {
+        updatedTemplate =  {...nextProps.template, questions: prevState.template.questions}
+      } 
+      return {template: updatedTemplate, loaded: true, edited: true};
+    } else {
+      let updatedTemplate =  {...nextProps.template, questions: prevState.questions}
+      return {template: updatedTemplate, loaded: true, edited: false};
     }
-    else return null;
   }
 
   fetchSingleTemplate = (id) => {
@@ -102,7 +108,8 @@ class EditTemplateScreen extends Component {
       }
     ]);
     let updatedTemplate =  {...this.state.template, questions: newQuestions}
-    this.setState({template: updatedTemplate})
+    console.log("updatedTemplate: ", updatedTemplate);
+    this.setState({template: updatedTemplate, edited: true})
   };
 
   handleRemoveShareholder = idx => () => {
@@ -298,12 +305,14 @@ class EditTemplateScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, currentProps) => {
+  console.log(state.ListTemplatesReducer.editedTemplate);
+  const editedTemplate = state.ListTemplatesReducer.editedTemplate.id == currentProps.id ? state.ListTemplatesReducer.editedTemplate : {}
   return {
     email_contact: state.AppReducer.email_contact,
     add_contact_error: state.AppReducer.add_contact_error,
     add_contact_status: state.AppReducer.add_contact_status,
-    template: state.ListTemplatesReducer.editedTemplate
+    template: editedTemplate
   }
 }
 

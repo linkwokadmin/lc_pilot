@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import moment from 'moment'
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, AsyncStorage, TouchableHighlight } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, ScrollView, TouchableHighlight } from 'react-native';
 
 import { connect } from 'react-redux';
 import { compose } from "redux";
@@ -139,7 +139,7 @@ class SurveyShowScreen extends Component {
   
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={{ flex: 1, marginBottom: 50, marginTop: 50, justifyContent: 'center', alignItems: 'center' }}>
           <Card style={{ height: 86, width: '94%', elevation: 2, borderRadius: 5 }}>
               <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
@@ -200,7 +200,7 @@ class SurveyShowScreen extends Component {
               onPress={() => this.handleSave()}
             />
         */}
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -244,8 +244,8 @@ const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch =
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'column',
+    // flex: 1,
+    // flexDirection: 'column',
   },
   Header: {
     fontSize: 20,
