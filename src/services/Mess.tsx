@@ -25,6 +25,7 @@ const user = getRandomUser()
 const isMe = (someUser) => user === someUser
 const avatar = { uri: 'https://facebook.github.io/react/img/logo_og.png' }
 import { Actions } from 'react-native-router-flux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const styles = StyleSheet.create({
   hashtag: {
@@ -56,6 +57,7 @@ export default class Mess extends Component {
     this.chat = Chat(this.props.currentUser, this.chatRoom, this.receiveChatMessage);
     this.state = {
       messages: [],
+      showLoader: true
     }
 
 
@@ -90,6 +92,7 @@ export default class Mess extends Component {
     if (isMe(user)) return // prevent echoing yourself (TODO: server could handle this i guess?)
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, message),
+      showLoader: false
     }))
   }
 
@@ -269,6 +272,11 @@ export default class Mess extends Component {
   render() {
     return (
       <View style={{ flex: 1, paddingTop: STATUS_BAR_HEIGHT, flexDirection: 'row' }}>
+        <Spinner
+            visible={this.state.showLoader}
+            textContent={'Loading...'}
+            textStyle={{color: '#FFF'}}
+          />
         <GiftedChat
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
