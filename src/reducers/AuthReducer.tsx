@@ -56,7 +56,7 @@ export default (state = INITIAL_STATE, action) => {
           };
       }
     case type.SUCCESS_REGISTER:
-      return {...state, name: ''};
+      return {...state, name: '', signUpLoading: false};
     case type.AUTH_SUCCESS:
       return {
         ...state,

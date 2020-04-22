@@ -50,11 +50,11 @@ class SignUpScreen extends Component {
             justifyContent: 'center',
             alignContent: 'center',
           }}>
-          {/* <Spinner
+          <Spinner
             visible={this.props.signUpLoading}
             textContent={'Loading...'}
             textStyle={{color: '#FFF'}}
-          /> */}
+          />
           <View
             style={{
               marginTop: Platform.OS === 'ios' ? 100 : 30,
