@@ -20,7 +20,7 @@
 
 //   newJWT(jwt){
 //     this.setState({
-//       jwt: jwt
+//       jwt: jwtgit 
 //     });
 //   }
 

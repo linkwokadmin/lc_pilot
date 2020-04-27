@@ -11,14 +11,17 @@ import DialogInput from 'react-native-dialog-input';
 import axios from 'axios';
 import { api_url } from '../resources/constants'
 import { AsyncStorage } from 'react-native';
-import { Card } from 'react-native-paper'
+import { Card } from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 class CoachTemplateScene extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       dialogVisible: false,
-      newTemplate: null 
+      newTemplate: null,
+      showLoader: false
     }
     // console.log(this.props)
   }
@@ -53,6 +56,7 @@ class CoachTemplateScene extends Component {
   handleName = (name) => {
     this.setState({dialogVisible:false});
     AsyncStorage.getItem("authorization")
+    this.setState({...this.state, showLoader: true})
     .then((token) => {
       let url = api_url + "/api/v1/templates";
       let data = {
@@ -68,20 +72,24 @@ class CoachTemplateScene extends Component {
         headers: headers
       }).then(response => {
         let template = response.data.data;
+        this.setState({...this.state, showLoader: false})
         Actions.editSurvey({ title: template.name, id: template.id })
         // return template;
       }).catch((error) => {
         console.log(error);
+        this.setState({...this.state, showLoader: false})
         return null;
       })
     })
     .catch((err) => {
       console.log("Token Error: ", err);
+      this.setState({...this.state, showLoader: false})
       return null;
     })
   }
-
+  
   sendTemplate = (item) => {
+    this.setState({...this.state, showLoader: true})
     AsyncStorage.getItem("authorization")
     .then((token) => {
       let url = api_url + "/api/v1/survey_templates/create_and_share_survey/" + item.id + "/" + this.props.contactId;
@@ -92,21 +100,24 @@ class CoachTemplateScene extends Component {
       axios.get(url, {
         headers: headers
       }).then(response => {
+        this.setState({...this.state, showLoader: false})
         let template = response.data.data;
         Actions.b_chat({ 
+          selectedTemplate: template,
           title: this.props.contactName, 
           contactId: this.props.contactId, 
           contactName:this.props.contactName, 
           contactEmail: this.props.contactEmail, 
           currentUser: this.props.currentUser,
-          selectedTemplate: template
         })
       }).catch((error) => {
+        this.setState({...this.state, showLoader: false})
         console.log(error);
         return null;
       })
     })
     .catch((err) => {
+      this.setState({...this.state, showLoader: false})
       console.log("Token Error: ", err);
       return null;
     })
@@ -168,6 +179,11 @@ class CoachTemplateScene extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Spinner
+            visible={this.state.showLoader}
+            textContent={'Loading...'}
+            textStyle={{color: '#FFF'}}
+          />
         <FlatList
           data={this.props.templates}
           renderItem={data => this.renderNewRow(data)}

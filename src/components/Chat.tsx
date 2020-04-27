@@ -6,8 +6,15 @@ import { changeMessage, sendMessage, fetchMessages } from '../actions/AppActions
 
 class Chat extends Component {
 
+  constructor(){
+    super();
+    this.state = { showLoader: true};
+    console.log("chat screen")
+    console.log(this.state.showLoader)
+  }
+
   componentWillMount() {
-    this.props.fetchMessages(this.props.contactEmail);
+    // this.props.fetchMessages(this.props.contactEmail);
     this.createDataSource(this.props.conversation);
   }
 
@@ -20,6 +27,7 @@ class Chat extends Component {
   createDataSource(conversation) {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.dataSource = ds.cloneWithRows(conversation);
+    this.setState({...this.state, showLoader: false})
     // this.dataSource is a variable on scope of this class
   }
 
@@ -67,7 +75,7 @@ class Chat extends Component {
             value={this.props.message}
             onChangeText={text => this.props.changeMessage(text)}
             underlineColorAndroid='transparent'
-            style={{ flex: 4, backgroundColor: '#fff', fontSize: 15, borderRadius: 30 }}
+            style={{ flex: 4, backgroundColor: 'black', fontSize: 15, borderRadius: 30 }}
           />
           <TouchableHighlight
             onPress={this._sendMessage.bind(this)}

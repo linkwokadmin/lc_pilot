@@ -11,12 +11,10 @@ import SlackMessage from './../components/SlackMessage';
 import Color from './../components/Color'
 import { Card } from 'react-native-paper'
 
-// layout numbers
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const STATUS_BAR_HEIGHT = 40  // i know, but let's pretend its cool
 const CHAT_MAX_HEIGHT = SCREEN_HEIGHT - STATUS_BAR_HEIGHT
 
-// yes, i'm 41 years old.
 const NAMES = ['Girl', 'Boy', 'Horse', 'Poo', 'Face', 'Giant', 'Super', 'Butt', 'Captain', 'Lazer']
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min
 const getRandomName = () => NAMES[getRandomInt(0, NAMES.length)]
@@ -25,6 +23,7 @@ const user = getRandomUser()
 const isMe = (someUser) => user === someUser
 const avatar = { uri: 'https://facebook.github.io/react/img/logo_og.png' }
 import { Actions } from 'react-native-router-flux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const styles = StyleSheet.create({
   hashtag: {
@@ -56,6 +55,7 @@ export default class Mess extends Component {
     this.chat = Chat(this.props.currentUser, this.chatRoom, this.receiveChatMessage);
     this.state = {
       messages: [],
+      showLoader: true
     }
 
 
@@ -90,6 +90,7 @@ export default class Mess extends Component {
     if (isMe(user)) return // prevent echoing yourself (TODO: server could handle this i guess?)
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, message),
+      showLoader: false
     }))
   }
 
@@ -269,6 +270,11 @@ export default class Mess extends Component {
   render() {
     return (
       <View style={{ flex: 1, paddingTop: STATUS_BAR_HEIGHT, flexDirection: 'row' }}>
+        <Spinner
+            visible={this.state.showLoader}
+            textContent={'Loading...'}
+            textStyle={{color: '#FFF'}}
+          />
         <GiftedChat
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
