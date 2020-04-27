@@ -11,12 +11,10 @@ import SlackMessage from './../components/SlackMessage';
 import Color from './../components/Color'
 import { Card } from 'react-native-paper'
 
-// layout numbers
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const STATUS_BAR_HEIGHT = 40  // i know, but let's pretend its cool
 const CHAT_MAX_HEIGHT = SCREEN_HEIGHT - STATUS_BAR_HEIGHT
 
-// yes, i'm 41 years old.
 const NAMES = ['Girl', 'Boy', 'Horse', 'Poo', 'Face', 'Giant', 'Super', 'Butt', 'Captain', 'Lazer']
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min
 const getRandomName = () => NAMES[getRandomInt(0, NAMES.length)]

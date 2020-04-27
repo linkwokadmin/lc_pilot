@@ -21,19 +21,22 @@ class TemplateSurveyShowScreen extends Component {
   }
 
   componentDidMount() {
-    console.log("++++++++++++++++++++++++++++++=");
     this.fetchResponses(this.props.id);
     this.fetchSurveyQuestions(this.props.id);
-    if (this.props.filled) {
-      console.log(111111);
-      this.setState({ 'feedbacks': this.props.feedbacks });
-    } else {
-      console.log(22222)
-      this.setState({ 'feedbacks': this.props.questions });
-    }
     setTimeout(()=> 
-      Actions.refresh({ rightButton: this.renderRightButton() }),
+      Actions.refresh({ rightButton: this.renderRightButton()}),
     0.5);
+  }
+
+  componentDidUpdate(){
+    console.log("ComponentUpdate::",this.state)
+    if(this.state.feedbacks.length == 0){
+      const feedbacks = this.props.filled ? this.props.feedbacks : this.props.questions
+      if(feedbacks){
+        this.setState({feedbacks: feedbacks})
+      }
+    }else{
+    }
   }
 
   renderRightButton = () => {
@@ -66,14 +69,18 @@ class TemplateSurveyShowScreen extends Component {
   }
 
   onMcqChange = (question, item) => {
+    console.log("items...")
     console.log(item);
+    console.log(this.state)
     let val = (val !== undefined ? val : "") + "" + item.label;
     let questionFeedback = { ...question, value: val }
-    let newFeedbacks = this.state.feedbacks.map((feedback, idx) => {
+    const feedbacks = this.state.feedbacks.length == 0 ? (this.props.filled ? this.props.feedbacks : this.props.questions) : this.state.feedbacks
+    let newFeedbacks = feedbacks.map((feedback, idx) => {
+      console.log("feedbacks")
       if (feedback.id !== question.id) return feedback;
       return questionFeedback;
     });
-    this.setState({ 'feedbacks': newFeedbacks })
+    this.setState({ feedbacks: newFeedbacks })
   }
 
   onRateChange = (question, text) => {
@@ -183,7 +190,7 @@ class TemplateSurveyShowScreen extends Component {
         </View>
           <FlatList
             enableEmptySections
-            data={(this.props.filled ? this.props.feedbacks : this.props.questions )}
+            data={(this.state.feedbacks)}
             renderItem={data => this.renderQuestion(data)}
           />
           {
