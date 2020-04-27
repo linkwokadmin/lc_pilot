@@ -24,7 +24,8 @@ import {
   SINGLE_TEMPLATE,
   CREATE_TEMPLATE,
   FETCH_SURVEY_QUESTION,
-  FETCH_SURVEY_FEEDBACK
+  FETCH_SURVEY_FEEDBACK,
+  FETCH_QUESTION
 } from '../resources/types';
 import { template } from '@babel/core';
 import { log } from 'react-native-reanimated';
@@ -194,10 +195,10 @@ export const fetchQuestions=(template_id)=>{
         }
       }).then((response) => {
         let questions = response.data.data;
-        // console.log("Questions: ", questions);
+        console.log("Questions: ", questions);
         dispatch({
-          type: QUESTION_LIST,
-          payload: questions
+          type: FETCH_QUESTION,
+          payload: {templateId: template_id, questions: questions}
         })
       }).catch((api_err) => {
         console.log("API ERR: ", api_err)

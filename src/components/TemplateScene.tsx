@@ -150,18 +150,22 @@ class TemplateScene extends Component {
       <ScrollView style={styles.container}>
         <FlatList
           enableEmptySections
-          data={(this.props.currentUser.user_type.toLowerCase() === 'coach' ? this.props.coachTemplates : this.props.userTemplates)}
+          data={this.props.currentUser.user_type.toLowerCase() === 'coach' ? this.props.coachTemplates : []}
           renderItem={data => this.renderNewRow(data)}
         />
-        <View style={{ flex: 8, marginBottom: 20, marginTop: 5, justifyContent: 'flex-start', alignItems: 'center' }}>
-            <Card style={{ height: 86, width: '94%', elevation: 2 }}>
-                <Card.Content style={{ alignItems: 'center' }}>
-                    <TouchableHighlight style={{width: '100%', height: '100%', alignItems: 'center'}} onPress={this.showDialog}>
-                        <Text style={{ padding: 10, fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>+ Add New</Text>
-                    </TouchableHighlight>
-                </Card.Content>
-            </Card>
-        </View>
+        {
+          this.props.currentUser.user_type.toLowerCase() === 'coach' ?  
+            <View style={{ flex: 8, marginBottom: 20, marginTop: 5, justifyContent: 'flex-start', alignItems: 'center' }}>
+                <Card style={{ height: 86, width: '94%', elevation: 2 }}>
+                    <Card.Content style={{ alignItems: 'center' }}>
+                        <TouchableHighlight style={{width: '100%', height: '100%', alignItems: 'center'}} onPress={this.showDialog}>
+                            <Text style={{ padding: 10, fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>+ Add New</Text>
+                        </TouchableHighlight>
+                    </Card.Content>
+                </Card>
+            </View>
+          : null
+        }
         
       </ScrollView>
     );

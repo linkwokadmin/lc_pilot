@@ -17,23 +17,23 @@ import LinearGradient from 'react-native-linear-gradient';
 class TemplateSurveyShowScreen extends Component {
   constructor(props) {
     super(props)
-    this.state = { mcq: {}, feedbacks: [], filled: false }
+    this.state = { mcq: {}, feedbacks: this.props.feedbacks, filled: false }
   }
 
   componentDidMount() {
-    console.log("++++++++++++++++++++++++++++++=");
     this.fetchResponses(this.props.id);
     this.fetchSurveyQuestions(this.props.id);
-    if (this.props.filled) {
-      console.log(111111);
-      this.setState({ 'feedbacks': this.props.feedbacks });
-    } else {
-      console.log(22222)
-      this.setState({ 'feedbacks': this.props.questions });
-    }
     setTimeout(()=> 
       Actions.refresh({ rightButton: this.renderRightButton() }),
     0.5);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState){
+    if((prevState.feedbacks === undefined || prevState.feedbacks <= 0) && (nextProps.feedbacks === undefined || nextProps.feedbacks.length <= 0)) {
+      return {
+        feedbacks: nextProps.questions
+      }
+    } else return null;
   }
 
   renderRightButton = () => {
@@ -61,7 +61,7 @@ class TemplateSurveyShowScreen extends Component {
       if (feedback.id !== question.id) return feedback;
       return questionFeedback;
     });
-    console.log("NEW: ",newFeedbacks);
+    console.log("NEW: ",this.state);
     this.setState({ 'feedbacks': newFeedbacks })
   }
 
@@ -235,12 +235,11 @@ class TemplateSurveyShowScreen extends Component {
 
 const mapStateToProps = (state, currentProps) => {
   const questions = state.ListQuestionsReducer.questions[currentProps.id.toString()];
-  console.log(state.ListFeedbacksReducer.feedbacks[currentProps.id.toString()])
   const feedbacks = state.ListFeedbacksReducer.feedbacks[currentProps.id.toString()];
   return {
     questions: questions,
-    feedbacks: feedbacks,
-    filled: ((feedbacks === undefined ? false : (feedbacks.length) > 0 ? true : false))
+    feedbacks: feedbacks === undefined ? [] : feedbacks,
+    filled: ((feedbacks === undefined ? false : (feedbacks.length) <= 0 ? false : true))
   }
 }
 

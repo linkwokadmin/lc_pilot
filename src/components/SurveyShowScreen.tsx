@@ -21,13 +21,13 @@ class SurveyShowScreen extends Component {
   }
 
   componentDidMount() {
-    this.fetchResponses(this.props.id);
+    // this.fetchResponses(this.props.id);
     this.fetchQuestions(this.props.id);
-    if (this.props.filled) {
-      this.setState({ 'feedbacks': this.props.feedbacks });
-    } else {
-      this.setState({ 'feedbacks': this.props.questions });
-    }
+    // if (this.props.filled) {
+    //   this.setState({ 'feedbacks': this.props.feedbacks });
+    // } else {
+      // this.setState({ 'feedbacks': this.props.questions });
+    // }
     setTimeout(()=> 
       Actions.refresh({ rightButton: this.renderRightButton() }),
     0.5);
@@ -140,7 +140,7 @@ class SurveyShowScreen extends Component {
   render() {
     return (
       <ScrollView style={styles.container}>
-        <View style={{ flex: 1, marginBottom: 50, marginTop: 50, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, marginBottom: 20, marginTop: 20, justifyContent: 'center', alignItems: 'center' }}>
           <Card style={{ height: 86, width: '94%', elevation: 2, borderRadius: 5 }}>
               <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
                   <TouchableHighlight >
@@ -186,7 +186,7 @@ class SurveyShowScreen extends Component {
         </View>
           <FlatList
             enableEmptySections
-            data={(this.props.filled ? this.props.feedbacks : this.props.questions )}
+            data={this.props.questions}
             renderItem={data => this.renderQuestion(data)}
           />
        
@@ -205,10 +205,10 @@ class SurveyShowScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const questions = _.map(state.ListQuestionsReducer, (value, uid) => {
-    return { ...value, uid }
-  });
+const mapStateToProps = (state, currentProps) => {
+  console.log(state.ListQuestionsReducer.coach_questions[currentProps.id.toString()])
+  console.log(currentProps.id)
+  const questions = state.ListQuestionsReducer.coach_questions[currentProps.id.toString()];
   const feedbacks = _.map(state.ListFeedbacksReducer, (value, uid) => {
     return { ...value, uid }
   });
@@ -216,7 +216,7 @@ const mapStateToProps = state => {
   return {
     questions: questions,
     feedbacks: feedbacks,
-    filled: (feedbacks.length > 0 ? true : false)
+    filled: false
   }
 }
 
