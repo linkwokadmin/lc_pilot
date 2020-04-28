@@ -28,26 +28,14 @@ class TemplateSurveyShowScreen extends Component {
     0.5);
   }
 
-  componentDidUpdate(){
-    console.log("ComponentUpdate::",this.state)
-    if(this.state.feedbacks.length == 0){
-      const feedbacks = this.props.filled ? this.props.feedbacks : this.props.questions
-      if(feedbacks){
-        this.setState({feedbacks: feedbacks})
-      }
-    }else{
-    }
-  }
-
   // TODO: Santosh check this out iif you are trying to load one template after another, if it does not work for you try uncommenting this
-  // static getDerivedStateFromProps(nextProps, prevState){
-  //   if((prevState.feedbacks === undefined || prevState.feedbacks <= 0) && (nextProps.feedbacks === undefined || nextProps.feedbacks.length <= 0)) {
-  //     return {
-  //       feedbacks: nextProps.questions
-  //     }
-  //   } else return null;
-  // }
-  ////////////////////////////////////////////////////////////////////////////////////////////
+  static getDerivedStateFromProps(nextProps, prevState){
+    if((prevState.feedbacks === undefined || prevState.feedbacks <= 0) && (nextProps.feedbacks === undefined || nextProps.feedbacks.length <= 0)) {
+      return {
+        feedbacks: nextProps.filled ? nextProps.feedbacks : nextProps.questions
+      }
+    } else return null;
+  }
 
   renderRightButton = () => {
     return (

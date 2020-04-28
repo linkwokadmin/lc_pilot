@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment'
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
-import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {Button, Share, View, Text, FlatList, Image, TouchableHighlight, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 import { connect } from 'react-redux';
 import { compose } from "redux";
@@ -98,6 +98,17 @@ class TemplateScene extends Component {
     return color;
   }
 
+  OnShare = async() => {
+    try{
+      const result = await Share.share({
+        message: `${api_url}/register?invite=${this.props.currentUser.id}`
+      })
+
+    }catch(error){
+      console.log(error.message)
+    }
+  }
+
   renderRow(item) {
     const survey = item.item;
     return (
@@ -147,27 +158,32 @@ class TemplateScene extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
-        <FlatList
-          enableEmptySections
-          data={this.props.currentUser.user_type.toLowerCase() === 'coach' ? this.props.coachTemplates : []}
-          renderItem={data => this.renderNewRow(data)}
-        />
-        {
-          this.props.currentUser.user_type.toLowerCase() === 'coach' ?  
-            <View style={{ flex: 8, marginBottom: 20, marginTop: 5, justifyContent: 'flex-start', alignItems: 'center' }}>
-                <Card style={{ height: 86, width: '94%', elevation: 2 }}>
-                    <Card.Content style={{ alignItems: 'center' }}>
-                        <TouchableHighlight style={{width: '100%', height: '100%', alignItems: 'center'}} onPress={this.showDialog}>
-                            <Text style={{ padding: 10, fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>+ Add New</Text>
-                        </TouchableHighlight>
-                    </Card.Content>
-                </Card>
-            </View>
-          : null
-        }
-        
-      </ScrollView>
+      <View style={styles.container}>
+        <ScrollView>
+          <FlatList
+            enableEmptySections
+            data={this.props.currentUser.user_type.toLowerCase() === 'coach' ? this.props.coachTemplates : []}
+            renderItem={data => this.renderNewRow(data)}
+          />
+          {
+            this.props.currentUser.user_type.toLowerCase() === 'coach' ?  
+              <View style={{ flex: 8, marginBottom: 20, marginTop: 5, justifyContent: 'flex-start', alignItems: 'center' }}>
+                  <Card style={{ height: 86, width: '94%', elevation: 2 }}>
+                      <Card.Content style={{ alignItems: 'center' }}>
+                          <TouchableHighlight style={{width: '100%', height: '100%', alignItems: 'center'}} onPress={this.showDialog}>
+                              <Text style={{ padding: 10, fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeight: '300', color: '#D3D2D1' }}>+ Add New</Text>
+                          </TouchableHighlight>
+                      </Card.Content>
+                  </Card>
+              </View>
+            : null
+          }
+          
+        </ScrollView>
+        <View>
+          <Button onPress={this.OnShare} title="Share" />
+        </View>
+      </View>
     );
   }
 }
