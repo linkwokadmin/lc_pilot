@@ -16,6 +16,7 @@ import {fetchContacts} from '../actions/AppActions';
 import {fetchCurrentUser} from '../actions/AuthActions';
 import {Card, Badge} from 'react-native-paper';
 import Status from './../services/Status';
+import {database} from 'firebase';
 
 class SelectContact extends Component {
   constructor(props) {
@@ -23,13 +24,24 @@ class SelectContact extends Component {
     this.state = {
       contacts: [],
       currentUser: null,
+      color: null,
     };
   }
 
   componentWillMount() {
     this.props.fetchContacts();
 
-    this.setState({contacts: this.props.contacts});
+    let y = [];
+    this.props.contacts.forEach(element => {
+      let j = Object.assign(element, {color: this.getColor()});
+      y.push(j);
+    });
+
+    console.log('<====================================*********');
+    console.log(y);
+    console.log('>====================================********');
+
+    this.setState({contacts: y});
     // this.setState({currentUser: this.props.currentUser})
     if (
       this.props.currentUser !== null &&
@@ -69,9 +81,6 @@ class SelectContact extends Component {
 
   increaseUnreadMessages = id => {
     let userLists = _.map(this.state.contacts, u => {
-      console.log('Cond:', u.id.toString() !== id);
-      console.log('UserId:', id);
-      console.log('Id:', u.id.toString());
       if (u.id.toString() !== id.toString()) return u;
       return {...u, count: u.count + 1};
     });
@@ -126,6 +135,9 @@ class SelectContact extends Component {
     );
   }
   renderRowNew(contact) {
+    console.log('================<<<<<<<====================');
+    console.log(contact);
+    console.log('====================>>>>>>================');
     let newContact = _.first(_.values(contact));
     if (
       newContact.email != null &&
@@ -160,7 +172,7 @@ class SelectContact extends Component {
                       height: 50,
                       borderRadius: 50,
                       alignContent: 'flex-start',
-                      backgroundColor: this.getColor(),
+                      backgroundColor: contact.item.color,
                     }}
                   />
                   <View

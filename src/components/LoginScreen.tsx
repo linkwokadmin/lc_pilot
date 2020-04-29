@@ -77,11 +77,12 @@ class LoginScreen extends Component {
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    justifyContent: 'space-evenly',
                     marginTop: 30,
                   }}>
                   <TouchableOpacity
                     activeOpacity={0.5}
+                    style={{marginRight: 10}}
                     onPress={this.handleSignUp}>
                     <LinearGradient
                       colors={['#1A7128', '#7BC035']}
@@ -103,6 +104,7 @@ class LoginScreen extends Component {
                     </LinearGradient>
                   </TouchableOpacity>
                   <TouchableOpacity
+                    style={{marginLeft: 10}}
                     activeOpacity={0.5}
                     onPress={() => this._SignIN()}>
                     <LinearGradient
