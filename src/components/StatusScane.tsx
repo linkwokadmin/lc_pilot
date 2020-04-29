@@ -1,25 +1,32 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 
-import ContactsList from './ContactsList'
+import ContactsList from './ContactsList';
+import {Actions} from 'react-native-router-flux';
 
 export default props => (
   <View style={styles.container}>
-  <ContactsList />
+    <ContactsList />
     <View>
-      <TouchableOpacity activeOpacity={0.5} onPress={() => alert('Clicked!!')} style={styles.touchableOpacityStyle} >
-        <Image source={require('../images/ic_chats_contacts.png')} style={styles.floatingButtonStyle} />
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={() => Actions.selectContact()}
+        style={styles.touchableOpacityStyle}>
+        <Image
+          source={require('../images/ic_chats_contacts.png')}
+          style={styles.floatingButtonStyle}
+        />
       </TouchableOpacity>
     </View>
   </View>
-)
+);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor : '#F5F5F5'
+    backgroundColor: '#F5F5F5',
   },
-  touchableOpacityStyle:{
+  touchableOpacityStyle: {
     position: 'absolute',
     width: 55,
     height: 55,
@@ -32,5 +39,5 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: 55,
     height: 55,
-  }
+  },
 });
