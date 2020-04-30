@@ -16,7 +16,6 @@ import {fetchContacts, AddNewContact} from '../actions/AppActions';
 import {fetchCurrentUser} from '../actions/AuthActions';
 import {Card, Badge} from 'react-native-paper';
 import Status from './../services/Status';
-import {database} from 'firebase';
 
 class SelectContact extends Component {
   constructor(props) {
@@ -24,7 +23,6 @@ class SelectContact extends Component {
     this.state = {
       contacts: [],
       currentUser: null,
-      color: null,
     };
   }
 
@@ -56,6 +54,9 @@ class SelectContact extends Component {
 
   increaseUnreadMessages = id => {
     let userLists = _.map(this.state.contacts, u => {
+      console.log('Cond:', u.id.toString() !== id);
+      console.log('UserId:', id);
+      console.log('Id:', u.id.toString());
       if (u.id.toString() !== id.toString()) return u;
       return {...u, count: u.count + 1};
     });
@@ -110,9 +111,6 @@ class SelectContact extends Component {
     );
   }
   renderRowNew(contact) {
-    console.log('================<<<<<<<====================');
-    console.log(contact);
-    console.log('====================>>>>>>================');
     let newContact = _.first(_.values(contact));
     if (
       newContact.email != null &&
@@ -147,7 +145,7 @@ class SelectContact extends Component {
                       height: 50,
                       borderRadius: 50,
                       alignContent: 'flex-start',
-                      backgroundColor: contact.item.color,
+                      backgroundColor: this.getColor(),
                     }}
                   />
                   <View
