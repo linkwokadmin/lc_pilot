@@ -86,7 +86,7 @@ class LoginScreen extends Component {
                     onPress={this.handleSignUp}>
                     <LinearGradient
                       colors={['#1A7128', '#7BC035']}
-                      style={{height: 44, width: 147, borderRadius: 4}}
+                      style={{height: 44, width: 140, borderRadius: 4}}
                       start={{x: 0, y: 1}}
                       end={{x: 4, y: 1}}
                       locations={[0, 0.3]}>
@@ -95,6 +95,7 @@ class LoginScreen extends Component {
                           fontSize: 18,
                           textAlign: 'center',
                           margin: 7,
+                          marginRight: 10,
                           color: '#fff',
                           backgroundColor: 'transparent',
                         }}>
@@ -109,7 +110,7 @@ class LoginScreen extends Component {
                     onPress={() => this._SignIN()}>
                     <LinearGradient
                       colors={['#1A7128', '#7BC035']}
-                      style={{height: 44, width: 147, borderRadius: 4}}
+                      style={{height: 44, width: 140, borderRadius: 4}}
                       start={{x: 0, y: 1}}
                       end={{x: 4, y: 1}}
                       locations={[0, 0.3]}>
@@ -118,6 +119,7 @@ class LoginScreen extends Component {
                           fontSize: 18,
                           textAlign: 'center',
                           margin: 7,
+                          marginLeft: 10,
                           color: '#fff',
                           backgroundColor: 'transparent',
                         }}>

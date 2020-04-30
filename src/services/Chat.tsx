@@ -32,6 +32,8 @@ export default (user, room, onChat) => {
   chan.onClose(event => console.log('Channel closed.'))
 
   chan.on('init:msg', (msg) => {
+    console.log("--------------------------Init Messages---------------------------------")
+    console.log(msg.messages)
     onChat(msg.messages)
   })
   // when we receive a new chat message, just trigger the appropriate callback
