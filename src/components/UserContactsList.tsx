@@ -12,12 +12,12 @@ import {
 } from 'react-native';
 
 import {connect} from 'react-redux';
-import {fetchContacts} from '../actions/AppActions';
+import {fetchUserContacts} from '../actions/AppActions';
 import {fetchCurrentUser} from '../actions/AuthActions';
 import {Card, Badge} from 'react-native-paper';
-import Status from './../services/Status';
+import Status from '../services/Status';
 
-class ContactsList extends Component {
+class UserContactsList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,26 +27,31 @@ class ContactsList extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchContacts();
-
-    this.setState({contacts: this.props.contacts});
-    // this.setState({currentUser: this.props.currentUser})
-    // if (
-    //   this.props.currentUser !== null &&
-    //   this.props.currentUser !== undefined &&
-    //   this.props.currentUser !== ''
-    // ) {
-    //   this.statusRoom = 'status:' + this.props.currentUser.id;
-    //   this.status = Status(
-    //     this.props.currentUser,
-    //     this.statusRoom,
-    //     null,
-    //     this.increaseUnreadMessages,
-    //   );
-    // }
+    this.props.fetchUserContacts();
+    if (
+      this.props.currentUser !== null &&
+      this.props.currentUser !== undefined &&
+      this.props.currentUser !== ''
+    ) {
+      this.statusRoom = 'status:' + this.props.currentUser.id;
+      this.status = Status(
+        this.props.currentUser,
+        this.statusRoom,
+        this.updateContacts,
+        this.increaseUnreadMessages,
+      );
+    }
   }
 
+  static getDerivedStateFromProps(nextProps, prevState){
+    return {contacts: nextProps.contacts}
+  }
+
+
+
+
   updateContacts = contacts => {
+    console.log(contacts)
     this.setState({contacts: contacts});
   };
 
@@ -270,7 +275,8 @@ class ContactsList extends Component {
   }
 
   render() {
-    console.log(this.state)
+    console.log("-------------------------props------------------------")
+    console.log(this.props)
     return (
       <FlatList
         keyExtractor={data => {
@@ -285,15 +291,10 @@ class ContactsList extends Component {
 }
 
 const mapStateToProps = state => {
-  const contacts = _.first(
-    _.map(state.ListContactsReducer.contacts, (value, uid) => {
-      return value;
-    }),
-  );
   return {
     email_logged_in: state.AppReducer.email_logged_in,
     currentUser: state.AuthReducer.currentUser,
-    contacts: contacts,
+    contacts: state.ListContactsReducer.user_contacts,
   };
 };
 const styles = StyleSheet.create({
@@ -306,5 +307,5 @@ const styles = StyleSheet.create({
 
 export default connect(
   mapStateToProps,
-  {fetchContacts, fetchCurrentUser},
-)(ContactsList);
+  {fetchUserContacts, fetchCurrentUser},
+)(UserContactsList);

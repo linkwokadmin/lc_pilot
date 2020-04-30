@@ -36,11 +36,10 @@ export default (user, room, onChat, increaseCount) => {
   chan.on("init:status_msg", (msg) => { 
     console.log("I am here");
     onChat(msg.users)
-    // console.log(msg);
   });
 
   chan.on("unread:msg", (msg) => {
-    console.log("I updating read messages");
+    // console.log("I updating read messages");
     console.log(msg.id);
     increaseCount(msg.id)
   });

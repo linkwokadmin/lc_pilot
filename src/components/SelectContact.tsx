@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import {connect} from 'react-redux';
-import {fetchContacts} from '../actions/AppActions';
+import {fetchContacts, AddNewContact} from '../actions/AppActions';
 import {fetchCurrentUser} from '../actions/AuthActions';
 import {Card, Badge} from 'react-native-paper';
 import Status from './../services/Status';
@@ -26,25 +26,15 @@ class SelectContact extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchContacts();
-
     this.setState({contacts: this.props.contacts});
     // this.setState({currentUser: this.props.currentUser})
-    if (
-      this.props.currentUser !== null &&
-      this.props.currentUser !== undefined &&
-      this.props.currentUser !== ''
-    ) {
-      this.statusRoom = 'status:' + this.props.currentUser.id;
-      this.status = Status(
-        this.props.currentUser,
-        this.statusRoom,
-        this.updateContacts,
-        this.increaseUnreadMessages,
-      );
-    }
     // this.createDataSource(this.props.contacts);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState){
+    return {contacts: nextProps.contacts}
   }
 
   updateContacts = contacts => {
@@ -52,12 +42,7 @@ class SelectContact extends Component {
   };
 
   readMessagesRedirect = newContact => {
-    let userLists = _.map(this.state.contacts, u => {
-      if (u.id !== newContact.id) return u;
-      return {...u, count: 0};
-    });
-    this.setState({contacts: userLists});
-    console.log(newContact);
+    this.props.AddNewContact(newContact)
     Actions.b_chat({
       title: newContact.name,
       contactId: newContact.id,
@@ -237,8 +222,10 @@ class SelectContact extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log("contacts state")
+  console.log(state.ListContactsReducer.contacts)
   const contacts = _.first(
-    _.map(state.ListContactsReducer, (value, uid) => {
+    _.map(state.ListContactsReducer.contacts, (value, uid) => {
       return value;
     }),
   );
@@ -246,7 +233,7 @@ const mapStateToProps = state => {
   return {
     email_logged_in: state.AppReducer.email_logged_in,
     currentUser: state.AuthReducer.currentUser,
-    contacts: contacts,
+    contacts: state.ListContactsReducer.contacts,
   };
 };
 
@@ -257,5 +244,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  {fetchContacts, fetchCurrentUser},
+  {fetchContacts, fetchCurrentUser, AddNewContact},
 )(SelectContact);

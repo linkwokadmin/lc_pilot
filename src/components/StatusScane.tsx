@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 
-import ContactsList from './ContactsList';
+import UserContactsList from './UserContactsList';
 import {Actions} from 'react-native-router-flux';
 
 export default props => (
   <View style={styles.container}>
-    <ContactsList />
+    <UserContactsList />
     <View>
       <TouchableOpacity
         activeOpacity={0.5}
