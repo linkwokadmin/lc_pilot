@@ -47,12 +47,9 @@ class UserContactsList extends Component {
     return {contacts: nextProps.contacts}
   }
 
-
-
-
   updateContacts = contacts => {
-    console.log(contacts)
-    this.setState({contacts: contacts});
+    // console.log(contacts)
+    // this.setState({contacts: contacts});
   };
 
   readMessagesRedirect = newContact => {

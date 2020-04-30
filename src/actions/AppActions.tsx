@@ -27,6 +27,7 @@ import {
   FETCH_SURVEY_FEEDBACK,
   FETCH_QUESTION,
   USER_CONTACT,
+  ADD_CONTACT_CHAT
 } from '../resources/types';
 import {template} from '@babel/core';
 import {log} from 'react-native-reanimated';
@@ -132,7 +133,7 @@ export const fetchUserContacts = () => {
 export const AddNewContact = (newContact) => {
   return dispatch => {
     dispatch({
-      type: USER_CONTACT,
+      type: ADD_CONTACT_CHAT,
       payload: newContact
     })
   }

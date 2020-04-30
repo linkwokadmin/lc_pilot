@@ -39,10 +39,6 @@ class SelectContact extends Component {
     return {contacts: nextProps.contacts}
   }
 
-  updateContacts = contacts => {
-    this.setState({contacts: contacts});
-  };
-
   readMessagesRedirect = newContact => {
     this.props.AddNewContact(newContact)
     Actions.b_chat({
@@ -110,9 +106,6 @@ class SelectContact extends Component {
     );
   }
   renderRowNew(contact) {
-    console.log('================<<<<<<<====================');
-    console.log(contact);
-    console.log('====================>>>>>>================');
     let newContact = _.first(_.values(contact));
     if (
       newContact.email != null &&

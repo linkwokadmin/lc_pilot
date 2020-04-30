@@ -5,7 +5,8 @@ const INITIAL_STATE = {
 
 import {
   CONTACTS_LIST,
-  USER_CONTACT
+  USER_CONTACT,
+  ADD_CONTACT_CHAT,
 } from '../resources/types';
 
 export default (state = INITIAL_STATE, action) => {
@@ -14,7 +15,10 @@ export default (state = INITIAL_STATE, action) => {
       return {...state,contacts: action.payload}
     
     case USER_CONTACT: 
-      let user_contacts = state.user_contacts.concat(action.payload)
+      return {...state, user_contacts: action.payload}
+
+    case ADD_CONTACT_CHAT: 
+      const user_contacts = state.user_contacts.concat(action.payload)
       return {...state, user_contacts: user_contacts}
     
     default:
