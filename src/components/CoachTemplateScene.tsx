@@ -34,7 +34,7 @@ class CoachTemplateScene extends Component {
   }
 
   componentDidMount() {
-    this.fetchCoachTemplates();
+    // this.fetchCoachTemplates();
     // console.log(this.props);
   }
 
@@ -193,7 +193,7 @@ class CoachTemplateScene extends Component {
                   style={{
                     height: 86,
                     width: 86,
-                    backgroundColor: this.getColor(),
+                    backgroundColor: item.item.color,
                     alignItems: 'flex-start',
                   }}
                 />

@@ -166,6 +166,7 @@ class TemplateScene extends Component {
   }
 
   renderNewRow(item) {
+    console.log(item)
     const survey = item.item;
     return (
       <View
@@ -200,7 +201,7 @@ class TemplateScene extends Component {
                   style={{
                     height: 86,
                     width: 86,
-                    backgroundColor: this.getColor(),
+                    backgroundColor: item.item.color,
                     alignItems: 'flex-start',
                   }}
                 />
