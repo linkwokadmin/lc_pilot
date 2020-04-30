@@ -26,6 +26,8 @@ import {
   FETCH_SURVEY_QUESTION,
   FETCH_SURVEY_FEEDBACK,
   FETCH_QUESTION,
+  USER_CONTACT,
+  ADD_CONTACT_CHAT
 } from '../resources/types';
 import {template} from '@babel/core';
 import {log} from 'react-native-reanimated';
@@ -85,6 +87,7 @@ export const createNewTemplate = template => {
 };
 
 export const fetchContacts = () => {
+  console.log("fetching contacts.....................................")
   return dispatch => {
     AsyncStorage.getItem('authorization').then(token => {
       axios
@@ -94,8 +97,7 @@ export const fetchContacts = () => {
           },
         })
         .then(response => {
-          let snapshot = response.data;
-          console.log('------ contect -----', snapshot);
+          let snapshot = response.data.data;
           // console.log(snapshot)
           dispatch({
             type: CONTACTS_LIST,
@@ -108,6 +110,34 @@ export const fetchContacts = () => {
     });
   };
 };
+
+export const fetchUserContacts = () => {
+  return dispatch => {
+    AsyncStorage.getItem('authorization').then(token => {
+      axios
+        .get(api_url + '/api/v1/users_of_contacts',{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(response => {
+          dispatch({
+            type: USER_CONTACT,
+            payload: response.data.data
+          })
+        })
+    });
+  };
+};
+
+export const AddNewContact = (newContact) => {
+  return dispatch => {
+    dispatch({
+      type: ADD_CONTACT_CHAT,
+      payload: newContact
+    })
+  }
+}
 
 export const sendMessage = (message, contactName, contactEmail) => {
   // Current user information

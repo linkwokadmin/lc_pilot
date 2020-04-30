@@ -167,6 +167,7 @@ class SignUpScreen extends Component {
                     placeholder=" Password"
                     placeholderTextColor="#C4C4C4"
                     returnKeyType="next"
+                    secureTextEntry
                     style={{
                       borderBottomColor: '#rgba(114, 114, 114, 0.5)',
                       borderBottomWidth: 1,

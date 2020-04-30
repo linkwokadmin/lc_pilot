@@ -31,19 +31,19 @@ class ContactsList extends Component {
 
     this.setState({contacts: this.props.contacts});
     // this.setState({currentUser: this.props.currentUser})
-    if (
-      this.props.currentUser !== null &&
-      this.props.currentUser !== undefined &&
-      this.props.currentUser !== ''
-    ) {
-      this.statusRoom = 'status:' + this.props.currentUser.id;
-      this.status = Status(
-        this.props.currentUser,
-        this.statusRoom,
-        this.updateContacts,
-        this.increaseUnreadMessages,
-      );
-    }
+    // if (
+    //   this.props.currentUser !== null &&
+    //   this.props.currentUser !== undefined &&
+    //   this.props.currentUser !== ''
+    // ) {
+    //   this.statusRoom = 'status:' + this.props.currentUser.id;
+    //   this.status = Status(
+    //     this.props.currentUser,
+    //     this.statusRoom,
+    //     null,
+    //     this.increaseUnreadMessages,
+    //   );
+    // }
   }
 
   updateContacts = contacts => {
@@ -56,7 +56,6 @@ class ContactsList extends Component {
       return {...u, count: 0};
     });
     this.setState({contacts: userLists});
-    console.log(newContact);
     Actions.b_chat({
       title: newContact.name,
       contactId: newContact.id,
@@ -68,9 +67,6 @@ class ContactsList extends Component {
 
   increaseUnreadMessages = id => {
     let userLists = _.map(this.state.contacts, u => {
-      console.log('Cond:', u.id.toString() !== id);
-      console.log('UserId:', id);
-      console.log('Id:', u.id.toString());
       if (u.id.toString() !== id.toString()) return u;
       return {...u, count: u.count + 1};
     });
@@ -274,6 +270,7 @@ class ContactsList extends Component {
   }
 
   render() {
+    console.log(this.state)
     return (
       <FlatList
         keyExtractor={data => {
@@ -289,11 +286,10 @@ class ContactsList extends Component {
 
 const mapStateToProps = state => {
   const contacts = _.first(
-    _.map(state.ListContactsReducer, (value, uid) => {
+    _.map(state.ListContactsReducer.contacts, (value, uid) => {
       return value;
     }),
   );
-
   return {
     email_logged_in: state.AppReducer.email_logged_in,
     currentUser: state.AuthReducer.currentUser,
