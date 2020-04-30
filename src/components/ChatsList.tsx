@@ -1,22 +1,16 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import firebase from 'firebase';
 import base64 from 'base-64';
 import _ from 'lodash';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
+import { View, Text, ListView, FlatList, Image, TouchableHighlight, StyleSheet } from 'react-native';
+
+import { connect } from 'react-redux';
 import {
-  View,
-  Text,
-  ListView,
-  FlatList,
-  Image,
-  TouchableHighlight,
-  StyleSheet,
-} from 'react-native';
+  fetchAllChats
+} from '../actions/AppActions';
 
-import {connect} from 'react-redux';
-import {fetchAllChats} from '../actions/AppActions';
-
-import {Card} from 'react-native-elements';
+import { Card } from 'react-native-elements'
 
 class ChatsList extends Component {
   componentDidMount() {
@@ -30,43 +24,42 @@ class ChatsList extends Component {
   // }
 
   renderRow(chatContent) {
-    let newChatContent = _.values(chatContent.item);
+    let newChatContent = _.values(chatContent.item)
     return (
+
       <TouchableHighlight
-        onPress={() =>
-          Actions.chat({
-            title: newChatContent[0].name,
-            contactName: newChatContent[0].name,
-            contactEmail: newChatContent[0].email,
-          })
-        }>
+        onPress={() => Actions.chat({
+          title: newChatContent[0].name,
+          contactName: newChatContent[0].name,
+          contactEmail: newChatContent[0].email
+        })}
+      >
         <View style={styles.chatCard}>
-          <Image
-            source={{uri: newChatContent[2].profileImage}}
-            style={styles.chatImage}
-          />
-          <View style={{marginLeft: 15}}>
+          <Image source={{ uri: newChatContent[2].profileImage }} style={styles.chatImage} />
+          <View style={{ marginLeft: 15 }}>
             <Text style={styles.chatTital}>{newChatContent[0].name}</Text>
-            <Text style={styles.chatSubtital}>
-              {newChatContent[0].lastMessage}
-            </Text>
+            <Text style={styles.chatSubtital}>{newChatContent[0].lastMessage}</Text>
           </View>
         </View>
+
       </TouchableHighlight>
-    );
+
+    )
   }
   render() {
     let loadData = this.props.chatsList;
     if (loadData[0] == null) {
       return (
         <View>
-          <Text style={styles.DataMessage}>
-            Surry,Data is not available to Show...
-          </Text>
+          <Text style={styles.DataMessage}>Surry,Data is not available to Show...</Text>
+        </View>
+      )
+    } else {
+      return (
+        <View>
+          
         </View>
       );
-    } else {
-      return <View />;
     }
   }
 }
@@ -74,39 +67,37 @@ class ChatsList extends Component {
 mapStateToProps = state => {
   return {
     email_logged_in: state.AppReducer.email_logged_in,
-    chatsList: state.ListChatsReducer,
-  };
-};
+    chatsList: state.ListChatsReducer
+  }
+}
 const styles = StyleSheet.create({
   chatCard: {
     flex: 1,
     flexDirection: 'row',
     padding: 15,
     borderBottomWidth: 1,
-    borderColor: '#b7b7b7',
+    borderColor: "#b7b7b7"
   },
   chatTital: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   chatSubtital: {
-    fontSize: 13,
+    fontSize: 13
   },
   chatImage: {
     width: 50,
     height: 50,
-    borderRadius: 50,
+    borderRadius: 50
   },
   DataMessage: {
     fontSize: 24,
-    marginTop: 50,
+    marginTop: 50
   },
   fatlistCard: {
-    width: '70%',
-  },
+    width: '70%'
+  }
 });
 
-export default connect(
-  mapStateToProps,
-  {fetchAllChats},
-)(ChatsList);
+
+export default connect(mapStateToProps, { fetchAllChats })(ChatsList);

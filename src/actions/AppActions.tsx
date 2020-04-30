@@ -405,9 +405,7 @@ export const fetchUserTemplates = (creatorId, userId) => {
           })
           .then(response => {
             let templates = response.data.data;
-            templates.forEach(element => {
-              element['color'] = getColor()
-            });
+            console.log('Tenp:', templates);
             dispatch({
               type: USER_TEMPLATE_LIST,
               payload: templates,
@@ -437,9 +435,6 @@ export const fetchCoachTemplates = () => {
           })
           .then(response => {
             let templates = response.data.data;
-            templates.forEach(element => {
-              element['color'] = getColor()
-            });
             dispatch({
               type: COACH_TEMPLATE_LIST,
               payload: templates,
@@ -673,12 +668,3 @@ export const changeMessage = text => {
     payload: text,
   };
 };
-
-const getColor  =() => {
-  var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
