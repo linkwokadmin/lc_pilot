@@ -106,6 +106,9 @@ class SelectContact extends Component {
     );
   }
   renderRowNew(contact) {
+    console.log('================<<<<<<<====================');
+    console.log(contact);
+    console.log('====================>>>>>>================');
     let newContact = _.first(_.values(contact));
     if (
       newContact.email != null &&

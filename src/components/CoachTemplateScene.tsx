@@ -193,7 +193,11 @@ class CoachTemplateScene extends Component {
                   style={{
                     height: 86,
                     width: 86,
+<<<<<<< HEAD
                     backgroundColor: item.item.color,
+=======
+                    backgroundColor: this.getColor(),
+>>>>>>>  changes some code for dynemic coror g
                     alignItems: 'flex-start',
                   }}
                 />
