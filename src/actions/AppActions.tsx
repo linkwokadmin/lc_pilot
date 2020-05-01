@@ -121,6 +121,7 @@ export const fetchUserContacts = () => {
           },
         })
         .then(response => {
+          console.log(response)
           dispatch({
             type: USER_CONTACT,
             payload: response.data.data
@@ -224,7 +225,6 @@ export const fetchAllChats = currentUserEmail => {
             }
           }
         }
-        console.log(array_merged);
 
         dispatch({
           type: FETCH_ALL_CHATS,
@@ -237,7 +237,6 @@ export const fetchAllChats = currentUserEmail => {
 //fatch Questions
 
 export const fetchQuestions = template_id => {
-  console.log(111);
   return dispatch => {
     AsyncStorage.getItem('authorization')
       .then(token => {
@@ -251,7 +250,6 @@ export const fetchQuestions = template_id => {
           })
           .then(response => {
             let questions = response.data.data;
-            console.log('Questions: ', questions);
             dispatch({
               type: FETCH_QUESTION,
               payload: {templateId: template_id, questions: questions},
@@ -268,7 +266,6 @@ export const fetchQuestions = template_id => {
 };
 
 export const fetchSurveyQuestions = template_id => {
-  console.log(111);
   return dispatch => {
     AsyncStorage.getItem('authorization')
       .then(token => {
@@ -284,7 +281,6 @@ export const fetchSurveyQuestions = template_id => {
           })
           .then(response => {
             let questions = response.data.data;
-            console.log('Questions: ', questions);
             dispatch({
               type: FETCH_SURVEY_QUESTION,
               payload: {templateId: template_id, questions: questions},
@@ -313,7 +309,6 @@ export const fetchResponses = template_id => {
           })
           .then(response => {
             let feedbacks = response.data.data;
-            console.log('feedbacks: ', feedbacks);
             dispatch({
               type: FETCH_SURVEY_FEEDBACK,
               payload: {templateId: template_id, feedbacks: feedbacks},

@@ -15,6 +15,7 @@ import {connect} from 'react-redux';
 import {fetchContacts, AddNewContact} from '../actions/AppActions';
 import {fetchCurrentUser} from '../actions/AuthActions';
 import {Card, Badge} from 'react-native-paper';
+import {fetchUserContacts} from '../actions/AppActions';
 import Status from './../services/Status';
 import {database} from 'firebase';
 
@@ -23,6 +24,7 @@ class SelectContact extends Component {
     super(props);
     this.state = {
       contacts: [],
+      user_contacts: [],
       currentUser: null,
       color: null,
     };
@@ -30,9 +32,9 @@ class SelectContact extends Component {
 
   componentDidMount() {
     this.props.fetchContacts();
-    this.setState({contacts: this.props.contacts});
-    // this.setState({currentUser: this.props.currentUser})
-    // this.createDataSource(this.props.contacts);
+    if(this.props.user_contacts.length == 0){
+      this.props.fetchUserContacts()
+    }
   }
 
   static getDerivedStateFromProps(nextProps, prevState){
@@ -40,7 +42,15 @@ class SelectContact extends Component {
   }
 
   readMessagesRedirect = newContact => {
-    this.props.AddNewContact(newContact)
+    let add = true
+    this.props.user_contacts.forEach(element => {
+      if(element.id == newContact.id){
+        add = false
+      }
+    });
+    if(add){
+      this.props.AddNewContact(newContact)
+    }
     Actions.b_chat({
       title: newContact.name,
       contactId: newContact.id,
@@ -106,9 +116,6 @@ class SelectContact extends Component {
     );
   }
   renderRowNew(contact) {
-    console.log('================<<<<<<<====================');
-    console.log(contact);
-    console.log('====================>>>>>>================');
     let newContact = _.first(_.values(contact));
     if (
       newContact.email != null &&
@@ -143,7 +150,7 @@ class SelectContact extends Component {
                       height: 50,
                       borderRadius: 50,
                       alignContent: 'flex-start',
-                      backgroundColor: contact.item.color,
+                      backgroundColor: this.getColor(),
                     }}
                   />
                   <View
@@ -174,41 +181,6 @@ class SelectContact extends Component {
                       {newContact.email}
                     </Text>
                   </View>
-                  {newContact.sent_at !== null ? (
-                    <View style={{alignContent: 'flex-end'}}>
-                      <Text
-                        style={{
-                          fontFamily: 'Roboto',
-                          fontSize: 12,
-                          fontStyle: 'normal',
-                          fontWeightn: 'norma',
-                          color: '#D5D2D2',
-                          padding: 0,
-                        }}>
-                        {moment(newContact.sent_at).fromNow()}
-                      </Text>
-                      {newContact.count > 0 ? (
-                        <Badge
-                          size={25}
-                          style={{marginRight: 10, marginTop: 5}}>
-                          {newContact.count}
-                        </Badge>
-                      ) : null}
-                    </View>
-                  ) : (
-                    <View style={{alignContent: 'flex-end'}}>
-                      <Text
-                        style={{
-                          fontFamily: 'Roboto',
-                          fontSize: 12,
-                          fontStyle: 'normal',
-                          fontWeightn: 'norma',
-                          color: '#D5D2D2',
-                          padding: 0,
-                        }}
-                      />
-                    </View>
-                  )}
                 </View>
               </TouchableHighlight>
             </Card.Content>
@@ -220,27 +192,15 @@ class SelectContact extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log("contacts state")
-  console.log(state.ListContactsReducer.contacts)
-  const contacts = _.first(
-    _.map(state.ListContactsReducer.contacts, (value, uid) => {
-      return value;
-    }),
-  );
-
   return {
     email_logged_in: state.AppReducer.email_logged_in,
     currentUser: state.AuthReducer.currentUser,
     contacts: state.ListContactsReducer.contacts,
+    user_contacts: state.ListContactsReducer.user_contacts
   };
 };
 
-// export default connect(
-//   mapStateToProps,
-//   {fetchContacts, fetchCurrentUser},
-// )(ContactsList);
-
 export default connect(
   mapStateToProps,
-  {fetchContacts, fetchCurrentUser, AddNewContact},
+  {fetchContacts, fetchCurrentUser, AddNewContact, fetchUserContacts},
 )(SelectContact);

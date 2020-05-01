@@ -48,8 +48,7 @@ class UserContactsList extends Component {
   }
 
   updateContacts = contacts => {
-    // console.log(contacts)
-    // this.setState({contacts: contacts});
+    this.setState({contacts: contacts});
   };
 
   readMessagesRedirect = newContact => {
@@ -272,8 +271,6 @@ class UserContactsList extends Component {
   }
 
   render() {
-    console.log("-------------------------props------------------------")
-    console.log(this.props)
     return (
       <FlatList
         keyExtractor={data => {
