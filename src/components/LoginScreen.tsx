@@ -73,7 +73,7 @@ class LoginScreen extends Component {
                     onChangeText={password => this.props.addPassword(password)}
                     value={this.props.password}
                   />
-                  <Text style={styles.errorMessage}>*{this.props.errorMessage}</Text>
+                  <Text style={styles.errorMessage}>{this.props.errorMessage}</Text>
                 </View>
                 <View
                   style={{
