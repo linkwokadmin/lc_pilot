@@ -145,7 +145,7 @@ class SurveyShowScreen extends Component {
               <Card.Content style={{ padding: 0, margin: 0, paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0, paddingVertical: 0 }}>
                   <TouchableHighlight >
                       <View style={{ flex: 1, flexDirection: "row", justifyContent: 'space-between' }}>
-                          <View style={{ height: 86, width: 86, backgroundColor: this.getColor(), alignItems: 'flex-start' }}></View>
+                          <View style={{ height: 86, width: 86, backgroundColor: this.props.color, alignItems: 'flex-start' }}></View>
                           <View style={{ alignContent: 'center', left: 10 }}>
                               <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontStyle: 'normal', fontWeightn: 'normal', color: '#000000', marginTop: 10 }}>
                                 {this.props.title}
@@ -155,7 +155,7 @@ class SurveyShowScreen extends Component {
                               </Text>
                             </View>
 
-                          <View style={{ height: 86, width: 70, backgroundColor: this.getColor(), alignItems: 'flex-end' }}>
+                          <View style={{ height: 86, width: 70, backgroundColor: this.props.color, alignItems: 'flex-end' }}>
                               <TouchableOpacity 
                                 activeOpacity={.5} 
                                 style={{ height: 86, width: 70 }} 

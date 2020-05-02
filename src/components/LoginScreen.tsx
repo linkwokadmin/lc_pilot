@@ -73,6 +73,7 @@ class LoginScreen extends Component {
                     onChangeText={password => this.props.addPassword(password)}
                     value={this.props.password}
                   />
+                  <Text style={styles.errorMessage}>*{this.props.errorMessage}</Text>
                 </View>
                 <View
                   style={{
@@ -143,6 +144,7 @@ const mapStateToProps = state => ({
   password: state.AuthReducer.password,
   message: state.AuthReducer.message,
   signInLoading: state.AuthReducer.signInLoading,
+  errorMessage: state.AuthReducer.message
 });
 
 export default connect(
@@ -189,4 +191,8 @@ const styles = StyleSheet.create({
     margin: 20,
     width: 100,
   },
+  errorMessage: {
+    textAlign: 'left',
+    color: 'red'
+  }
 });

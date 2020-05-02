@@ -66,6 +66,8 @@ export default (state = INITIAL_STATE, action) => {
         signInLoading: false,
       };
     case type.AUTH_FAILURE:
+      console.log("sign in error message")
+      console.log(action.payload)
       switch (action.payload) {
         case 'auth/invalid-email':
           return {
@@ -91,10 +93,16 @@ export default (state = INITIAL_STATE, action) => {
             message: constants.wrong_password,
             signInLoading: false,
           };
+
+        case '[Error: Request failed with status code 401]':
+          return {
+            ...state, 
+            message: constants.invalid_email_or_password
+          }
         default:
           return {
             ...state,
-            message: constants.undefined_register_error,
+            message: constants.invalid_email_or_password,
             signInLoading: false,
           };
       }

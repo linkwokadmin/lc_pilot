@@ -150,7 +150,7 @@ class TemplateScene extends Component {
               justifyContent: 'flex-start',
             }}>
             <View
-              style={{width: 50, height: 50, backgroundColor: this.getColor()}}
+              style={{width: 50, height: 50, backgroundColor: item.ite}}
             />
 
             <View style={{marginLeft: 40}}>
@@ -166,7 +166,6 @@ class TemplateScene extends Component {
   }
 
   renderNewRow(item) {
-    console.log(item)
     const survey = item.item;
     return (
       <View
@@ -194,6 +193,7 @@ class TemplateScene extends Component {
                   title: survey.name,
                   id: survey.id,
                   currentUser: this.props.currentUser,
+                  color: item.item.color,
                 })
               }>
               <View style={{flex: 1, flexDirection: 'row'}}>

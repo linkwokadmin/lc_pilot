@@ -73,6 +73,7 @@ export const SignIN = ({email, password}) => {
         authSuccess(dispatch, response.data.user);
       })
       .catch(error => {
+        console.log(error)
         authUnsuccess(error, dispatch);
       });
   };
@@ -139,7 +140,7 @@ const authSuccess = (dispatch, payload) => {
 const authUnsuccess = (error, dispatch) => {
   dispatch({
     type: AUTH_FAILURE,
-    payload: error.code,
+    payload: error,
   });
 };
 

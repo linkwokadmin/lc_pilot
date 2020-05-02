@@ -164,7 +164,7 @@ class UserTemplateScene extends Component {
                   style={{
                     height: 86,
                     width: 86,
-                    backgroundColor: this.getColor(),
+                    backgroundColor: item.item.color,
                     alignItems: 'flex-start',
                   }}
                 />

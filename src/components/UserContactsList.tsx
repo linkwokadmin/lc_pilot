@@ -270,16 +270,21 @@ class UserContactsList extends Component {
     }
   }
 
+   EmptyList =  (
+    <Text style={styles.emptyList}>Click On Chat Icon to get started...</Text>
+  )
+
   render() {
     return (
-      <FlatList
+        <FlatList
         keyExtractor={data => {
           data.id;
         }}
         enableEmptySections
+        ListEmptyComponent = {this.EmptyList}
         data={this.state.contacts}
         renderItem={data => this.renderRowNew(data)}
-      />
+      /> 
     );
   }
 }
@@ -297,6 +302,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
+
+  emptyList: {
+    width: '95%',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    color: 'green',
+    textAlign: 'center',
+    marginTop: '10%',
+  }
 });
 
 export default connect(

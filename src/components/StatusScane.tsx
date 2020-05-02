@@ -6,7 +6,7 @@ import {Actions} from 'react-native-router-flux';
 
 export default props => (
   <View style={styles.container}>
-    <UserContactsList />
+     <UserContactsList />
     <View>
       <TouchableOpacity
         activeOpacity={0.5}
