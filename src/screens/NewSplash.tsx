@@ -82,22 +82,22 @@ export default class NewSplashScreen extends Component {
                             fontWeight: '300',
                             color:'#727272',textAlign: 'center',
                             margin: Platform.OS === 'ios' ? 10 : 11
-                        }}>Secure chat, voice and video call with Clients (with recording features) </Text>
+                        }}>Secure chat with Clients (with recording features) </Text>
                         
 
-
+{/* 
                         <Text style={{
                             fontSize: Platform.OS === 'ios' ? 18 : 15,
                             fontStyle: 'normal',
                             fontWeight: '300',color:'#727272',textAlign: 'center',
                             margin: Platform.OS === 'ios' ? 10 : 11
-                        }}>Scheduling assistance, integrated with your favorite calendar apps. </Text>
-                        <Text style={{
+                        }}>Scheduling assistance, integrated with your favorite calendar apps. </Text> */}
+                        {/* <Text style={{
                             fontSize: Platform.OS === 'ios' ? 18 : 15,
                             fontStyle: 'normal',
                             fontWeight: '300',color:'#727272',textAlign: 'center',
                             margin: Platform.OS === 'ios' ? 10 : 11
-                        }}>Create interactive and fun progress plans with your Clients. </Text>
+                        }}>Create interactive and fun progress plans with your Clients. </Text> */}
                         <Text style={{
                             fontSize: Platform.OS === 'ios' ? 18 : 15,
                             fontStyle: 'normal',
@@ -110,12 +110,12 @@ export default class NewSplashScreen extends Component {
                             fontWeight: '300',color:'#727272',textAlign: 'center',
                             margin: Platform.OS === 'ios' ? 10 : 11
                         }}>Digital Contracts. </Text>
-                        <Text style={{
+                        {/* <Text style={{
                             fontSize: Platform.OS === 'ios' ? 18 : 15,
                             fontStyle: 'normal',
                             fontWeight: '300',color:'#727272',textAlign: 'center',
                             margin: Platform.OS === 'ios' ? 10 : 11
-                        }}>Send Invoices and receive Payments. </Text>
+                        }}>Send Invoices and receive Payments. </Text> */}
 
                     </View>
                     <View style={styles.btnStart}>

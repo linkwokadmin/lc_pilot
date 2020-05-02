@@ -271,7 +271,7 @@ class UserContactsList extends Component {
   }
 
    EmptyList =  (
-    <Text style={styles.emptyList}>Click On Chat Icon to get started...</Text>
+    <Text style={styles.emptyList}>No chats available, please click on chat icon to get started</Text>
   )
 
   render() {
