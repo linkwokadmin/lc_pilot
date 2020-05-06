@@ -22,7 +22,7 @@ export const invalid_email_or_password = '*Invalid email or password';
 
 export const wrong_password = 'The password is invalid for the given email, or the account corresponding to the email does not have a password set.';
 
-export const api_url = 'https://life-coach-api.herokuapp.com';
-// export const api_url = 'http://192.168.43.156:4000';
+// export const api_url = 'https://life-coach-api.herokuapp.com';
+export const api_url = 'http://192.168.43.156:4000';
 
 // export const api_url = 'http://192.168.0.106:4000';

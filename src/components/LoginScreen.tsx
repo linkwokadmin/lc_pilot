@@ -30,6 +30,10 @@ class LoginScreen extends Component {
     Actions.signUpScreen();
   }
 
+  redirectToForgotPassword(){
+    Actions.forgot_password();
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -130,6 +134,7 @@ class LoginScreen extends Component {
                     </LinearGradient>
                   </TouchableOpacity>
                 </View>
+                  <Text onPress = {this.redirectToForgotPassword}> Forgot password ? </Text>
               </View>
             </Card.Content>
           </Card>
