@@ -5,7 +5,7 @@ const INITIAL_STATE = {
 }
 
 import {
-  TEMPLATES_LIST, ADD_TEMPLATE, ERROR_ADDING_TEMPLATE, USER_TEMPLATE_LIST, COACH_TEMPLATE_LIST, SINGLE_TEMPLATE, CREATE_TEMPLATE
+  TEMPLATES_LIST, ADD_TEMPLATE, ERROR_ADDING_TEMPLATE, USER_TEMPLATE_LIST, COACH_TEMPLATE_LIST, SINGLE_TEMPLATE, CREATE_TEMPLATE,UPDATE_QUESTIONS
 } from '../resources/types';
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,6 +19,11 @@ export default (state = INITIAL_STATE, action) => {
           name: action.payload.name,
           questions: action.payload.questions
         }
+      }
+    case UPDATE_QUESTIONS: 
+      return {
+        ...state,
+        editedTemplate: action.payload
       }
     case USER_TEMPLATE_LIST:
       return {...state, userTemplates: action.payload}

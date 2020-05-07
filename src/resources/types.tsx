@@ -52,3 +52,4 @@ export const FETCH_QUESTION = 'FETCH_QUESTION';
 export const SET_M_NUMBER = 'SET_M_NUMBER';
 export const OTP_ERROR = "OTP_ERROR";
 export const VERIFY_OTP = "VERIFY_OTP";
+export const UPDATE_QUESTIONS = 'UPDATE_QUESTIONS';
