@@ -73,7 +73,7 @@ export const SignIN = ({email, password}) => {
         authSuccess(dispatch, response.data.user);
       })
       .catch(error => {
-        console.log(error)
+        console.log(error);
         authUnsuccess(error, dispatch);
       });
   };

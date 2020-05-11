@@ -32,24 +32,24 @@ class SelectContact extends Component {
 
   componentDidMount() {
     this.props.fetchContacts();
-    if(this.props.user_contacts.length == 0){
-      this.props.fetchUserContacts()
+    if (this.props.user_contacts.length == 0) {
+      this.props.fetchUserContacts();
     }
   }
 
-  static getDerivedStateFromProps(nextProps, prevState){
-    return {contacts: nextProps.contacts}
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {contacts: nextProps.contacts};
   }
 
   readMessagesRedirect = newContact => {
-    let add = true
+    let add = true;
     this.props.user_contacts.forEach(element => {
-      if(element.id == newContact.id){
-        add = false
+      if (element.id == newContact.id) {
+        add = false;
       }
     });
-    if(add){
-      this.props.AddNewContact(newContact)
+    if (add) {
+      this.props.AddNewContact(newContact);
     }
     Actions.b_chat({
       title: newContact.name,
@@ -196,7 +196,7 @@ const mapStateToProps = state => {
     email_logged_in: state.AppReducer.email_logged_in,
     currentUser: state.AuthReducer.currentUser,
     contacts: state.ListContactsReducer.contacts,
-    user_contacts: state.ListContactsReducer.user_contacts
+    user_contacts: state.ListContactsReducer.user_contacts,
   };
 };
 

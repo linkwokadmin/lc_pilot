@@ -149,9 +149,7 @@ class TemplateScene extends Component {
               flexDirection: 'row',
               justifyContent: 'flex-start',
             }}>
-            <View
-              style={{width: 50, height: 50, backgroundColor: item.ite}}
-            />
+            <View style={{width: 50, height: 50, backgroundColor: item.ite}} />
 
             <View style={{marginLeft: 40}}>
               <Text style={{fontSize: 18, fontWeight: 'bold'}}>

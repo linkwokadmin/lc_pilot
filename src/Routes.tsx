@@ -30,6 +30,7 @@ import splashScreen from './screens/splash';
 import NewSplashScreen from './screens/NewSplash';
 import ForgotPassword from './components/ForgotPassword';
 import {Icon} from 'react-native-vector-icons/Icon';
+import profileScreen from './components/profileScreen';
 
 export default class Routes extends Component {
   constructor(props) {
@@ -160,17 +161,30 @@ export default class Routes extends Component {
             onRight={() => console.log(111)}
             rightButtonImage={null}
           />
-        <Scene
-        key="forgot_password"
-        component={ForgotPassword}
-        title="Forgot Password"
-        hideNavBar={false}
-        />
-          </Scene>
+
+          <Scene
+            key="forgot_password"
+            component={ForgotPassword}
+            title="Forgot Password"
+            hideNavBar={false}
+          />
+
+          <Scene
+            key="profileScreen"
+            component={profileScreen}
+            title="Profile "
+            onRight={() => this.logout()}
+            rightButtonImage={require('./images/logout.png')}
+          />
+        </Scene>
       </Router>
     );
   }
-
+  logout() {
+    AsyncStorage.clear();
+    // this.props.signInLoading = false;
+    Actions.loginScreen();
+  }
   EditIcon() {
     return (
       <View style={{marginRight: 10}}>
