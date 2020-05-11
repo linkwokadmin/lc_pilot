@@ -27,7 +27,8 @@ import {
   FETCH_SURVEY_FEEDBACK,
   FETCH_QUESTION,
   USER_CONTACT,
-  ADD_CONTACT_CHAT
+  ADD_CONTACT_CHAT,
+  UPDATE_QUESTIONS
 } from '../resources/types';
 import {template} from '@babel/core';
 import {log} from 'react-native-reanimated';
@@ -523,6 +524,13 @@ export const updateTemplates = template => {
       });
   };
 };
+
+export const updateQuestions = template => {
+  return dispatch => dispatch({
+    type: UPDATE_QUESTIONS, 
+    payload: template
+  })
+}
 
 // Share template to user
 // export const shareTemplate = (userId, templateId) => {

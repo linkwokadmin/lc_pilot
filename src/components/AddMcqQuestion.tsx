@@ -84,12 +84,10 @@ class AddMcqQuestion extends Component {
   
   handleAddOption = () => {
     let newOptions = this.state.options.concat([{ test: '', label: '', value: '' }])
-    console.log('hhhhhhhh', newOptions);
     this.setState({options: newOptions});
   };
 
   handleSave = () => {
-    console.log("Save: ",this.state);
     this.props.handleUpdate(this.props.idx, this.state);
   }
 

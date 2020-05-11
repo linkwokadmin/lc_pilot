@@ -28,6 +28,7 @@ import CoachTemplateScene from './components/CoachTemplateScene';
 import Mess from './services/Mess';
 import splashScreen from './screens/splash';
 import NewSplashScreen from './screens/NewSplash';
+import ForgotPassword from './components/ForgotPassword';
 import {Icon} from 'react-native-vector-icons/Icon';
 
 export default class Routes extends Component {
@@ -159,7 +160,13 @@ export default class Routes extends Component {
             onRight={() => console.log(111)}
             rightButtonImage={null}
           />
-        </Scene>
+        <Scene
+        key="forgot_password"
+        component={ForgotPassword}
+        title="Forgot Password"
+        hideNavBar={false}
+        />
+          </Scene>
       </Router>
     );
   }

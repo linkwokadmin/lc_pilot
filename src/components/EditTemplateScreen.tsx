@@ -7,7 +7,8 @@ import _ from 'lodash';
 // import { Formik } from 'formik';
 import {
   fetchSingleTemplate,
-  updateTemplates
+  updateTemplates,
+  updateQuestions
 } from '../actions/AppActions';
 import { TextInput } from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
@@ -19,12 +20,13 @@ import AddTextQuestion from './AddTextQuestion';
 import AddMcqQuestion from './AddMcqQuestion'
 import AddReatQuestion from './AddReatQuestion'
 import LinearGradient from 'react-native-linear-gradient';
+import { template } from '@babel/core';
 
 class EditTemplateScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      template: {},
+      template: undefined,
       loaded: false,
       edited: false
     };
@@ -39,15 +41,14 @@ class EditTemplateScreen extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState){
-    console.log("PrevState:", prevState);
-    console.log("nextProps:", nextProps);
-    if(prevState.template === null || nextProps.template !== undefined){
+    if(prevState.template === undefined || nextProps.template !== undefined){
       let updatedTemplate = {...nextProps.template, questions: nextProps.template.questions}
       if(prevState.template !== undefined && prevState.template.questions !== undefined && prevState.template.questions.length > nextProps.template.questions.length) {
         updatedTemplate =  {...nextProps.template, questions: prevState.template.questions}
       } 
       return {template: updatedTemplate, loaded: true, edited: true};
-    } else {
+    }
+     else {
       let updatedTemplate =  {...nextProps.template, questions: prevState.questions}
       return {template: updatedTemplate, loaded: true, edited: false};
     }
@@ -77,7 +78,8 @@ class EditTemplateScreen extends Component {
       return { ...shareholder, type: text };
     });
     let updatedTemplate =  {...this.state.template, questions: newquestions}
-    this.setState({template: updatedTemplate})
+    // this.setState({template: updatedTemplate})
+    this.props.actions.updateQuestions(updatedTemplate)
   };
 
   handleSubmit = evt => {
@@ -108,19 +110,21 @@ class EditTemplateScreen extends Component {
       }
     ]);
     let updatedTemplate =  {...this.state.template, questions: newQuestions}
-    console.log("updatedTemplate: ", updatedTemplate);
-    this.setState({template: updatedTemplate, edited: true})
+    // this.setState({template: updatedTemplate, edited: true})
+    this.props.actions.updateQuestions(updatedTemplate)
   };
 
   handleRemoveShareholder = idx => () => {
     let updatedQuestion =  this.state.template.questions.filter((s, sidx) => idx !== sidx)
     let updatedTemplate =  {...this.state.template, questions: updatedQuestion}
-    this.setState({template: updatedTemplate})
+    // this.setState({template: updatedTemplate})
+    this.props.actions.updateQuestions(updatedTemplate)
   };
 
   handleNameChange = name => () => {
     let updatedTemplate =  {...this.state.template, name: name}
-    this.setState({template: updatedTemplate})
+    // this.setState({template: updatedTemplate})
+    this.props.actions.updateQuestions(updatedTemplate)
   }
 
   handleUpdate = (idx, updatedState) => {
@@ -129,11 +133,11 @@ class EditTemplateScreen extends Component {
       return { ...shareholder, ...updatedState };
     });
     let updatedTemplate =  {...this.state.template, questions: newquestions}
-    this.setState({template: updatedTemplate})
+    // this.setState({template: updatedTemplate})
+    this.props.actions.updateQuestions(updatedTemplate)
   }
 
   handleSave = () => {
-    // console.log(this.state.template);
     this.updateTemplates(this.state.template);
     Actions.mainScreen({currentUser: this.props.currentUser});
   }
@@ -306,7 +310,6 @@ class EditTemplateScreen extends Component {
 }
 
 const mapStateToProps = (state, currentProps) => {
-  console.log(state.ListTemplatesReducer.editedTemplate);
   const editedTemplate = state.ListTemplatesReducer.editedTemplate.id == currentProps.id ? state.ListTemplatesReducer.editedTemplate : {}
   return {
     email_contact: state.AppReducer.email_contact,
@@ -328,7 +331,14 @@ const mapDispatchToProps = /* istanbul ignore next - redux function*/ dispatch =
         return dispatch(
           updateTemplates(template)
         )
-      }
+        
+      },
+      updateQuestions: (template) => {
+        return dispatch(
+          updateQuestions(template)
+        )
+      },
+
     }
   }
 };
